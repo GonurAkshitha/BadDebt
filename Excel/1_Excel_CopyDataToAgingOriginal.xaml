@@ -1,0 +1,399 @@
+<Activity mc:Ignorable="sap sap2010" x:Class="Excel_CopyDataToAgingOriginal" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib" xmlns:sd="clr-namespace:System.Data;assembly=System.Data" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="argInConfig" Type="InArgument(scg:Dictionary(x:String, x:Object))" />
+    <x:Property Name="argOutAgingDifference" Type="OutArgument(x:Double)" />
+    <x:Property Name="argOutAgingDifference3007" Type="OutArgument(x:Double)" />
+    <x:Property Name="ArgInLogNotifications" Type="InArgument(sd:DataTable)" />
+  </x:Members>
+  <mva:VisualBasic.Settings>
+    <x:Null />
+  </mva:VisualBasic.Settings>
+  <sap:VirtualizedContainerService.HintSize>1104,4217.6</sap:VirtualizedContainerService.HintSize>
+  <sap2010:WorkflowViewState.IdRef>Excel_CopyDataToAgingOriginal_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <scg:List x:TypeArguments="x:String" Capacity="24">
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>Microsoft.VisualBasic</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Collections</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Diagnostics</x:String>
+      <x:String>System.Drawing</x:String>
+      <x:String>System.IO</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Net.Mail</x:String>
+      <x:String>System.Xml</x:String>
+      <x:String>System.Xml.Linq</x:String>
+      <x:String>UiPath.Core</x:String>
+      <x:String>UiPath.Core.Activities</x:String>
+      <x:String>System.Windows.Markup</x:String>
+      <x:String>UiPath.Excel</x:String>
+      <x:String>System.Xml.Serialization</x:String>
+      <x:String>Microsoft.VisualBasic.CompilerServices</x:String>
+    </scg:List>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <scg:List x:TypeArguments="AssemblyReference" Capacity="42">
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Drawing</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.UiAutomation.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.Excel.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.Excel</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.Composition</AssemblyReference>
+      <AssemblyReference>System.ValueTuple</AssemblyReference>
+      <AssemblyReference>System.Data.Entity</AssemblyReference>
+    </scg:List>
+  </TextExpression.ReferencesForImplementation>
+  <sap:WorkflowViewStateService.ViewState>
+    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+      <x:Boolean x:Key="ShouldExpandAll">True</x:Boolean>
+    </scg:Dictionary>
+  </sap:WorkflowViewStateService.ViewState>
+  <Sequence sap2010:Annotation.AnnotationText="Description - This module copies all the data from Aging Report template and pastes it into &quot;Aging Original&quot; sheet of Bad Debt Template&#xA;&#xA;Technicals - It copies all the data from Aging Report and writes into &quot;Aging Original&quot; sheet of Bad Debt template and calculates the sum of Net Aging column for company code 3007 as well as rest of codes except 3007 into GL sheet.&#xA;&#xA;Developed by - Sanchit Tondwalkar&#xA;Modified by- Shivani Karla 6th April 2020" DisplayName="Excel_CopyDataToAgingOriginal" sap:VirtualizedContainerService.HintSize="837.6,4152.8" sap2010:WorkflowViewState.IdRef="Sequence_13">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="x:String" Name="vIntNetAgingSum" />
+      <Variable x:TypeArguments="x:String" Name="vStrNetAgingChinaSum" />
+      <Variable x:TypeArguments="sd:DataTable" Name="vDtAgingReport" />
+      <Variable x:TypeArguments="x:Double" Default="0" Name="vDblAgingTotal" />
+      <Variable x:TypeArguments="scg:IEnumerable(x:Object)" Name="vNetAgingSum" />
+      <Variable x:TypeArguments="sd:DataTable" Name="vDtAgingOriginal" />
+      <Variable x:TypeArguments="x:Double" Default="0" Name="vDblAgingTotal3007" />
+      <Variable x:TypeArguments="ui:WorkbookApplication" Name="vWbBadDebt" />
+      <Variable x:TypeArguments="x:Int32" Default="0" Name="vIntCounter" />
+    </Sequence.Variables>
+    <sap:WorkflowViewStateService.ViewState>
+      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+        <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+      </scg:Dictionary>
+    </sap:WorkflowViewStateService.ViewState>
+    <ui:InvokeWorkflowFile ArgumentsVariable="{x:Null}" ContinueOnError="{x:Null}" DisplayName=" 29 Invoke LogFile workflow" sap:VirtualizedContainerService.HintSize="796,113.6" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_1" UnSafe="False" WorkflowFileName="LogandReport\LogFile.xaml">
+      <ui:InvokeWorkflowFile.Arguments>
+        <InArgument x:TypeArguments="x:String" x:Key="argIstrLogNumber">LOG-BD29</InArgument>
+        <InArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" x:Key="argIdicConfig">[ArgInConfig]</InArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="argIstrKeyValues" />
+        <InArgument x:TypeArguments="x:String" x:Key="argIstrErrorScreenshot" />
+        <InArgument x:TypeArguments="sd:DataTable" x:Key="argIdtLogNotification">[ArgInLogNotifications]</InArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="arglstrTechincalExceptionMessage" />
+        <OutArgument x:TypeArguments="x:String" x:Key="argOException" />
+        <InArgument x:TypeArguments="x:Int32" x:Key="argIstrTransactionID" />
+        <InArgument x:TypeArguments="x:String" x:Key="argInDBConnectionString">[ArgInConfig("DB_ConnectionString").ToString]</InArgument>
+      </ui:InvokeWorkflowFile.Arguments>
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </ui:InvokeWorkflowFile>
+    <ui:ReadRange AddHeaders="False" DataTable="[vDtAgingReport]" DisplayName="Read Range - Aging Report" sap:VirtualizedContainerService.HintSize="796,88" sap2010:WorkflowViewState.IdRef="ReadRange_3" Range="A2" SheetName="Sheet1" WorkbookPath="[Environment.CurrentDirectory+argInConfig(&quot;InputPath&quot;).ToString+argInConfig(&quot;AgingFileName&quot;).ToString+now.ToString(&quot;MM-dd-yyyy&quot;)+&quot;.xlsx&quot;]">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </ui:ReadRange>
+    <ui:ExcelApplicationScope Password="{x:Null}" CreateNewFile="False" DisplayName="Excel Application Scope - Bad Debt Template" sap:VirtualizedContainerService.HintSize="796,3400.8" sap2010:WorkflowViewState.IdRef="ExcelApplicationScope_4" InstanceCachePeriod="3000" Visible="False" Workbook="[vWbBadDebt]" WorkbookPath="[Environment.CurrentDirectory+argInConfig(&quot;InputPath&quot;).ToString+argInConfig(&quot;TemplateName&quot;).ToString]">
+      <ui:ExcelApplicationScope.Body>
+        <ActivityAction x:TypeArguments="ui:WorkbookApplication">
+          <ActivityAction.Argument>
+            <DelegateInArgument x:TypeArguments="ui:WorkbookApplication" Name="ExcelWorkbookScope" />
+          </ActivityAction.Argument>
+          <Sequence DisplayName="Do" sap:VirtualizedContainerService.HintSize="762.4,3291.2" sap2010:WorkflowViewState.IdRef="Sequence_12">
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+            <Sequence DisplayName="Copy Pasting data from Aging Report to Aging Original" sap:VirtualizedContainerService.HintSize="720.8,2796.8" sap2010:WorkflowViewState.IdRef="Sequence_11">
+              <Sequence.Variables>
+                <Variable x:TypeArguments="sd:DataTable" Name="vDtAgingOriginalRead" />
+              </Sequence.Variables>
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+              <ui:ExcelReadRange AddHeaders="True" DataTable="[vDtAgingOriginal]" DisplayName="Read Range - Blank Aging Original" sap:VirtualizedContainerService.HintSize="679.2,60" sap2010:WorkflowViewState.IdRef="ExcelReadRange_4" Range="A2" SheetName="[argInConfig(&quot;AOriginalSheetName&quot;).ToString]">
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                    <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+              </ui:ExcelReadRange>
+              <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="679.2,92.8" sap2010:WorkflowViewState.IdRef="LogMessage_5" Level="Info" Message="[&quot;Merge Aging Original and Aging Report&quot;]">
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                    <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+              </ui:LogMessage>
+              <ui:MergeDataTable Destination="[vDtAgingOriginal]" DisplayName="Merge Data Table - Copy data from Aging Report DT to Blank DT" sap:VirtualizedContainerService.HintSize="679.2,134.4" sap2010:WorkflowViewState.IdRef="MergeDataTable_4" MissingSchemaAction="Ignore" Source="[vDtAgingReport]" />
+              <ui:ExcelWriteRange AddHeaders="False" DataTable="[vDtAgingReport]" DisplayName="Write Range - Aging Original DT" sap:VirtualizedContainerService.HintSize="679.2,88" sap2010:WorkflowViewState.IdRef="ExcelWriteRange_2" SheetName="[argInConfig(&quot;AOriginalSheetName&quot;).ToString]" StartingCell="A3">
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                    <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+              </ui:ExcelWriteRange>
+              <Delay DisplayName="Delay - 5 sec" Duration="00:00:05" sap:VirtualizedContainerService.HintSize="679.2,22.4" sap2010:WorkflowViewState.IdRef="Delay_1" />
+              <ui:ExcelReadRange AddHeaders="True" DataTable="[vDtAgingOriginalRead]" DisplayName="Read Range - Aging Original sheet" sap:VirtualizedContainerService.HintSize="679.2,60" sap2010:WorkflowViewState.IdRef="ExcelReadRange_3" Range="A2" SheetName="[argInConfig(&quot;AOriginalSheetName&quot;).ToString]">
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                    <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+              </ui:ExcelReadRange>
+              <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="679.2,92.8" sap2010:WorkflowViewState.IdRef="LogMessage_6" Level="Info" Message="[&quot;Extend Formulas in Aging Original&quot;]">
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                    <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+              </ui:LogMessage>
+              <ui:ExcelWriteCell Cell="AL1" DisplayName="Write Cell - Extend formula for CurrentAmt _Net" sap:VirtualizedContainerService.HintSize="679.2,88" sap2010:WorkflowViewState.IdRef="ExcelWriteCell_32" SheetName="[argInConfig(&quot;AOriginalSheetName&quot;).ToString]" Text="[&quot;=SUBTOTAL(9,AL3:AL&quot;+(vDtAgingOriginalRead.rows.Count+2).ToString+&quot;)&quot;]">
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                    <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+              </ui:ExcelWriteCell>
+              <ui:ExcelWriteCell Cell="AM1" DisplayName="Write Cell - Extend formula for 1 to 30 _Net" sap:VirtualizedContainerService.HintSize="679.2,88" sap2010:WorkflowViewState.IdRef="ExcelWriteCell_33" SheetName="[argInConfig(&quot;AOriginalSheetName&quot;).ToString]" Text="[&quot;=SUBTOTAL(9,AM3:AM&quot;+(vDtAgingOriginalRead.rows.Count+2).ToString+&quot;)&quot;]">
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                    <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+              </ui:ExcelWriteCell>
+              <ui:ExcelWriteCell Cell="AN1" DisplayName="Write Cell - Extend formula for 31 to 60 _Net" sap:VirtualizedContainerService.HintSize="679.2,88" sap2010:WorkflowViewState.IdRef="ExcelWriteCell_34" SheetName="[argInConfig(&quot;AOriginalSheetName&quot;).ToString]" Text="[&quot;=SUBTOTAL(9,AN3:AN&quot;+(vDtAgingOriginalRead.rows.Count+2).ToString+&quot;)&quot;]">
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                    <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+              </ui:ExcelWriteCell>
+              <ui:ExcelWriteCell Cell="AO1" DisplayName="Write Cell - Extend formula for 61 to 90 _Net" sap:VirtualizedContainerService.HintSize="679.2,88" sap2010:WorkflowViewState.IdRef="ExcelWriteCell_35" SheetName="[argInConfig(&quot;AOriginalSheetName&quot;).ToString]" Text="[&quot;=SUBTOTAL(9,AO3:AO&quot;+(vDtAgingOriginalRead.rows.Count+2).ToString+&quot;)&quot;]">
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                    <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+              </ui:ExcelWriteCell>
+              <ui:ExcelWriteCell Cell="AP1" DisplayName="Write Cell - Extend formula for 91 to 120 _Net" sap:VirtualizedContainerService.HintSize="679.2,88" sap2010:WorkflowViewState.IdRef="ExcelWriteCell_36" SheetName="[argInConfig(&quot;AOriginalSheetName&quot;).ToString]" Text="[&quot;=SUBTOTAL(9,AP3:AP&quot;+(vDtAgingOriginalRead.rows.Count+2).ToString+&quot;)&quot;]">
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                    <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+              </ui:ExcelWriteCell>
+              <ui:ExcelWriteCell Cell="AQ1" DisplayName="Write Cell - Extend formula for 121 to 180 _Net" sap:VirtualizedContainerService.HintSize="679.2,88" sap2010:WorkflowViewState.IdRef="ExcelWriteCell_37" SheetName="[argInConfig(&quot;AOriginalSheetName&quot;).ToString]" Text="[&quot;=SUBTOTAL(9,AQ3:AQ&quot;+(vDtAgingOriginalRead.rows.Count+2).ToString+&quot;)&quot;]">
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                    <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+              </ui:ExcelWriteCell>
+              <ui:ExcelWriteCell Cell="AR1" DisplayName="Write Cell - Extend formula for 181 to 365 _Net" sap:VirtualizedContainerService.HintSize="679.2,88" sap2010:WorkflowViewState.IdRef="ExcelWriteCell_38" SheetName="[argInConfig(&quot;AOriginalSheetName&quot;).ToString]" Text="[&quot;=SUBTOTAL(9,AR3:AR&quot;+(vDtAgingOriginalRead.rows.Count+2).ToString+&quot;)&quot;]">
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                    <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+              </ui:ExcelWriteCell>
+              <ui:ExcelWriteCell Cell="AS1" DisplayName="Write Cell - Extend formula for 366+ _Net - Extend formula for 1 to 30 _Net" sap:VirtualizedContainerService.HintSize="679.2,88" sap2010:WorkflowViewState.IdRef="ExcelWriteCell_39" SheetName="[argInConfig(&quot;AOriginalSheetName&quot;).ToString]" Text="[&quot;=SUBTOTAL(9,AS3:AS&quot;+(vDtAgingOriginalRead.rows.Count+2).ToString+&quot;)&quot;]">
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                    <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+              </ui:ExcelWriteCell>
+              <ui:ExcelWriteCell Cell="AT1" DisplayName="Write Cell - Extend formula for Net Aging" sap:VirtualizedContainerService.HintSize="679.2,88" sap2010:WorkflowViewState.IdRef="ExcelWriteCell_40" SheetName="[argInConfig(&quot;AOriginalSheetName&quot;).ToString]" Text="[&quot;=SUBTOTAL(9,AT3:AT&quot;+(vDtAgingOriginalRead.rows.Count+2).ToString+&quot;)&quot;]">
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                    <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+              </ui:ExcelWriteCell>
+              <ui:ForEachRow ColumnNames="{x:Null}" CurrentIndex="{x:Null}" DataTable="[vDtAgingOriginalRead]" DisplayName="For Each Row - Aging Original DT" sap:VirtualizedContainerService.HintSize="679.2,721.6" sap2010:WorkflowViewState.IdRef="ForEachRow_1">
+                <ui:ForEachRow.Body>
+                  <ActivityAction x:TypeArguments="sd:DataRow">
+                    <ActivityAction.Argument>
+                      <DelegateInArgument x:TypeArguments="sd:DataRow" Name="row" />
+                    </ActivityAction.Argument>
+                    <Sequence DisplayName="Body" sap:VirtualizedContainerService.HintSize="645.6,600.8" sap2010:WorkflowViewState.IdRef="Sequence_20">
+                      <sap:WorkflowViewStateService.ViewState>
+                        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                        </scg:Dictionary>
+                      </sap:WorkflowViewStateService.ViewState>
+                      <If Condition="[vIntCounter&lt;vDtAgingOriginalRead.Rows.Count]" DisplayName="If not Last Row" sap:VirtualizedContainerService.HintSize="604,408" sap2010:WorkflowViewState.IdRef="If_2">
+                        <sap:WorkflowViewStateService.ViewState>
+                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                          </scg:Dictionary>
+                        </sap:WorkflowViewStateService.ViewState>
+                        <If.Then>
+                          <If Condition="[row(&quot;C Code&quot;).ToString=&quot;3007&quot;]" DisplayName="If - Check C Code is 3007" sap:VirtualizedContainerService.HintSize="568.8,219.2" sap2010:WorkflowViewState.IdRef="If_1">
+                            <sap:WorkflowViewStateService.ViewState>
+                              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                                <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                              </scg:Dictionary>
+                            </sap:WorkflowViewStateService.ViewState>
+                            <If.Then>
+                              <Assign DisplayName="Assign - Calculate Net Aging Sum for 3007" sap:VirtualizedContainerService.HintSize="262.4,60" sap2010:WorkflowViewState.IdRef="Assign_9">
+                                <Assign.To>
+                                  <OutArgument x:TypeArguments="x:Double">[vDblAgingTotal3007]</OutArgument>
+                                </Assign.To>
+                                <Assign.Value>
+                                  <InArgument x:TypeArguments="x:Double">[vDblAgingTotal3007+Convert.ToDouble(row("Net Aging"))]</InArgument>
+                                </Assign.Value>
+                              </Assign>
+                            </If.Then>
+                            <If.Else>
+                              <Assign DisplayName="Assign - Calculate Net Aging Sum for rest Company codes" sap:VirtualizedContainerService.HintSize="262.4,60" sap2010:WorkflowViewState.IdRef="Assign_12">
+                                <Assign.To>
+                                  <OutArgument x:TypeArguments="x:Double">[vDblAgingTotal]</OutArgument>
+                                </Assign.To>
+                                <Assign.Value>
+                                  <InArgument x:TypeArguments="x:Double">[vDblAgingTotal+Convert.ToDouble(row("Net Aging"))]</InArgument>
+                                </Assign.Value>
+                              </Assign>
+                            </If.Else>
+                          </If>
+                        </If.Then>
+                      </If>
+                      <Assign sap:VirtualizedContainerService.HintSize="604,60" sap2010:WorkflowViewState.IdRef="Assign_13">
+                        <Assign.To>
+                          <OutArgument x:TypeArguments="x:Int32">[vIntCounter]</OutArgument>
+                        </Assign.To>
+                        <Assign.Value>
+                          <InArgument x:TypeArguments="x:Int32">[vIntCounter+1]</InArgument>
+                        </Assign.Value>
+                      </Assign>
+                    </Sequence>
+                  </ActivityAction>
+                </ui:ForEachRow.Body>
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                    <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+              </ui:ForEachRow>
+            </Sequence>
+            <ui:ExcelWriteCell Cell="A43" DisplayName="Write Cell - Net Aging Sum for rest company codes to GL sheet" sap:VirtualizedContainerService.HintSize="720.8,88" sap2010:WorkflowViewState.IdRef="ExcelWriteCell_3" SheetName="[argInConfig(&quot;GLSheetName&quot;).ToString]" Text="[vDblAgingTotal.ToString]">
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+            </ui:ExcelWriteCell>
+            <ui:ExcelReadCell Cell="A44" DisplayName="Read Cell- GL" sap:VirtualizedContainerService.HintSize="200,51" sap2010:WorkflowViewState.IdRef="ExcelReadCell_1" SheetName="[argInConfig(&quot;GLSheetName&quot;).ToString]">
+              <ui:ExcelReadCell.Result>
+                <OutArgument x:TypeArguments="x:Double">[argOutAgingDifference]</OutArgument>
+              </ui:ExcelReadCell.Result>
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+            </ui:ExcelReadCell>
+            <ui:ExcelWriteCell Cell="Q43" DisplayName="Write Cell - Net Aging Sum for 3007 to GL sheet" sap:VirtualizedContainerService.HintSize="200,51" sap2010:WorkflowViewState.IdRef="ExcelWriteCell_4" SheetName="[argInConfig(&quot;GLSheetName&quot;).ToString]" Text="[vDblAgingTotal3007.ToString]">
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+            </ui:ExcelWriteCell>
+            <ui:ExcelReadCell Cell="Q44" DisplayName="Read Cell-GL Q" sap:VirtualizedContainerService.HintSize="200,51" sap2010:WorkflowViewState.IdRef="ExcelReadCell_2" SheetName="[argInConfig(&quot;GLSheetName&quot;).ToString]">
+              <ui:ExcelReadCell.Result>
+                <OutArgument x:TypeArguments="x:Double">[argOutAgingDifference3007]</OutArgument>
+              </ui:ExcelReadCell.Result>
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+            </ui:ExcelReadCell>
+          </Sequence>
+        </ActivityAction>
+      </ui:ExcelApplicationScope.Body>
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </ui:ExcelApplicationScope>
+    <ui:ExcelCloseWorkbook DisplayName="Close Workbook- WbBadDebt" sap:VirtualizedContainerService.HintSize="796,60" sap2010:WorkflowViewState.IdRef="ExcelCloseWorkbook_1" Workbook="[vWbBadDebt]">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </ui:ExcelCloseWorkbook>
+    <ui:InvokeWorkflowFile ArgumentsVariable="{x:Null}" ContinueOnError="{x:Null}" DisplayName=" 30 Invoke LogFile workflow" sap:VirtualizedContainerService.HintSize="796,113.6" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_2" UnSafe="False" WorkflowFileName="LogandReport\LogFile.xaml">
+      <ui:InvokeWorkflowFile.Arguments>
+        <InArgument x:TypeArguments="x:String" x:Key="argIstrLogNumber">LOG-BD30</InArgument>
+        <InArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" x:Key="argIdicConfig">[ArgInConfig]</InArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="argIstrKeyValues" />
+        <InArgument x:TypeArguments="x:String" x:Key="argIstrErrorScreenshot" />
+        <InArgument x:TypeArguments="sd:DataTable" x:Key="argIdtLogNotification">[ArgInLogNotifications]</InArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="arglstrTechincalExceptionMessage" />
+        <OutArgument x:TypeArguments="x:String" x:Key="argOException" />
+        <InArgument x:TypeArguments="x:Int32" x:Key="argIstrTransactionID" />
+        <InArgument x:TypeArguments="x:String" x:Key="argInDBConnectionString">[ArgInConfig("DB_ConnectionString").ToString]</InArgument>
+      </ui:InvokeWorkflowFile.Arguments>
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </ui:InvokeWorkflowFile>
+  </Sequence>
+</Activity>

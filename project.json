@@ -1,0 +1,83 @@
+{
+  "name": "Bad_Debt_V2",
+  "description": "Bad Debt Process Automation",
+  "main": "Main.xaml",
+  "dependencies": {
+    "BalaReva.EasyExcel.Activities": "[16.0.0]",
+    "BalaReva.Excel.Activities": "[2019.4.0]",
+    "Microsoft.Activities.Extensions": "[2.0.6.9]",
+    "UiPath.Database.Activities": "[1.5.0]",
+    "UiPath.Excel.Activities": "[2.20.3]",
+    "UiPath.Mail.Activities": "[1.12.3]",
+    "UiPath.System.Activities": "[21.10.4]",
+    "UiPath.UIAutomation.Activities": "[21.10.5]",
+    "UiPathTeam.Excel.Extensions.Activities": "[1.0.7107.42453]"
+  },
+  "webServices": [],
+  "entitiesStores": [],
+  "schemaVersion": "4.0",
+  "studioVersion": "19.10.4.0",
+  "projectVersion": "2.0.6",
+  "runtimeOptions": {
+    "autoDispose": false,
+    "isPausable": true,
+    "isAttended": false,
+    "requiresUserInteraction": true,
+    "supportsPersistence": false,
+    "excludedLoggedData": [
+      "Private:*",
+      "*password*"
+    ],
+    "executionType": "Workflow",
+    "readyForPiP": false,
+    "startsInPiP": false,
+    "mustRestoreAllDependencies": false
+  },
+  "designOptions": {
+    "projectProfile": "Developement",
+    "outputType": "Process",
+    "libraryOptions": {
+      "includeOriginalXaml": false,
+      "privateWorkflows": []
+    },
+    "processOptions": {
+      "ignoredFiles": [
+        "TestWorkflow.xaml",
+        "Test.xaml"
+      ]
+    },
+    "fileInfoCollection": [],
+    "modernBehavior": false
+  },
+  "arguments": {
+    "input": [
+      {
+        "name": "in_OrchestratorQueueName",
+        "type": "System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+        "required": false,
+        "hasDefault": false
+      }
+    ],
+    "output": []
+  },
+  "expressionLanguage": "VisualBasic",
+  "entryPoints": [
+    {
+      "filePath": "Main.xaml",
+      "uniqueId": "10e6c745-84a5-4b6b-a0e2-1beca43d7b46",
+      "input": [
+        {
+          "name": "in_OrchestratorQueueName",
+          "type": "System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+          "required": false,
+          "hasDefault": false
+        }
+      ],
+      "output": []
+    }
+  ],
+  "isTemplate": false,
+  "templateProjectData": {},
+  "publishData": {},
+  "targetFramework": "Legacy"
+}

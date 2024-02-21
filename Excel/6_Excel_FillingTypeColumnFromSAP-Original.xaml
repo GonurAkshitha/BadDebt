@@ -1,0 +1,2154 @@
+<Activity mc:Ignorable="sap sap2010" x:Class="Excel_FillingTypeColumnFromSAP" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib" xmlns:sd="clr-namespace:System.Data;assembly=System.Data" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="argInConfig" Type="InArgument(scg:Dictionary(x:String, x:Object))" />
+    <x:Property Name="ArgInLogNotifications" Type="InArgument(sd:DataTable)" />
+  </x:Members>
+  <mva:VisualBasic.Settings>
+    <x:Null />
+  </mva:VisualBasic.Settings>
+  <sap:VirtualizedContainerService.HintSize>1104,10442.4</sap:VirtualizedContainerService.HintSize>
+  <sap2010:WorkflowViewState.IdRef>Excel_FillingTypeColumnFromSAP_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <scg:List x:TypeArguments="x:String" Capacity="46">
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>Microsoft.VisualBasic</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Collections</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Diagnostics</x:String>
+      <x:String>System.Drawing</x:String>
+      <x:String>System.IO</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Net.Mail</x:String>
+      <x:String>System.Xml</x:String>
+      <x:String>System.Xml.Linq</x:String>
+      <x:String>UiPath.Core</x:String>
+      <x:String>UiPath.Core.Activities</x:String>
+      <x:String>System.Windows.Markup</x:String>
+      <x:String>UiPath.Excel</x:String>
+      <x:String>System.Xml.Serialization</x:String>
+      <x:String>Microsoft.VisualBasic.CompilerServices</x:String>
+    </scg:List>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <scg:List x:TypeArguments="AssemblyReference" Capacity="42">
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Drawing</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.UiAutomation.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.Excel.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.Excel</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ValueTuple</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.Composition</AssemblyReference>
+    </scg:List>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence sap2010:Annotation.AnnotationText="Description - Fills the Type column on the basis of RD status from lookup downloaded from SAP.&#xA;&#xA;Technicals - Fills the Type column in Aging by mapping the customer number and checking RD status column from lookup table of SAP.&#xA;&#xA;Developed by - Sanchit Tondwalkar" DisplayName="Excel_FillingTypeColumnFromSAP" sap:VirtualizedContainerService.HintSize="676.8,10377.6" sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="sd:DataTable" Name="vDtAgingWorksheet" />
+      <Variable x:TypeArguments="sd:DataRow[]" Name="vDrDivisionRowArray" />
+      <Variable x:TypeArguments="x:Int32" Name="vIntCounter">
+        <Variable.Default>
+          <Literal x:TypeArguments="x:Int32" />
+        </Variable.Default>
+      </Variable>
+      <Variable x:TypeArguments="sd:DataTable" Name="vDtInvoiceLookUp" />
+      <Variable x:TypeArguments="sd:DataTable" Default="[New DataTable]" Name="vDtRDStatusC" />
+      <Variable x:TypeArguments="sd:DataRow[]" Name="vDrAgingTypeStatusCArray" />
+      <Variable x:TypeArguments="sd:DataTable" Default="[New DataTable]" Name="vDtRDStatusA" />
+      <Variable x:TypeArguments="sd:DataRow[]" Name="vDrAgingTypeStatusAArray" />
+      <Variable x:TypeArguments="sd:DataRow[]" Name="vDrBlankRowArray" />
+      <Variable x:TypeArguments="ui:WorkbookApplication" Name="vWBAgingWorksheet" />
+      <Variable x:TypeArguments="x:Boolean" Name="vBoolAllowExists" />
+      <Variable x:TypeArguments="scg:IEnumerable(x:Object)" Name="Vdr" />
+      <Variable x:TypeArguments="x:Boolean" Name="vBoolSaveWindowExists" />
+      <Variable x:TypeArguments="x:Boolean" Name="vBoolRDStatusCLookupExists" />
+      <Variable x:TypeArguments="x:Boolean" Name="vBoolRDStatusALookupExists" />
+      <Variable x:TypeArguments="sd:DataTable" Name="vDtTemp" />
+      <Variable x:TypeArguments="x:Int32" Name="vIntShortDelay">
+        <Variable.Default>
+          <Literal x:TypeArguments="x:Int32" Value="2000" />
+        </Variable.Default>
+      </Variable>
+    </Sequence.Variables>
+    <sap:WorkflowViewStateService.ViewState>
+      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+        <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+      </scg:Dictionary>
+    </sap:WorkflowViewStateService.ViewState>
+    <ui:InvokeWorkflowFile ArgumentsVariable="{x:Null}" ContinueOnError="{x:Null}" DisplayName=" 39 Invoke LogFile workflow" sap:VirtualizedContainerService.HintSize="635.2,113.6" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_4" UnSafe="False" WorkflowFileName="LogandReport\LogFile.xaml">
+      <ui:InvokeWorkflowFile.Arguments>
+        <InArgument x:TypeArguments="x:String" x:Key="argIstrLogNumber">LOG-BD39</InArgument>
+        <InArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" x:Key="argIdicConfig">[ArgInConfig]</InArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="argIstrKeyValues" />
+        <InArgument x:TypeArguments="x:String" x:Key="argIstrErrorScreenshot" />
+        <InArgument x:TypeArguments="sd:DataTable" x:Key="argIdtLogNotification">[ArgInLogNotifications]</InArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="arglstrTechincalExceptionMessage" />
+        <OutArgument x:TypeArguments="x:String" x:Key="argOException" />
+        <InArgument x:TypeArguments="x:Int32" x:Key="argIstrTransactionID" />
+        <InArgument x:TypeArguments="x:String" x:Key="argInDBConnectionString">[ArgInConfig("DB_ConnectionString").ToString]</InArgument>
+      </ui:InvokeWorkflowFile.Arguments>
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </ui:InvokeWorkflowFile>
+    <ui:PathExists DisplayName="Path Exists - RD Status C Lookup" Exists="[vBoolRDStatusCLookupExists]" sap:VirtualizedContainerService.HintSize="635.2,52.8" sap2010:WorkflowViewState.IdRef="PathExists_1" Path="[Environment.CurrentDirectory+argInConfig(&quot;InputPath&quot;).ToString+argInConfig(&quot;RDStatusCLookupName&quot;).ToString]" PathType="File">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </ui:PathExists>
+    <If Condition="[vBoolRDStatusCLookupExists]" DisplayName="If - Check RD Status C Lookup Exists" sap:VirtualizedContainerService.HintSize="635.2,52.8" sap2010:WorkflowViewState.IdRef="If_18">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+      <If.Then>
+        <ui:Delete ContinueOnError="{x:Null}" DisplayName="Delete - RD Status C Lookup" sap:VirtualizedContainerService.HintSize="200,22" sap2010:WorkflowViewState.IdRef="Delete_1" Path="[Environment.CurrentDirectory+argInConfig(&quot;InputPath&quot;).ToString+argInConfig(&quot;RDStatusCLookupName&quot;).ToString]" />
+      </If.Then>
+    </If>
+    <ui:PathExists DisplayName="Path Exists - RD Status A Lookup" Exists="[vBoolRDStatusALookupExists]" sap:VirtualizedContainerService.HintSize="635.2,52.8" sap2010:WorkflowViewState.IdRef="PathExists_2" Path="[Environment.CurrentDirectory+argInConfig(&quot;InputPath&quot;).ToString+argInConfig(&quot;RDStatusALookupName&quot;).ToString]" PathType="File">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </ui:PathExists>
+    <If Condition="[vBoolRDStatusALookupExists]" DisplayName="If - Check RD Status A Lookup Exists" sap:VirtualizedContainerService.HintSize="635,51" sap2010:WorkflowViewState.IdRef="If_19">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+      <If.Then>
+        <ui:Delete ContinueOnError="{x:Null}" DisplayName="Delete - RD Status A Lookup" sap:VirtualizedContainerService.HintSize="200,22" sap2010:WorkflowViewState.IdRef="Delete_2" Path="[Environment.CurrentDirectory+argInConfig(&quot;InputPath&quot;).ToString+argInConfig(&quot;RDStatusALookupName&quot;).ToString]" />
+      </If.Then>
+    </If>
+    <ui:ExcelApplicationScope Password="{x:Null}" DisplayName="Excel Application Scope - Bad Debt Template" sap:VirtualizedContainerService.HintSize="635,1606" sap2010:WorkflowViewState.IdRef="ExcelApplicationScope_1" InstanceCachePeriod="3000" Workbook="[vWBAgingWorksheet]" WorkbookPath="[Environment.CurrentDirectory+argInConfig(&quot;InputPath&quot;).ToString+argInConfig(&quot;TemplateName&quot;).ToString]">
+      <ui:ExcelApplicationScope.Body>
+        <ActivityAction x:TypeArguments="ui:WorkbookApplication">
+          <ActivityAction.Argument>
+            <DelegateInArgument x:TypeArguments="ui:WorkbookApplication" Name="ExcelWorkbookScope" />
+          </ActivityAction.Argument>
+          <Sequence DisplayName="Do" sap:VirtualizedContainerService.HintSize="494,1497" sap2010:WorkflowViewState.IdRef="Sequence_2">
+            <Sequence.Variables>
+              <Variable x:TypeArguments="x:String" Name="vStrSelectedRange" />
+            </Sequence.Variables>
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+            <ui:WindowScope ApplicationWindow="{x:Null}" SearchScope="{x:Null}" TimeoutMS="{x:Null}" Window="{x:Null}" DisplayName="Attach Window - Bad Debt Template" sap:VirtualizedContainerService.HintSize="452,1405" sap2010:WorkflowViewState.IdRef="WindowScope_2" InformativeScreenshot="418c89c087a01f9dba2ef475c9f74f54" Selector="&lt;wnd app='excel.exe' cls='XLMAIN' omit:title='Bad Debt Analysis_Blank - Excel' /&gt;">
+              <ui:WindowScope.Body>
+                <ActivityAction x:TypeArguments="x:Object">
+                  <ActivityAction.Argument>
+                    <DelegateInArgument x:TypeArguments="x:Object" Name="ContextTarget" />
+                  </ActivityAction.Argument>
+                  <Sequence DisplayName="Do" sap:VirtualizedContainerService.HintSize="418,1259" sap2010:WorkflowViewState.IdRef="Sequence_28">
+                    <sap:WorkflowViewStateService.ViewState>
+                      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                      </scg:Dictionary>
+                    </sap:WorkflowViewStateService.ViewState>
+                    <Sequence sap:VirtualizedContainerService.HintSize="376,712" sap2010:WorkflowViewState.IdRef="Sequence_23">
+                      <sap:WorkflowViewStateService.ViewState>
+                        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                        </scg:Dictionary>
+                      </sap:WorkflowViewStateService.ViewState>
+                      <ui:ExcelSelectRange DisplayName="Select Range - Aging Worksheet Type" sap:VirtualizedContainerService.HintSize="334,59" sap2010:WorkflowViewState.IdRef="ExcelSelectRange_10" Range="E6" SheetName="[argInConfig(&quot;AWorksheetName&quot;).ToString]">
+                        <sap:WorkflowViewStateService.ViewState>
+                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                          </scg:Dictionary>
+                        </sap:WorkflowViewStateService.ViewState>
+                      </ui:ExcelSelectRange>
+                      <ui:SendHotkey ClickBeforeTyping="{x:Null}" DelayBetweenKeys="{x:Null}" EmptyField="{x:Null}" SendWindowMessages="{x:Null}" Activate="True" DelayBefore="[vIntShortDelay]" DelayMS="[vIntShortDelay]" DisplayName="Send Hotkey - Alt+down" sap:VirtualizedContainerService.HintSize="334,51" sap2010:WorkflowViewState.IdRef="SendHotkey_3" Key="down" KeyModifiers="Alt" SpecialKey="True">
+                        <ui:SendHotkey.Target>
+                          <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="{x:Null}" Id="8546f597-ff83-4aad-8106-28915be04918">
+                            <ui:Target.TimeoutMS>
+                              <InArgument x:TypeArguments="x:Int32" />
+                            </ui:Target.TimeoutMS>
+                            <ui:Target.WaitForReady>
+                              <InArgument x:TypeArguments="ui:WaitForReady" />
+                            </ui:Target.WaitForReady>
+                          </ui:Target>
+                        </ui:SendHotkey.Target>
+                        <sap:WorkflowViewStateService.ViewState>
+                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                          </scg:Dictionary>
+                        </sap:WorkflowViewStateService.ViewState>
+                      </ui:SendHotkey>
+                      <ui:Check ContinueOnError="{x:Null}" Action="Uncheck" AlterIfDisabled="True" DelayAfter="[vIntShortDelay]" DelayBefore="[vIntShortDelay]" DisplayName="Check 'check box  (Select All)'" sap:VirtualizedContainerService.HintSize="334,51" sap2010:WorkflowViewState.IdRef="Check_1">
+                        <ui:Check.Target>
+                          <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="39cb7420-8ccc-4121-9d09-d746d2911898" InformativeScreenshot="e82f5d39af5d10dddc4a5539b1edc1ef" Selector="&lt;wnd app='excel.exe' cls='Net UI Tool Window' /&gt;&lt;wnd cls='NetUIHWND' /&gt;&lt;ctrl idx='1' name='Manual Filter' role='outline' /&gt;&lt;ctrl name='(Select All)' role='check box' /&gt;">
+                            <ui:Target.TimeoutMS>
+                              <InArgument x:TypeArguments="x:Int32" />
+                            </ui:Target.TimeoutMS>
+                            <ui:Target.WaitForReady>
+                              <InArgument x:TypeArguments="ui:WaitForReady" />
+                            </ui:Target.WaitForReady>
+                          </ui:Target>
+                        </ui:Check.Target>
+                        <sap:WorkflowViewStateService.ViewState>
+                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                          </scg:Dictionary>
+                        </sap:WorkflowViewStateService.ViewState>
+                      </ui:Check>
+                      <ui:TypeInto ClickBeforeTyping="{x:Null}" DelayBetweenKeys="{x:Null}" EmptyField="{x:Null}" SendWindowMessages="{x:Null}" SimulateType="{x:Null}" Activate="True" AlterIfDisabled="True" DelayBefore="[vIntShortDelay]" DelayMS="[vIntShortDelay]" DisplayName="Type Into - 20" sap:VirtualizedContainerService.HintSize="334,51" sap2010:WorkflowViewState.IdRef="TypeInto_12" Text="20">
+                        <ui:TypeInto.Target>
+                          <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="99387b02-b4c0-4a69-ad9e-43e91e2370c5" InformativeScreenshot="889921c481318c78b5b6b61d2154d915" Selector="&lt;wnd app='excel.exe' cls='Net UI Tool Window' /&gt;&lt;wnd cls='RICHEDIT60W' /&gt;">
+                            <ui:Target.TimeoutMS>
+                              <InArgument x:TypeArguments="x:Int32" />
+                            </ui:Target.TimeoutMS>
+                            <ui:Target.WaitForReady>
+                              <InArgument x:TypeArguments="ui:WaitForReady" />
+                            </ui:Target.WaitForReady>
+                          </ui:Target>
+                        </ui:TypeInto.Target>
+                        <sap:WorkflowViewStateService.ViewState>
+                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                          </scg:Dictionary>
+                        </sap:WorkflowViewStateService.ViewState>
+                      </ui:TypeInto>
+                      <ui:Check ContinueOnError="{x:Null}" Action="Check" AlterIfDisabled="True" DelayAfter="[vIntShortDelay]" DelayBefore="[vIntShortDelay]" DisplayName="Check 'check box  20'" sap:VirtualizedContainerService.HintSize="334,51" sap2010:WorkflowViewState.IdRef="Check_2">
+                        <ui:Check.Target>
+                          <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="900526c1-f497-43a7-a7c4-bb60c06ec0d5" InformativeScreenshot="3b01abbe249e6a24339c0ecb314984ba" Selector="&lt;wnd app='excel.exe' cls='Net UI Tool Window' /&gt;&lt;wnd cls='NetUIHWND' /&gt;&lt;ctrl idx='1' name='Manual Filter' role='outline' /&gt;&lt;ctrl name='20' role='check box' /&gt;">
+                            <ui:Target.TimeoutMS>
+                              <InArgument x:TypeArguments="x:Int32" />
+                            </ui:Target.TimeoutMS>
+                            <ui:Target.WaitForReady>
+                              <InArgument x:TypeArguments="ui:WaitForReady" />
+                            </ui:Target.WaitForReady>
+                          </ui:Target>
+                        </ui:Check.Target>
+                        <sap:WorkflowViewStateService.ViewState>
+                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                          </scg:Dictionary>
+                        </sap:WorkflowViewStateService.ViewState>
+                      </ui:Check>
+                      <ui:Click SendWindowMessages="{x:Null}" SimulateClick="{x:Null}" AlterIfDisabled="True" ClickType="CLICK_SINGLE" DelayBefore="[vIntShortDelay]" DelayMS="[vIntShortDelay]" DisplayName="Click 'push button  OK'" sap:VirtualizedContainerService.HintSize="334,51" sap2010:WorkflowViewState.IdRef="Click_22" KeyModifiers="None" MouseButton="BTN_LEFT">
+                        <ui:Click.CursorPosition>
+                          <ui:CursorPosition Position="Center">
+                            <ui:CursorPosition.OffsetX>
+                              <InArgument x:TypeArguments="x:Int32" />
+                            </ui:CursorPosition.OffsetX>
+                            <ui:CursorPosition.OffsetY>
+                              <InArgument x:TypeArguments="x:Int32" />
+                            </ui:CursorPosition.OffsetY>
+                          </ui:CursorPosition>
+                        </ui:Click.CursorPosition>
+                        <ui:Click.Target>
+                          <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="6ac6fbbf-550f-46c4-b693-51fdd5e982d0" InformativeScreenshot="7ad5d9365d71c509f8319edb37261a11" Selector="&lt;wnd app='excel.exe' cls='Net UI Tool Window' /&gt;&lt;wnd cls='NetUIHWND' /&gt;&lt;ctrl name='OK' role='push button' /&gt;">
+                            <ui:Target.TimeoutMS>
+                              <InArgument x:TypeArguments="x:Int32" />
+                            </ui:Target.TimeoutMS>
+                            <ui:Target.WaitForReady>
+                              <InArgument x:TypeArguments="ui:WaitForReady" />
+                            </ui:Target.WaitForReady>
+                          </ui:Target>
+                        </ui:Click.Target>
+                        <sap:WorkflowViewStateService.ViewState>
+                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                          </scg:Dictionary>
+                        </sap:WorkflowViewStateService.ViewState>
+                      </ui:Click>
+                      <Sequence DisplayName="Selection C Code" sap:VirtualizedContainerService.HintSize="334,66" sap2010:WorkflowViewState.IdRef="Sequence_67">
+                        <sap:WorkflowViewStateService.ViewState>
+                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                          </scg:Dictionary>
+                        </sap:WorkflowViewStateService.ViewState>
+                        <ui:ExcelSelectRange DisplayName="Select Range - Aging Worksheet Type" sap:VirtualizedContainerService.HintSize="200,52" sap2010:WorkflowViewState.IdRef="ExcelSelectRange_9" Range="D6" SheetName="[argInConfig(&quot;AWorksheetName&quot;).ToString]">
+                          <sap:WorkflowViewStateService.ViewState>
+                            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                              <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                            </scg:Dictionary>
+                          </sap:WorkflowViewStateService.ViewState>
+                        </ui:ExcelSelectRange>
+                        <ui:SendHotkey ClickBeforeTyping="{x:Null}" DelayBetweenKeys="{x:Null}" EmptyField="{x:Null}" SendWindowMessages="{x:Null}" Activate="True" DelayBefore="[vIntShortDelay]" DelayMS="[vIntShortDelay]" DisplayName="Send Hotkey - Alt+down" sap:VirtualizedContainerService.HintSize="200,52" sap2010:WorkflowViewState.IdRef="SendHotkey_25" Key="down" KeyModifiers="Alt" SpecialKey="True">
+                          <ui:SendHotkey.Target>
+                            <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="{x:Null}" Id="1cee39ff-27d1-454d-abbb-478c34ead15c">
+                              <ui:Target.TimeoutMS>
+                                <InArgument x:TypeArguments="x:Int32" />
+                              </ui:Target.TimeoutMS>
+                              <ui:Target.WaitForReady>
+                                <InArgument x:TypeArguments="ui:WaitForReady" />
+                              </ui:Target.WaitForReady>
+                            </ui:Target>
+                          </ui:SendHotkey.Target>
+                          <sap:WorkflowViewStateService.ViewState>
+                            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                              <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                            </scg:Dictionary>
+                          </sap:WorkflowViewStateService.ViewState>
+                        </ui:SendHotkey>
+                        <ui:TypeInto ClickBeforeTyping="{x:Null}" DelayBetweenKeys="{x:Null}" EmptyField="{x:Null}" SendWindowMessages="{x:Null}" SimulateType="{x:Null}" Activate="True" AlterIfDisabled="True" DelayBefore="[vIntShortDelay]" DelayMS="[vIntShortDelay]" DisplayName="Type Into - 2016" sap:VirtualizedContainerService.HintSize="200,52" sap2010:WorkflowViewState.IdRef="TypeInto_52" Text="2016">
+                          <ui:TypeInto.Target>
+                            <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="2162e1d0-96cb-4d49-a911-cc860eb37c2e" InformativeScreenshot="889921c481318c78b5b6b61d2154d915" Selector="&lt;wnd app='excel.exe' cls='Net UI Tool Window' /&gt;&lt;wnd cls='RICHEDIT60W' /&gt;">
+                              <ui:Target.TimeoutMS>
+                                <InArgument x:TypeArguments="x:Int32" />
+                              </ui:Target.TimeoutMS>
+                              <ui:Target.WaitForReady>
+                                <InArgument x:TypeArguments="ui:WaitForReady" />
+                              </ui:Target.WaitForReady>
+                            </ui:Target>
+                          </ui:TypeInto.Target>
+                          <sap:WorkflowViewStateService.ViewState>
+                            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                              <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                            </scg:Dictionary>
+                          </sap:WorkflowViewStateService.ViewState>
+                        </ui:TypeInto>
+                        <ui:Check ContinueOnError="{x:Null}" Action="Uncheck" AlterIfDisabled="True" DelayAfter="[vIntShortDelay]" DelayBefore="[vIntShortDelay]" DisplayName="Check 'check box  2016" sap:VirtualizedContainerService.HintSize="200,52" sap2010:WorkflowViewState.IdRef="Check_10">
+                          <ui:Check.Target>
+                            <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="febf448e-179f-4980-9454-91d75a09e9da" InformativeScreenshot="3b01abbe249e6a24339c0ecb314984ba" Selector="&lt;wnd app='excel.exe' cls='Net UI Tool Window' /&gt;&lt;wnd cls='NetUIHWND' /&gt;&lt;ctrl idx='2' name='Manual Filter' role='outline' /&gt;&lt;ctrl name='2016' role='check box' /&gt;">
+                              <ui:Target.TimeoutMS>
+                                <InArgument x:TypeArguments="x:Int32" />
+                              </ui:Target.TimeoutMS>
+                              <ui:Target.WaitForReady>
+                                <InArgument x:TypeArguments="ui:WaitForReady" />
+                              </ui:Target.WaitForReady>
+                            </ui:Target>
+                          </ui:Check.Target>
+                          <sap:WorkflowViewStateService.ViewState>
+                            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                              <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                            </scg:Dictionary>
+                          </sap:WorkflowViewStateService.ViewState>
+                        </ui:Check>
+                        <ui:Check ContinueOnError="{x:Null}" Action="Check" AlterIfDisabled="True" DelayAfter="[vIntShortDelay]" DelayBefore="[vIntShortDelay]" DisplayName="Check 'Add current Slection" sap:VirtualizedContainerService.HintSize="200,52" sap2010:WorkflowViewState.IdRef="Check_11">
+                          <ui:Check.Target>
+                            <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="6c13d759-22f3-4c8d-920b-6790b3379960" InformativeScreenshot="d1aca97d0d014b9713113319bebd0ad5" Selector="&lt;wnd app='excel.exe' cls='Net UI Tool Window' /&gt;&lt;wnd cls='NetUIHWND' /&gt;&lt;ctrl idx='2' name='Manual Filter' role='outline' /&gt;&lt;ctrl name='Add current selection to filter' role='check box' /&gt;" WaitForReady="INTERACTIVE">
+                              <ui:Target.TimeoutMS>
+                                <InArgument x:TypeArguments="x:Int32" />
+                              </ui:Target.TimeoutMS>
+                            </ui:Target>
+                          </ui:Check.Target>
+                          <sap:WorkflowViewStateService.ViewState>
+                            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                              <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                            </scg:Dictionary>
+                          </sap:WorkflowViewStateService.ViewState>
+                        </ui:Check>
+                        <ui:Click SendWindowMessages="{x:Null}" SimulateClick="{x:Null}" AlterIfDisabled="True" ClickType="CLICK_SINGLE" DelayBefore="[vIntShortDelay]" DelayMS="[vIntShortDelay]" DisplayName="Click 'push button  OK'" sap:VirtualizedContainerService.HintSize="200,52" sap2010:WorkflowViewState.IdRef="Click_72" KeyModifiers="None" MouseButton="BTN_LEFT">
+                          <ui:Click.CursorPosition>
+                            <ui:CursorPosition Position="Center">
+                              <ui:CursorPosition.OffsetX>
+                                <InArgument x:TypeArguments="x:Int32" />
+                              </ui:CursorPosition.OffsetX>
+                              <ui:CursorPosition.OffsetY>
+                                <InArgument x:TypeArguments="x:Int32" />
+                              </ui:CursorPosition.OffsetY>
+                            </ui:CursorPosition>
+                          </ui:Click.CursorPosition>
+                          <ui:Click.Target>
+                            <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="74cea92d-e636-4177-8ea6-12012f3454f4" InformativeScreenshot="7ad5d9365d71c509f8319edb37261a11" Selector="&lt;wnd app='excel.exe' cls='Net UI Tool Window' /&gt;&lt;wnd cls='NetUIHWND' /&gt;&lt;ctrl name='OK' role='push button' /&gt;">
+                              <ui:Target.TimeoutMS>
+                                <InArgument x:TypeArguments="x:Int32" />
+                              </ui:Target.TimeoutMS>
+                              <ui:Target.WaitForReady>
+                                <InArgument x:TypeArguments="ui:WaitForReady" />
+                              </ui:Target.WaitForReady>
+                            </ui:Target>
+                          </ui:Click.Target>
+                          <sap:WorkflowViewStateService.ViewState>
+                            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                              <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                            </scg:Dictionary>
+                          </sap:WorkflowViewStateService.ViewState>
+                        </ui:Click>
+                        <ui:ExcelSelectRange DisplayName="Select Range - Aging Worksheet Type" sap:VirtualizedContainerService.HintSize="200,52" sap2010:WorkflowViewState.IdRef="ExcelSelectRange_11" Range="D6" SheetName="[argInConfig(&quot;AWorksheetName&quot;).ToString]">
+                          <sap:WorkflowViewStateService.ViewState>
+                            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                              <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                            </scg:Dictionary>
+                          </sap:WorkflowViewStateService.ViewState>
+                        </ui:ExcelSelectRange>
+                        <ui:SendHotkey ClickBeforeTyping="{x:Null}" DelayBetweenKeys="{x:Null}" EmptyField="{x:Null}" SendWindowMessages="{x:Null}" Activate="True" DelayBefore="[vIntShortDelay]" DelayMS="[vIntShortDelay]" DisplayName="Send Hotkey - Alt+down" sap:VirtualizedContainerService.HintSize="200,52" sap2010:WorkflowViewState.IdRef="SendHotkey_26" Key="down" KeyModifiers="Alt" SpecialKey="True">
+                          <ui:SendHotkey.Target>
+                            <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="{x:Null}" Id="5045436f-de2c-4baa-b929-be176434e716">
+                              <ui:Target.TimeoutMS>
+                                <InArgument x:TypeArguments="x:Int32" />
+                              </ui:Target.TimeoutMS>
+                              <ui:Target.WaitForReady>
+                                <InArgument x:TypeArguments="ui:WaitForReady" />
+                              </ui:Target.WaitForReady>
+                            </ui:Target>
+                          </ui:SendHotkey.Target>
+                          <sap:WorkflowViewStateService.ViewState>
+                            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                              <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                            </scg:Dictionary>
+                          </sap:WorkflowViewStateService.ViewState>
+                        </ui:SendHotkey>
+                        <ui:TypeInto ClickBeforeTyping="{x:Null}" DelayBetweenKeys="{x:Null}" EmptyField="{x:Null}" SendWindowMessages="{x:Null}" SimulateType="{x:Null}" Activate="True" AlterIfDisabled="True" DelayBefore="[vIntShortDelay]" DelayMS="[vIntShortDelay]" DisplayName="Type Into - 3007" sap:VirtualizedContainerService.HintSize="200,52" sap2010:WorkflowViewState.IdRef="TypeInto_53" Text="3007">
+                          <ui:TypeInto.Target>
+                            <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="026733c6-9be7-4e65-9682-9063e5c51b16" InformativeScreenshot="889921c481318c78b5b6b61d2154d915" Selector="&lt;wnd app='excel.exe' cls='Net UI Tool Window' /&gt;&lt;wnd cls='RICHEDIT60W' /&gt;">
+                              <ui:Target.TimeoutMS>
+                                <InArgument x:TypeArguments="x:Int32" />
+                              </ui:Target.TimeoutMS>
+                              <ui:Target.WaitForReady>
+                                <InArgument x:TypeArguments="ui:WaitForReady" />
+                              </ui:Target.WaitForReady>
+                            </ui:Target>
+                          </ui:TypeInto.Target>
+                          <sap:WorkflowViewStateService.ViewState>
+                            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                              <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                            </scg:Dictionary>
+                          </sap:WorkflowViewStateService.ViewState>
+                        </ui:TypeInto>
+                        <ui:Check ContinueOnError="{x:Null}" Action="Uncheck" AlterIfDisabled="True" DelayAfter="[vIntShortDelay]" DelayBefore="[vIntShortDelay]" DisplayName="Check 'check box  3007" sap:VirtualizedContainerService.HintSize="200,52" sap2010:WorkflowViewState.IdRef="Check_12">
+                          <ui:Check.Target>
+                            <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="fa38cc9e-3220-4ef8-89ee-4cfb01c6b232" InformativeScreenshot="3b01abbe249e6a24339c0ecb314984ba" Selector="&lt;wnd app='excel.exe' cls='Net UI Tool Window' /&gt;&lt;wnd cls='NetUIHWND' /&gt;&lt;ctrl idx='2' name='Manual Filter' role='outline' /&gt;&lt;ctrl name='3007' role='check box' /&gt;">
+                              <ui:Target.TimeoutMS>
+                                <InArgument x:TypeArguments="x:Int32" />
+                              </ui:Target.TimeoutMS>
+                              <ui:Target.WaitForReady>
+                                <InArgument x:TypeArguments="ui:WaitForReady" />
+                              </ui:Target.WaitForReady>
+                            </ui:Target>
+                          </ui:Check.Target>
+                          <sap:WorkflowViewStateService.ViewState>
+                            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                              <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                            </scg:Dictionary>
+                          </sap:WorkflowViewStateService.ViewState>
+                        </ui:Check>
+                        <ui:Check ContinueOnError="{x:Null}" Action="Check" AlterIfDisabled="True" DelayAfter="[vIntShortDelay]" DelayBefore="[vIntShortDelay]" DisplayName="Check 'Add current Slection" sap:VirtualizedContainerService.HintSize="200,52" sap2010:WorkflowViewState.IdRef="Check_13">
+                          <ui:Check.Target>
+                            <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="171df152-3a0e-43c4-9c73-25043a9e43a2" InformativeScreenshot="d1aca97d0d014b9713113319bebd0ad5" Selector="&lt;wnd app='excel.exe' cls='Net UI Tool Window' /&gt;&lt;wnd cls='NetUIHWND' /&gt;&lt;ctrl idx='2' name='Manual Filter' role='outline' /&gt;&lt;ctrl name='Add current selection to filter' role='check box' /&gt;" WaitForReady="INTERACTIVE">
+                              <ui:Target.TimeoutMS>
+                                <InArgument x:TypeArguments="x:Int32" />
+                              </ui:Target.TimeoutMS>
+                            </ui:Target>
+                          </ui:Check.Target>
+                          <sap:WorkflowViewStateService.ViewState>
+                            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                              <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                            </scg:Dictionary>
+                          </sap:WorkflowViewStateService.ViewState>
+                        </ui:Check>
+                        <ui:Click SendWindowMessages="{x:Null}" SimulateClick="{x:Null}" AlterIfDisabled="True" ClickType="CLICK_SINGLE" DelayBefore="[vIntShortDelay]" DelayMS="[vIntShortDelay]" DisplayName="Click 'push button  OK'" sap:VirtualizedContainerService.HintSize="200,52" sap2010:WorkflowViewState.IdRef="Click_73" KeyModifiers="None" MouseButton="BTN_LEFT">
+                          <ui:Click.CursorPosition>
+                            <ui:CursorPosition Position="Center">
+                              <ui:CursorPosition.OffsetX>
+                                <InArgument x:TypeArguments="x:Int32" />
+                              </ui:CursorPosition.OffsetX>
+                              <ui:CursorPosition.OffsetY>
+                                <InArgument x:TypeArguments="x:Int32" />
+                              </ui:CursorPosition.OffsetY>
+                            </ui:CursorPosition>
+                          </ui:Click.CursorPosition>
+                          <ui:Click.Target>
+                            <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="5f413dbe-943a-4527-a4a5-a4bfbce3af51" InformativeScreenshot="7ad5d9365d71c509f8319edb37261a11" Selector="&lt;wnd app='excel.exe' cls='Net UI Tool Window' /&gt;&lt;wnd cls='NetUIHWND' /&gt;&lt;ctrl name='OK' role='push button' /&gt;">
+                              <ui:Target.TimeoutMS>
+                                <InArgument x:TypeArguments="x:Int32" />
+                              </ui:Target.TimeoutMS>
+                              <ui:Target.WaitForReady>
+                                <InArgument x:TypeArguments="ui:WaitForReady" />
+                              </ui:Target.WaitForReady>
+                            </ui:Target>
+                          </ui:Click.Target>
+                          <sap:WorkflowViewStateService.ViewState>
+                            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                              <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                            </scg:Dictionary>
+                          </sap:WorkflowViewStateService.ViewState>
+                        </ui:Click>
+                      </Sequence>
+                    </Sequence>
+                    <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="376,51" sap2010:WorkflowViewState.IdRef="LogMessage_3" Level="Info" Message="[&quot;Read Aging Data&quot;]">
+                      <sap:WorkflowViewStateService.ViewState>
+                        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                          <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                        </scg:Dictionary>
+                      </sap:WorkflowViewStateService.ViewState>
+                    </ui:LogMessage>
+                    <ui:ExcelSelectRange DisplayName="Select Range - Aging worksheet 3" sap:VirtualizedContainerService.HintSize="376,51" sap2010:WorkflowViewState.IdRef="ExcelSelectRange_1" Range="A6" SheetName="[argInConfig(&quot;AWorksheetName&quot;).ToString]">
+                      <sap:WorkflowViewStateService.ViewState>
+                        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                          <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                        </scg:Dictionary>
+                      </sap:WorkflowViewStateService.ViewState>
+                    </ui:ExcelSelectRange>
+                    <ui:SendHotkey ClickBeforeTyping="{x:Null}" DelayBetweenKeys="{x:Null}" EmptyField="{x:Null}" SendWindowMessages="{x:Null}" Activate="True" DelayBefore="[vIntShortDelay]" DelayMS="[vIntShortDelay]" DisplayName="Send Hotkey - down" sap:VirtualizedContainerService.HintSize="376,51" sap2010:WorkflowViewState.IdRef="SendHotkey_5" Key="down" KeyModifiers="None" SpecialKey="True">
+                      <ui:SendHotkey.Target>
+                        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="{x:Null}" Id="ae0e2c61-1c5c-4c49-9382-06ffc5a402b8">
+                          <ui:Target.TimeoutMS>
+                            <InArgument x:TypeArguments="x:Int32" />
+                          </ui:Target.TimeoutMS>
+                          <ui:Target.WaitForReady>
+                            <InArgument x:TypeArguments="ui:WaitForReady" />
+                          </ui:Target.WaitForReady>
+                        </ui:Target>
+                      </ui:SendHotkey.Target>
+                      <sap:WorkflowViewStateService.ViewState>
+                        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                          <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                        </scg:Dictionary>
+                      </sap:WorkflowViewStateService.ViewState>
+                    </ui:SendHotkey>
+                    <ui:SendHotkey ClickBeforeTyping="{x:Null}" DelayBetweenKeys="{x:Null}" EmptyField="{x:Null}" SendWindowMessages="{x:Null}" Activate="True" DelayBefore="[vIntShortDelay]" DelayMS="[vIntShortDelay]" DisplayName="Send Hotkey - Ctrl+Shift+Down" sap:VirtualizedContainerService.HintSize="376,51" sap2010:WorkflowViewState.IdRef="SendHotkey_4" Key="down" KeyModifiers="Ctrl, Shift" SpecialKey="True">
+                      <ui:SendHotkey.Target>
+                        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="{x:Null}" Id="c5ce28ef-36a2-43c4-968b-667a1dac457c">
+                          <ui:Target.TimeoutMS>
+                            <InArgument x:TypeArguments="x:Int32" />
+                          </ui:Target.TimeoutMS>
+                          <ui:Target.WaitForReady>
+                            <InArgument x:TypeArguments="ui:WaitForReady" />
+                          </ui:Target.WaitForReady>
+                        </ui:Target>
+                      </ui:SendHotkey.Target>
+                      <sap:WorkflowViewStateService.ViewState>
+                        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                          <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                        </scg:Dictionary>
+                      </sap:WorkflowViewStateService.ViewState>
+                    </ui:SendHotkey>
+                    <ui:SendHotkey ClickBeforeTyping="{x:Null}" DelayBetweenKeys="{x:Null}" EmptyField="{x:Null}" SendWindowMessages="{x:Null}" SpecialKey="{x:Null}" Activate="True" DelayBefore="[vIntShortDelay]" DelayMS="[vIntShortDelay]" DisplayName="Send Hotkey - Ctrl+c" sap:VirtualizedContainerService.HintSize="376,51" sap2010:WorkflowViewState.IdRef="SendHotkey_6" Key="c" KeyModifiers="Ctrl">
+                      <ui:SendHotkey.Target>
+                        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="{x:Null}" Id="68f24fe7-3b1f-424f-acae-5c9812df71d1">
+                          <ui:Target.TimeoutMS>
+                            <InArgument x:TypeArguments="x:Int32" />
+                          </ui:Target.TimeoutMS>
+                          <ui:Target.WaitForReady>
+                            <InArgument x:TypeArguments="ui:WaitForReady" />
+                          </ui:Target.WaitForReady>
+                        </ui:Target>
+                      </ui:SendHotkey.Target>
+                      <sap:WorkflowViewStateService.ViewState>
+                        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                          <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                        </scg:Dictionary>
+                      </sap:WorkflowViewStateService.ViewState>
+                    </ui:SendHotkey>
+                  </Sequence>
+                </ActivityAction>
+              </ui:WindowScope.Body>
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+            </ui:WindowScope>
+          </Sequence>
+        </ActivityAction>
+      </ui:ExcelApplicationScope.Body>
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </ui:ExcelApplicationScope>
+    <ui:InvokeWorkflowFile ArgumentsVariable="{x:Null}" ContinueOnError="{x:Null}" DisplayName="Invoke SAP_Logon750_LoginModule workflow" sap:VirtualizedContainerService.HintSize="635,87" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_3" UnSafe="False" WorkflowFileName="SAP\SAP_Logon750_LoginModule.xaml">
+      <ui:InvokeWorkflowFile.Arguments>
+        <InArgument x:TypeArguments="x:String" x:Key="ArgStrSapAppName">[argInConfig("AppName").ToString]</InArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="ArgStrBotEnvironment">[argInConfig("BotEnvironment").ToString]</InArgument>
+        <InArgument x:TypeArguments="x:TimeSpan" x:Key="ArgInTmeSpanDelayShort">00:00:02</InArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="ArgInSAPUserName">[argInConfig("SAP_UserID").ToString]</InArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="ArgInSAPPassword">[argInConfig("SAP_Password").ToString]</InArgument>
+        <InArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" x:Key="ArgInConfig">[argInConfig]</InArgument>
+        <InArgument x:TypeArguments="sd:DataTable" x:Key="ArgInLogNotifications">[ArgInLogNotifications]</InArgument>
+      </ui:InvokeWorkflowFile.Arguments>
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </ui:InvokeWorkflowFile>
+    <ui:WindowScope ApplicationWindow="{x:Null}" SearchScope="{x:Null}" Window="{x:Null}" DisplayName="Attach Window - SAP Home screen" sap:VirtualizedContainerService.HintSize="635.2,3389.6" sap2010:WorkflowViewState.IdRef="WindowScope_9" InformativeScreenshot="ca5a0b92c3c1e22a71aa8020d57bb8a2" Selector="&lt;wnd app='saplogon.exe' cls='SAP_FRONTEND_SESSION' title='SAP*' /&gt;" TimeoutMS="60000">
+      <ui:WindowScope.Body>
+        <ActivityAction x:TypeArguments="x:Object">
+          <ActivityAction.Argument>
+            <DelegateInArgument x:TypeArguments="x:Object" Name="ContextTarget" />
+          </ActivityAction.Argument>
+          <Sequence sap:VirtualizedContainerService.HintSize="525.6,3242.4" sap2010:WorkflowViewState.IdRef="Sequence_61">
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                <x:Boolean x:Key="IsPinned">False</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+            <Sequence DisplayName="Do" sap:VirtualizedContainerService.HintSize="484,868.8" sap2010:WorkflowViewState.IdRef="Sequence_60">
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+              <ui:TypeInto ClickBeforeTyping="{x:Null}" DelayBetweenKeys="{x:Null}" EmptyField="{x:Null}" SendWindowMessages="{x:Null}" SimulateType="{x:Null}" Activate="True" AlterIfDisabled="True" DelayBefore="[vIntShortDelay]" DelayMS="[vIntShortDelay]" DisplayName="Type Into - se16n" sap:VirtualizedContainerService.HintSize="334.4,135.2" sap2010:WorkflowViewState.IdRef="TypeInto_44" Text="se16n[k(enter)]">
+                <ui:TypeInto.Target>
+                  <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="654a0cd2-45e4-4ae6-8a2c-d9ac6b8f27b8" InformativeScreenshot="e557301cdd3c8f69256dcb7e3e1bec49" Selector="&lt;sap id='tbar[0]/okcd' /&gt;">
+                    <ui:Target.TimeoutMS>
+                      <InArgument x:TypeArguments="x:Int32" />
+                    </ui:Target.TimeoutMS>
+                    <ui:Target.WaitForReady>
+                      <InArgument x:TypeArguments="ui:WaitForReady" />
+                    </ui:Target.WaitForReady>
+                  </ui:Target>
+                </ui:TypeInto.Target>
+              </ui:TypeInto>
+              <ui:TypeInto ClickBeforeTyping="{x:Null}" DelayBetweenKeys="{x:Null}" EmptyField="{x:Null}" SendWindowMessages="{x:Null}" SimulateType="{x:Null}" Activate="True" AlterIfDisabled="True" DelayBefore="[vIntShortDelay]" DelayMS="[vIntShortDelay]" DisplayName="Type Into - Table name" sap:VirtualizedContainerService.HintSize="334.4,135.2" sap2010:WorkflowViewState.IdRef="TypeInto_45" Text="Vbreve[k(enter)]">
+                <ui:TypeInto.Target>
+                  <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="405d6ab0-62ee-4db0-abc2-e95d7f46eaf3" InformativeScreenshot="8eb30be70795485b49b0dd7d65dcac8c" Selector="&lt;wnd app='saplogon.exe' cls='SAP_FRONTEND_SESSION' title='General Table Display' /&gt;&lt;sap id='usr/ctxtGD-TAB' /&gt;">
+                    <ui:Target.TimeoutMS>
+                      <InArgument x:TypeArguments="x:Int32" />
+                    </ui:Target.TimeoutMS>
+                    <ui:Target.WaitForReady>
+                      <InArgument x:TypeArguments="ui:WaitForReady" />
+                    </ui:Target.WaitForReady>
+                  </ui:Target>
+                </ui:TypeInto.Target>
+              </ui:TypeInto>
+              <ui:TypeInto ClickBeforeTyping="{x:Null}" DelayBetweenKeys="{x:Null}" SendWindowMessages="{x:Null}" SimulateType="{x:Null}" Activate="True" AlterIfDisabled="True" DelayBefore="[vIntShortDelay]" DelayMS="[vIntShortDelay]" DisplayName="Type Into - No of hits blank" EmptyField="True" sap:VirtualizedContainerService.HintSize="334,134" sap2010:WorkflowViewState.IdRef="TypeInto_46">
+                <ui:TypeInto.Target>
+                  <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="c0241079-1366-4e88-a0bc-13b810405946" InformativeScreenshot="0ca9f61cde2d95023e3e2614fed6446a" Selector="&lt;wnd app='saplogon.exe' cls='SAP_FRONTEND_SESSION' title='General Table Display' /&gt;&lt;sap id='usr/txtGD-MAX_LINES' /&gt;">
+                    <ui:Target.TimeoutMS>
+                      <InArgument x:TypeArguments="x:Int32" />
+                    </ui:Target.TimeoutMS>
+                    <ui:Target.WaitForReady>
+                      <InArgument x:TypeArguments="ui:WaitForReady" />
+                    </ui:Target.WaitForReady>
+                  </ui:Target>
+                </ui:TypeInto.Target>
+                <ui:TypeInto.Text>
+                  <InArgument x:TypeArguments="x:String">
+                    <Literal x:TypeArguments="x:String" Value="" />
+                  </InArgument>
+                </ui:TypeInto.Text>
+              </ui:TypeInto>
+              <ui:Click SendWindowMessages="{x:Null}" SimulateClick="{x:Null}" AlterIfDisabled="True" ClickType="CLICK_SINGLE" DelayBefore="[vIntShortDelay]" DelayMS="[vIntShortDelay]" DisplayName="Click 'Button  More'" sap:VirtualizedContainerService.HintSize="334,106" sap2010:WorkflowViewState.IdRef="Click_62" KeyModifiers="None" MouseButton="BTN_LEFT">
+                <ui:Click.CursorPosition>
+                  <ui:CursorPosition Position="Center">
+                    <ui:CursorPosition.OffsetX>
+                      <InArgument x:TypeArguments="x:Int32" />
+                    </ui:CursorPosition.OffsetX>
+                    <ui:CursorPosition.OffsetY>
+                      <InArgument x:TypeArguments="x:Int32" />
+                    </ui:CursorPosition.OffsetY>
+                  </ui:CursorPosition>
+                </ui:Click.CursorPosition>
+                <ui:Click.Target>
+                  <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="8d3bf0bb-ba96-4f37-b741-2461da914088" InformativeScreenshot="b4b7cb65b643f4ca573c0c0ceeeeaaa0" Selector="&lt;wnd app='saplogon.exe' cls='SAP_FRONTEND_SESSION' title='General Table Display' /&gt;&lt;sap id='usr/tblSAPLSE16NSELFIELDS_TC' tableCol='4' tableRow='1' /&gt;">
+                    <ui:Target.TimeoutMS>
+                      <InArgument x:TypeArguments="x:Int32" />
+                    </ui:Target.TimeoutMS>
+                    <ui:Target.WaitForReady>
+                      <InArgument x:TypeArguments="ui:WaitForReady" />
+                    </ui:Target.WaitForReady>
+                  </ui:Target>
+                </ui:Click.Target>
+              </ui:Click>
+              <ui:Click SendWindowMessages="{x:Null}" SimulateClick="{x:Null}" AlterIfDisabled="True" ClickType="CLICK_SINGLE" DelayBefore="[vIntShortDelay]" DelayMS="[vIntShortDelay]" DisplayName="Click 'Button Upload'" sap:VirtualizedContainerService.HintSize="334,106" sap2010:WorkflowViewState.IdRef="Click_63" KeyModifiers="None" MouseButton="BTN_LEFT">
+                <ui:Click.CursorPosition>
+                  <ui:CursorPosition Position="Center">
+                    <ui:CursorPosition.OffsetX>
+                      <InArgument x:TypeArguments="x:Int32" />
+                    </ui:CursorPosition.OffsetX>
+                    <ui:CursorPosition.OffsetY>
+                      <InArgument x:TypeArguments="x:Int32" />
+                    </ui:CursorPosition.OffsetY>
+                  </ui:CursorPosition>
+                </ui:Click.CursorPosition>
+                <ui:Click.Target>
+                  <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="d6c8ebbd-0315-4cda-b638-62624e491167" InformativeScreenshot="27293521ffa86456bb4dcc66330bada7" Selector="&lt;wnd app='saplogon.exe' cls='#32770' title='Multiple Selection by Field' /&gt;&lt;sap id='tbar[0]/btn[24]' /&gt;">
+                    <ui:Target.TimeoutMS>
+                      <InArgument x:TypeArguments="x:Int32" />
+                    </ui:Target.TimeoutMS>
+                    <ui:Target.WaitForReady>
+                      <InArgument x:TypeArguments="ui:WaitForReady" />
+                    </ui:Target.WaitForReady>
+                  </ui:Target>
+                </ui:Click.Target>
+              </ui:Click>
+            </Sequence>
+            <ui:Click SendWindowMessages="{x:Null}" SimulateClick="{x:Null}" AlterIfDisabled="True" ClickType="CLICK_SINGLE" DelayBefore="[vIntShortDelay]" DelayMS="[vIntShortDelay]" DisplayName="Click 'Button Transfer'" sap:VirtualizedContainerService.HintSize="484,106" sap2010:WorkflowViewState.IdRef="Click_64" KeyModifiers="None" MouseButton="BTN_LEFT">
+              <ui:Click.CursorPosition>
+                <ui:CursorPosition Position="Center">
+                  <ui:CursorPosition.OffsetX>
+                    <InArgument x:TypeArguments="x:Int32" />
+                  </ui:CursorPosition.OffsetX>
+                  <ui:CursorPosition.OffsetY>
+                    <InArgument x:TypeArguments="x:Int32" />
+                  </ui:CursorPosition.OffsetY>
+                </ui:CursorPosition>
+              </ui:Click.CursorPosition>
+              <ui:Click.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="7a58a042-f121-4b3d-b172-58d2e8d4448b" InformativeScreenshot="ece5fad0c008cd9eaf1ab4bce5585095" Selector="&lt;wnd app='saplogon.exe' cls='#32770' title='Multiple Selection by Field' /&gt;&lt;sap id='tbar[0]/btn[8]' /&gt;">
+                  <ui:Target.TimeoutMS>
+                    <InArgument x:TypeArguments="x:Int32" />
+                  </ui:Target.TimeoutMS>
+                  <ui:Target.WaitForReady>
+                    <InArgument x:TypeArguments="ui:WaitForReady" />
+                  </ui:Target.WaitForReady>
+                </ui:Target>
+              </ui:Click.Target>
+            </ui:Click>
+            <ui:TypeInto ClickBeforeTyping="{x:Null}" DelayBetweenKeys="{x:Null}" EmptyField="{x:Null}" SendWindowMessages="{x:Null}" SimulateType="{x:Null}" Activate="True" AlterIfDisabled="True" DelayBefore="[vIntShortDelay]" DelayMS="[vIntShortDelay]" DisplayName="Type Into - RD status C" sap:VirtualizedContainerService.HintSize="484,134" sap2010:WorkflowViewState.IdRef="TypeInto_47" Text="C">
+              <ui:TypeInto.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="788de59e-6d10-480a-8bb9-b92a474b3357" InformativeScreenshot="c7c09191906094819a45ae1d931303f1" Selector="&lt;wnd app='saplogon.exe' cls='SAP_FRONTEND_SESSION' title='General Table Display' /&gt;&lt;sap id='usr/tblSAPLSE16NSELFIELDS_TC' tableCol='2' tableRow='22' /&gt;">
+                  <ui:Target.TimeoutMS>
+                    <InArgument x:TypeArguments="x:Int32" />
+                  </ui:Target.TimeoutMS>
+                  <ui:Target.WaitForReady>
+                    <InArgument x:TypeArguments="ui:WaitForReady" />
+                  </ui:Target.WaitForReady>
+                </ui:Target>
+              </ui:TypeInto.Target>
+            </ui:TypeInto>
+            <ui:Click SendWindowMessages="{x:Null}" SimulateClick="{x:Null}" AlterIfDisabled="True" ClickType="CLICK_SINGLE" DelayBefore="[vIntShortDelay]" DelayMS="[vIntShortDelay]" DisplayName="Click 'Button  Online (F8)'" sap:VirtualizedContainerService.HintSize="484,106" sap2010:WorkflowViewState.IdRef="Click_65" KeyModifiers="None" MouseButton="BTN_LEFT">
+              <ui:Click.CursorPosition>
+                <ui:CursorPosition Position="Center">
+                  <ui:CursorPosition.OffsetX>
+                    <InArgument x:TypeArguments="x:Int32" />
+                  </ui:CursorPosition.OffsetX>
+                  <ui:CursorPosition.OffsetY>
+                    <InArgument x:TypeArguments="x:Int32" />
+                  </ui:CursorPosition.OffsetY>
+                </ui:CursorPosition>
+              </ui:Click.CursorPosition>
+              <ui:Click.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="7cab47a5-503e-491a-b3b0-0e9dce2f34ad" InformativeScreenshot="ae75ac130b17c81d2d214d9bd17721b6" Selector="&lt;wnd app='saplogon.exe' cls='SAP_FRONTEND_SESSION' title='General Table Display' /&gt;&lt;sap id='tbar[1]/btn[8]' /&gt;" WaitForReady="COMPLETE">
+                  <ui:Target.TimeoutMS>
+                    <InArgument x:TypeArguments="x:Int32" />
+                  </ui:Target.TimeoutMS>
+                </ui:Target>
+              </ui:Click.Target>
+            </ui:Click>
+            <ui:Click SendWindowMessages="{x:Null}" SimulateClick="{x:Null}" AlterIfDisabled="True" ClickType="CLICK_SINGLE" DelayBefore="[vIntShortDelay]" DelayMS="[vIntShortDelay]" DisplayName="Click F8" sap:VirtualizedContainerService.HintSize="484,68" sap2010:WorkflowViewState.IdRef="Click_66" KeyModifiers="None" MouseButton="BTN_LEFT">
+              <ui:Click.CursorPosition>
+                <ui:CursorPosition Position="Center">
+                  <ui:CursorPosition.OffsetX>
+                    <InArgument x:TypeArguments="x:Int32" />
+                  </ui:CursorPosition.OffsetX>
+                  <ui:CursorPosition.OffsetY>
+                    <InArgument x:TypeArguments="x:Int32" />
+                  </ui:CursorPosition.OffsetY>
+                </ui:CursorPosition>
+              </ui:Click.CursorPosition>
+              <ui:Click.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="33662408-82bc-47ff-bfed-a85d7c6a1acc" Selector="&lt;wnd app='saplogon.exe' cls='SAP_FRONTEND_SESSION' title='VBREVE: Display of Entries Found' /&gt;&lt;wnd cls='Custom Container Class' idx='4' title='Custom  Container' /&gt;&lt;wnd cls='Shell Window Class' title='Control  Container' /&gt;&lt;wnd cls='ToolbarWindow32' /&gt;&lt;ctrl idx='4' name=' ' role='split button' /&gt;" WaitForReady="COMPLETE">
+                  <ui:Target.TimeoutMS>
+                    <InArgument x:TypeArguments="x:Int32" />
+                  </ui:Target.TimeoutMS>
+                </ui:Target>
+              </ui:Click.Target>
+            </ui:Click>
+            <ui:Click SendWindowMessages="{x:Null}" SimulateClick="{x:Null}" AlterIfDisabled="True" ClickType="CLICK_SINGLE" DelayBefore="[vIntShortDelay]" DelayMS="[vIntShortDelay]" DisplayName="Click 'menu item  Spreadsheet' 1" sap:VirtualizedContainerService.HintSize="484,106" sap2010:WorkflowViewState.IdRef="Click_67" KeyModifiers="None" MouseButton="BTN_LEFT">
+              <ui:Click.CursorPosition>
+                <ui:CursorPosition Position="Center">
+                  <ui:CursorPosition.OffsetX>
+                    <InArgument x:TypeArguments="x:Int32" />
+                  </ui:CursorPosition.OffsetX>
+                  <ui:CursorPosition.OffsetY>
+                    <InArgument x:TypeArguments="x:Int32" />
+                  </ui:CursorPosition.OffsetY>
+                </ui:CursorPosition>
+              </ui:Click.CursorPosition>
+              <ui:Click.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="97551d54-3118-4d18-9cfa-7e53154e340d" InformativeScreenshot="54705cf7937ad5b435e1744d01f5e2f1" Selector="&lt;wnd aaname='Context' app='saplogon.exe' cls='#32768' /&gt;&lt;ctrl name='Context' role='popup menu' /&gt;&lt;ctrl automationid='1' /&gt;" WaitForReady="COMPLETE">
+                  <ui:Target.TimeoutMS>
+                    <InArgument x:TypeArguments="x:Int32" />
+                  </ui:Target.TimeoutMS>
+                </ui:Target>
+              </ui:Click.Target>
+            </ui:Click>
+            <ui:UiElementExists DisplayName="Element Exists 'saplogon.exe  Save As'" Exists="[vBoolSaveWindowExists]" sap:VirtualizedContainerService.HintSize="484,106" sap2010:WorkflowViewState.IdRef="UiElementExists_22">
+              <ui:UiElementExists.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="314f35fc-81e5-4f7c-b9a7-8373637bcfeb" InformativeScreenshot="b9a5dae96c26f29d362ad678a28c70af" Selector="&lt;wnd app='saplogon.exe' cls='#32770' title='Save As' /&gt;&lt;wnd ctrlid='1148' /&gt;&lt;wnd ctrlid='1148' /&gt;&lt;wnd ctrlid='1148' /&gt;">
+                  <ui:Target.TimeoutMS>
+                    <InArgument x:TypeArguments="x:Int32" />
+                  </ui:Target.TimeoutMS>
+                  <ui:Target.WaitForReady>
+                    <InArgument x:TypeArguments="ui:WaitForReady" />
+                  </ui:Target.WaitForReady>
+                </ui:Target>
+              </ui:UiElementExists.Target>
+            </ui:UiElementExists>
+            <While DisplayName="While - Save Window not exists" sap:VirtualizedContainerService.HintSize="484,263" sap2010:WorkflowViewState.IdRef="While_3">
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+              <While.Condition>[vBoolSaveWindowExists=False]</While.Condition>
+              <ui:UiElementExists DisplayName="Element Exists 'saplogon.exe  Save As'" Exists="[vBoolSaveWindowExists]" sap:VirtualizedContainerService.HintSize="334,106" sap2010:WorkflowViewState.IdRef="UiElementExists_23">
+                <ui:UiElementExists.Target>
+                  <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="576d7090-247a-4bd3-86d8-609e5da12d23" InformativeScreenshot="b9a5dae96c26f29d362ad678a28c70af" Selector="&lt;wnd app='saplogon.exe' cls='#32770' title='Save As' /&gt;&lt;wnd ctrlid='1148' /&gt;&lt;wnd ctrlid='1148' /&gt;&lt;wnd ctrlid='1148' /&gt;">
+                    <ui:Target.TimeoutMS>
+                      <InArgument x:TypeArguments="x:Int32" />
+                    </ui:Target.TimeoutMS>
+                    <ui:Target.WaitForReady>
+                      <InArgument x:TypeArguments="ui:WaitForReady" />
+                    </ui:Target.WaitForReady>
+                  </ui:Target>
+                </ui:UiElementExists.Target>
+              </ui:UiElementExists>
+            </While>
+            <ui:TypeInto ClickBeforeTyping="{x:Null}" DelayBetweenKeys="{x:Null}" EmptyField="{x:Null}" SendWindowMessages="{x:Null}" SimulateType="{x:Null}" Activate="True" AlterIfDisabled="True" DelayBefore="[vIntShortDelay]" DelayMS="[vIntShortDelay]" DisplayName="Type Into 'Save Path -4 '" sap:VirtualizedContainerService.HintSize="484,134" sap2010:WorkflowViewState.IdRef="TypeInto_48" Text="[Environment.CurrentDirectory+argInConfig(&quot;InputPath&quot;).ToString+argInConfig(&quot;RDStatusCLookupName&quot;).ToString]">
+              <ui:TypeInto.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="5d7f078d-32c3-452a-a018-98fef34864da" InformativeScreenshot="e6983e3c06edf4032dbf9025962792bd" Selector="&lt;wnd app='saplogon.exe' cls='#32770' title='Save As' /&gt;&lt;wnd ctrlid='1148' /&gt;&lt;wnd ctrlid='1148' /&gt;&lt;wnd ctrlid='1148' /&gt;">
+                  <ui:Target.TimeoutMS>
+                    <InArgument x:TypeArguments="x:Int32" />
+                  </ui:Target.TimeoutMS>
+                  <ui:Target.WaitForReady>
+                    <InArgument x:TypeArguments="ui:WaitForReady" />
+                  </ui:Target.WaitForReady>
+                </ui:Target>
+              </ui:TypeInto.Target>
+            </ui:TypeInto>
+            <ui:Click SendWindowMessages="{x:Null}" SimulateClick="{x:Null}" AlterIfDisabled="True" ClickType="CLICK_SINGLE" DelayBefore="[vIntShortDelay]" DelayMS="[vIntShortDelay]" DisplayName="Click 'Button Save'" sap:VirtualizedContainerService.HintSize="484,106" sap2010:WorkflowViewState.IdRef="Click_68" KeyModifiers="None" MouseButton="BTN_LEFT">
+              <ui:Click.CursorPosition>
+                <ui:CursorPosition Position="Center">
+                  <ui:CursorPosition.OffsetX>
+                    <InArgument x:TypeArguments="x:Int32" />
+                  </ui:CursorPosition.OffsetX>
+                  <ui:CursorPosition.OffsetY>
+                    <InArgument x:TypeArguments="x:Int32" />
+                  </ui:CursorPosition.OffsetY>
+                </ui:CursorPosition>
+              </ui:Click.CursorPosition>
+              <ui:Click.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="3f3cb2eb-cd53-46d8-b7aa-23aef2c27d14" InformativeScreenshot="c30780eb5ca27cb369efd73fcbf83ed9" Selector="&lt;wnd app='saplogon.exe' cls='#32770' title='Save As' /&gt;&lt;wnd ctrlid='1' title='&amp;amp;Open' /&gt;">
+                  <ui:Target.TimeoutMS>
+                    <InArgument x:TypeArguments="x:Int32" />
+                  </ui:Target.TimeoutMS>
+                  <ui:Target.WaitForReady>
+                    <InArgument x:TypeArguments="ui:WaitForReady" />
+                  </ui:Target.WaitForReady>
+                </ui:Target>
+              </ui:Click.Target>
+            </ui:Click>
+            <ui:UiElementExists DisplayName="Element Exists Allow" Exists="[vBoolAllowExists]" sap:VirtualizedContainerService.HintSize="484,51" sap2010:WorkflowViewState.IdRef="UiElementExists_24">
+              <ui:UiElementExists.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="a48a3527-b3f3-417a-a6ac-8a6ba2c0694c" InformativeScreenshot="e9217b99d463005c2ce2bb22f7d832f8" Selector="&lt;wnd app='saplogon.exe' cls='#32770' title='SAP GUI Security' /&gt;&lt;wnd title='&amp;amp;Allow' aaname='Allow' /&gt;" TimeoutMS="3000" WaitForReady="COMPLETE" />
+              </ui:UiElementExists.Target>
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+            </ui:UiElementExists>
+            <If Condition="[vBoolAllowExists]" DisplayName="If Allow Pop up Exists" sap:VirtualizedContainerService.HintSize="484,215" sap2010:WorkflowViewState.IdRef="If_25">
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+              <If.Then>
+                <ui:Click DelayMS="{x:Null}" SendWindowMessages="{x:Null}" SimulateClick="{x:Null}" AlterIfDisabled="True" ClickType="CLICK_SINGLE" DelayBefore="[vIntShortDelay]" DisplayName="Click Allow" sap:VirtualizedContainerService.HintSize="334,68" sap2010:WorkflowViewState.IdRef="Click_69" KeyModifiers="None" MouseButton="BTN_LEFT">
+                  <ui:Click.CursorPosition>
+                    <ui:CursorPosition Position="Center">
+                      <ui:CursorPosition.OffsetX>
+                        <InArgument x:TypeArguments="x:Int32" />
+                      </ui:CursorPosition.OffsetX>
+                      <ui:CursorPosition.OffsetY>
+                        <InArgument x:TypeArguments="x:Int32" />
+                      </ui:CursorPosition.OffsetY>
+                    </ui:CursorPosition>
+                  </ui:Click.CursorPosition>
+                  <ui:Click.Target>
+                    <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="68abe010-ba92-410d-9e30-65d94556b99e" Selector="&lt;wnd app='saplogon.exe' cls='#32770' title='SAP GUI Security' /&gt;&lt;wnd title='&amp;amp;Allow' aaname='Allow' /&gt;" WaitForReady="COMPLETE">
+                      <ui:Target.TimeoutMS>
+                        <InArgument x:TypeArguments="x:Int32" />
+                      </ui:Target.TimeoutMS>
+                    </ui:Target>
+                  </ui:Click.Target>
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                      <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                      <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                    </scg:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
+                </ui:Click>
+              </If.Then>
+            </If>
+            <ui:UiElementExists DisplayName="Element Exists Allow" Exists="[vBoolAllowExists]" sap:VirtualizedContainerService.HintSize="484,51" sap2010:WorkflowViewState.IdRef="UiElementExists_25">
+              <ui:UiElementExists.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="4bf9817c-5fc3-4eff-8176-f2d2558968e6" InformativeScreenshot="e9217b99d463005c2ce2bb22f7d832f8" Selector="&lt;wnd app='saplogon.exe' cls='#32770' title='SAP GUI Security' /&gt;&lt;wnd title='&amp;amp;Allow' aaname='Allow' /&gt;" TimeoutMS="3000" WaitForReady="COMPLETE" />
+              </ui:UiElementExists.Target>
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+            </ui:UiElementExists>
+            <If Condition="[vBoolAllowExists]" DisplayName="If Allow Pop up Exists" sap:VirtualizedContainerService.HintSize="484,215" sap2010:WorkflowViewState.IdRef="If_26">
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+              <If.Then>
+                <ui:Click DelayMS="{x:Null}" SendWindowMessages="{x:Null}" SimulateClick="{x:Null}" AlterIfDisabled="True" ClickType="CLICK_SINGLE" DelayBefore="[vIntShortDelay]" DisplayName="Click Allow" sap:VirtualizedContainerService.HintSize="334,68" sap2010:WorkflowViewState.IdRef="Click_70" KeyModifiers="None" MouseButton="BTN_LEFT">
+                  <ui:Click.CursorPosition>
+                    <ui:CursorPosition Position="Center">
+                      <ui:CursorPosition.OffsetX>
+                        <InArgument x:TypeArguments="x:Int32" />
+                      </ui:CursorPosition.OffsetX>
+                      <ui:CursorPosition.OffsetY>
+                        <InArgument x:TypeArguments="x:Int32" />
+                      </ui:CursorPosition.OffsetY>
+                    </ui:CursorPosition>
+                  </ui:Click.CursorPosition>
+                  <ui:Click.Target>
+                    <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="b9f501e9-d6f9-436d-82e4-3c8ccb66c4a1" Selector="&lt;wnd app='saplogon.exe' cls='#32770' title='SAP GUI Security' /&gt;&lt;wnd title='&amp;amp;Allow' aaname='Allow' /&gt;" WaitForReady="COMPLETE">
+                      <ui:Target.TimeoutMS>
+                        <InArgument x:TypeArguments="x:Int32" />
+                      </ui:Target.TimeoutMS>
+                    </ui:Target>
+                  </ui:Click.Target>
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                      <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                      <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                    </scg:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
+                </ui:Click>
+              </If.Then>
+            </If>
+            <Assign DisplayName="Assign - SaveWindow Boolean as False" sap:VirtualizedContainerService.HintSize="484,60" sap2010:WorkflowViewState.IdRef="Assign_22">
+              <Assign.To>
+                <OutArgument x:TypeArguments="x:Boolean">[vBoolSaveWindowExists]</OutArgument>
+              </Assign.To>
+              <Assign.Value>
+                <InArgument x:TypeArguments="x:Boolean">False</InArgument>
+              </Assign.Value>
+            </Assign>
+          </Sequence>
+        </ActivityAction>
+      </ui:WindowScope.Body>
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </ui:WindowScope>
+    <ui:KillProcess AppliesTo="{x:Null}" ContinueOnError="{x:Null}" Process="{x:Null}" DisplayName="Kill Process - Excel" sap:VirtualizedContainerService.HintSize="635,22" sap2010:WorkflowViewState.IdRef="KillProcess_4" ProcessName="excel" />
+    <ui:TypeInto ClickBeforeTyping="{x:Null}" DelayBetweenKeys="{x:Null}" EmptyField="{x:Null}" SendWindowMessages="{x:Null}" SimulateType="{x:Null}" Activate="True" AlterIfDisabled="True" DelayBefore="[vIntShortDelay]" DelayMS="[vIntShortDelay]" DisplayName="Type Into - /n" sap:VirtualizedContainerService.HintSize="635,51" sap2010:WorkflowViewState.IdRef="TypeInto_29" Text="/n[k(enter)]">
+      <ui:TypeInto.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="27c091fc-b481-4776-8c01-bf0f9e10ab57" InformativeScreenshot="4c80ff77e5f443d6b7a50096f9a239ab" Selector="&lt;wnd app='saplogon.exe' cls='SAP_FRONTEND_SESSION' title='VBREVE: Display of Entries Found' /&gt;&lt;sap id='tbar[0]/okcd' /&gt;">
+          <ui:Target.TimeoutMS>
+            <InArgument x:TypeArguments="x:Int32" />
+          </ui:Target.TimeoutMS>
+          <ui:Target.WaitForReady>
+            <InArgument x:TypeArguments="ui:WaitForReady" />
+          </ui:Target.WaitForReady>
+        </ui:Target>
+      </ui:TypeInto.Target>
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </ui:TypeInto>
+    <ui:ExcelApplicationScope Password="{x:Null}" DisplayName="Excel Application Scope - Bad Debt Template" sap:VirtualizedContainerService.HintSize="635,2601" sap2010:WorkflowViewState.IdRef="ExcelApplicationScope_6" InstanceCachePeriod="3000" Workbook="[vWBAgingWorksheet]" WorkbookPath="[Environment.CurrentDirectory+argInConfig(&quot;InputPath&quot;).ToString+argInConfig(&quot;TemplateName&quot;).ToString]">
+      <ui:ExcelApplicationScope.Body>
+        <ActivityAction x:TypeArguments="ui:WorkbookApplication">
+          <ActivityAction.Argument>
+            <DelegateInArgument x:TypeArguments="ui:WorkbookApplication" Name="ExcelWorkbookScope" />
+          </ActivityAction.Argument>
+          <Sequence DisplayName="Do" sap:VirtualizedContainerService.HintSize="494,2492" sap2010:WorkflowViewState.IdRef="Sequence_66">
+            <Sequence.Variables>
+              <Variable x:TypeArguments="x:String" Name="vStrSelectedRange" />
+            </Sequence.Variables>
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+            <ui:WindowScope ApplicationWindow="{x:Null}" SearchScope="{x:Null}" TimeoutMS="{x:Null}" Window="{x:Null}" DisplayName="Attach Window - Bad Debt Template" sap:VirtualizedContainerService.HintSize="452,2400" sap2010:WorkflowViewState.IdRef="WindowScope_10" InformativeScreenshot="418c89c087a01f9dba2ef475c9f74f54" Selector="&lt;wnd app='excel.exe' cls='XLMAIN' omit:title='Bad Debt Analysis_Blank - Excel' /&gt;">
+              <ui:WindowScope.Body>
+                <ActivityAction x:TypeArguments="x:Object">
+                  <ActivityAction.Argument>
+                    <DelegateInArgument x:TypeArguments="x:Object" Name="ContextTarget" />
+                  </ActivityAction.Argument>
+                  <Sequence DisplayName="Do" sap:VirtualizedContainerService.HintSize="418,2254" sap2010:WorkflowViewState.IdRef="Sequence_65">
+                    <sap:WorkflowViewStateService.ViewState>
+                      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                      </scg:Dictionary>
+                    </sap:WorkflowViewStateService.ViewState>
+                    <Sequence sap:VirtualizedContainerService.HintSize="376,1790" sap2010:WorkflowViewState.IdRef="Sequence_64">
+                      <sap:WorkflowViewStateService.ViewState>
+                        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                        </scg:Dictionary>
+                      </sap:WorkflowViewStateService.ViewState>
+                      <ui:ExcelSelectRange DisplayName="Select Range - Aging Worksheet 2" sap:VirtualizedContainerService.HintSize="334,59" sap2010:WorkflowViewState.IdRef="ExcelSelectRange_7" Range="E6" SheetName="[argInConfig(&quot;AWorksheetName&quot;).ToString]" />
+                      <ui:SendHotkey ClickBeforeTyping="{x:Null}" DelayBetweenKeys="{x:Null}" EmptyField="{x:Null}" SendWindowMessages="{x:Null}" Activate="True" DelayBefore="[vIntShortDelay]" DelayMS="[vIntShortDelay]" DisplayName="Send Hotkey - Alt+down" sap:VirtualizedContainerService.HintSize="334,51" sap2010:WorkflowViewState.IdRef="SendHotkey_20" Key="down" KeyModifiers="Alt" SpecialKey="True">
+                        <ui:SendHotkey.Target>
+                          <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="{x:Null}" Id="7a23b6ff-bc66-466f-bb2b-1c560583a96c">
+                            <ui:Target.TimeoutMS>
+                              <InArgument x:TypeArguments="x:Int32" />
+                            </ui:Target.TimeoutMS>
+                            <ui:Target.WaitForReady>
+                              <InArgument x:TypeArguments="ui:WaitForReady" />
+                            </ui:Target.WaitForReady>
+                          </ui:Target>
+                        </ui:SendHotkey.Target>
+                        <sap:WorkflowViewStateService.ViewState>
+                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                          </scg:Dictionary>
+                        </sap:WorkflowViewStateService.ViewState>
+                      </ui:SendHotkey>
+                      <ui:Check ContinueOnError="{x:Null}" Action="Uncheck" AlterIfDisabled="True" DelayAfter="[vIntShortDelay]" DelayBefore="[vIntShortDelay]" DisplayName="Check 'check box  (Select All)'" sap:VirtualizedContainerService.HintSize="334,51" sap2010:WorkflowViewState.IdRef="Check_7">
+                        <ui:Check.Target>
+                          <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="114bcc9c-2a62-440a-a211-f4792cd40daf" InformativeScreenshot="e82f5d39af5d10dddc4a5539b1edc1ef" Selector="&lt;wnd app='excel.exe' cls='Net UI Tool Window' /&gt;&lt;wnd cls='NetUIHWND' /&gt;&lt;ctrl idx='1' name='Manual Filter' role='outline' /&gt;&lt;ctrl name='(Select All)' role='check box' /&gt;">
+                            <ui:Target.TimeoutMS>
+                              <InArgument x:TypeArguments="x:Int32" />
+                            </ui:Target.TimeoutMS>
+                            <ui:Target.WaitForReady>
+                              <InArgument x:TypeArguments="ui:WaitForReady" />
+                            </ui:Target.WaitForReady>
+                          </ui:Target>
+                        </ui:Check.Target>
+                        <sap:WorkflowViewStateService.ViewState>
+                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                          </scg:Dictionary>
+                        </sap:WorkflowViewStateService.ViewState>
+                      </ui:Check>
+                      <ui:TypeInto ClickBeforeTyping="{x:Null}" DelayBetweenKeys="{x:Null}" EmptyField="{x:Null}" SendWindowMessages="{x:Null}" SimulateType="{x:Null}" Activate="True" AlterIfDisabled="True" DelayBefore="[vIntShortDelay]" DelayMS="[vIntShortDelay]" DisplayName="Type Into - 20" sap:VirtualizedContainerService.HintSize="334,51" sap2010:WorkflowViewState.IdRef="TypeInto_50" Text="20">
+                        <ui:TypeInto.Target>
+                          <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="ef915525-e472-4ded-8e58-bf95ed410df9" InformativeScreenshot="889921c481318c78b5b6b61d2154d915" Selector="&lt;wnd app='excel.exe' cls='Net UI Tool Window' /&gt;&lt;wnd cls='RICHEDIT60W' /&gt;">
+                            <ui:Target.TimeoutMS>
+                              <InArgument x:TypeArguments="x:Int32" />
+                            </ui:Target.TimeoutMS>
+                            <ui:Target.WaitForReady>
+                              <InArgument x:TypeArguments="ui:WaitForReady" />
+                            </ui:Target.WaitForReady>
+                          </ui:Target>
+                        </ui:TypeInto.Target>
+                        <sap:WorkflowViewStateService.ViewState>
+                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                          </scg:Dictionary>
+                        </sap:WorkflowViewStateService.ViewState>
+                      </ui:TypeInto>
+                      <ui:Check ContinueOnError="{x:Null}" Action="Check" AlterIfDisabled="True" DelayAfter="[vIntShortDelay]" DelayBefore="[vIntShortDelay]" DisplayName="Check 'check box  20'" sap:VirtualizedContainerService.HintSize="334,51" sap2010:WorkflowViewState.IdRef="Check_8">
+                        <ui:Check.Target>
+                          <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="125b9dda-2562-4db5-b4e3-7c3ae69b796e" InformativeScreenshot="3b01abbe249e6a24339c0ecb314984ba" Selector="&lt;wnd app='excel.exe' cls='Net UI Tool Window' /&gt;&lt;wnd cls='NetUIHWND' /&gt;&lt;ctrl idx='1' name='Manual Filter' role='outline' /&gt;&lt;ctrl name='20' role='check box' /&gt;">
+                            <ui:Target.TimeoutMS>
+                              <InArgument x:TypeArguments="x:Int32" />
+                            </ui:Target.TimeoutMS>
+                            <ui:Target.WaitForReady>
+                              <InArgument x:TypeArguments="ui:WaitForReady" />
+                            </ui:Target.WaitForReady>
+                          </ui:Target>
+                        </ui:Check.Target>
+                        <sap:WorkflowViewStateService.ViewState>
+                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                          </scg:Dictionary>
+                        </sap:WorkflowViewStateService.ViewState>
+                      </ui:Check>
+                      <ui:Click SendWindowMessages="{x:Null}" SimulateClick="{x:Null}" AlterIfDisabled="True" ClickType="CLICK_SINGLE" DelayBefore="[vIntShortDelay]" DelayMS="[vIntShortDelay]" DisplayName="Click 'push button  OK'" sap:VirtualizedContainerService.HintSize="334,51" sap2010:WorkflowViewState.IdRef="Click_71" KeyModifiers="None" MouseButton="BTN_LEFT">
+                        <ui:Click.CursorPosition>
+                          <ui:CursorPosition Position="Center">
+                            <ui:CursorPosition.OffsetX>
+                              <InArgument x:TypeArguments="x:Int32" />
+                            </ui:CursorPosition.OffsetX>
+                            <ui:CursorPosition.OffsetY>
+                              <InArgument x:TypeArguments="x:Int32" />
+                            </ui:CursorPosition.OffsetY>
+                          </ui:CursorPosition>
+                        </ui:Click.CursorPosition>
+                        <ui:Click.Target>
+                          <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="e01bc4a8-bc1a-47f0-a463-666bd6a8a912" InformativeScreenshot="7ad5d9365d71c509f8319edb37261a11" Selector="&lt;wnd app='excel.exe' cls='Net UI Tool Window' /&gt;&lt;wnd cls='NetUIHWND' /&gt;&lt;ctrl name='OK' role='push button' /&gt;">
+                            <ui:Target.TimeoutMS>
+                              <InArgument x:TypeArguments="x:Int32" />
+                            </ui:Target.TimeoutMS>
+                            <ui:Target.WaitForReady>
+                              <InArgument x:TypeArguments="ui:WaitForReady" />
+                            </ui:Target.WaitForReady>
+                          </ui:Target>
+                        </ui:Click.Target>
+                        <sap:WorkflowViewStateService.ViewState>
+                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                          </scg:Dictionary>
+                        </sap:WorkflowViewStateService.ViewState>
+                      </ui:Click>
+                      <Sequence DisplayName="Selection C Code" sap:VirtualizedContainerService.HintSize="334,1144" sap2010:WorkflowViewState.IdRef="Sequence_68">
+                        <sap:WorkflowViewStateService.ViewState>
+                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                          </scg:Dictionary>
+                        </sap:WorkflowViewStateService.ViewState>
+                        <ui:ExcelSelectRange DisplayName="Select Range - Aging Worksheet Type" sap:VirtualizedContainerService.HintSize="200,51" sap2010:WorkflowViewState.IdRef="ExcelSelectRange_12" Range="D6" SheetName="[argInConfig(&quot;AWorksheetName&quot;).ToString]">
+                          <sap:WorkflowViewStateService.ViewState>
+                            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                              <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                            </scg:Dictionary>
+                          </sap:WorkflowViewStateService.ViewState>
+                        </ui:ExcelSelectRange>
+                        <ui:SendHotkey ClickBeforeTyping="{x:Null}" DelayBetweenKeys="{x:Null}" EmptyField="{x:Null}" SendWindowMessages="{x:Null}" Activate="True" DelayBefore="[vIntShortDelay]" DelayMS="[vIntShortDelay]" DisplayName="Send Hotkey - Alt+down" sap:VirtualizedContainerService.HintSize="200,51" sap2010:WorkflowViewState.IdRef="SendHotkey_27" Key="down" KeyModifiers="Alt" SpecialKey="True">
+                          <ui:SendHotkey.Target>
+                            <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="{x:Null}" Id="a7fd2fc5-0867-4dff-aa1c-c88922b70016">
+                              <ui:Target.TimeoutMS>
+                                <InArgument x:TypeArguments="x:Int32" />
+                              </ui:Target.TimeoutMS>
+                              <ui:Target.WaitForReady>
+                                <InArgument x:TypeArguments="ui:WaitForReady" />
+                              </ui:Target.WaitForReady>
+                            </ui:Target>
+                          </ui:SendHotkey.Target>
+                          <sap:WorkflowViewStateService.ViewState>
+                            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                              <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                            </scg:Dictionary>
+                          </sap:WorkflowViewStateService.ViewState>
+                        </ui:SendHotkey>
+                        <ui:TypeInto ClickBeforeTyping="{x:Null}" DelayBetweenKeys="{x:Null}" EmptyField="{x:Null}" SendWindowMessages="{x:Null}" SimulateType="{x:Null}" Activate="True" AlterIfDisabled="True" DelayBefore="[vIntShortDelay]" DelayMS="[vIntShortDelay]" DisplayName="Type Into - 2016" sap:VirtualizedContainerService.HintSize="200,51" sap2010:WorkflowViewState.IdRef="TypeInto_54" Text="2016">
+                          <ui:TypeInto.Target>
+                            <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="c223ead2-0277-4074-a850-ed0013597067" InformativeScreenshot="889921c481318c78b5b6b61d2154d915" Selector="&lt;wnd app='excel.exe' cls='Net UI Tool Window' /&gt;&lt;wnd cls='RICHEDIT60W' /&gt;">
+                              <ui:Target.TimeoutMS>
+                                <InArgument x:TypeArguments="x:Int32" />
+                              </ui:Target.TimeoutMS>
+                              <ui:Target.WaitForReady>
+                                <InArgument x:TypeArguments="ui:WaitForReady" />
+                              </ui:Target.WaitForReady>
+                            </ui:Target>
+                          </ui:TypeInto.Target>
+                          <sap:WorkflowViewStateService.ViewState>
+                            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                              <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                            </scg:Dictionary>
+                          </sap:WorkflowViewStateService.ViewState>
+                        </ui:TypeInto>
+                        <ui:Check ContinueOnError="{x:Null}" Action="Uncheck" AlterIfDisabled="True" DelayAfter="[vIntShortDelay]" DelayBefore="[vIntShortDelay]" DisplayName="Check 'check box  2016" sap:VirtualizedContainerService.HintSize="200,51" sap2010:WorkflowViewState.IdRef="Check_14">
+                          <ui:Check.Target>
+                            <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="9b844ee1-7f6d-476c-a18e-31cf7ee2577d" InformativeScreenshot="3b01abbe249e6a24339c0ecb314984ba" Selector="&lt;wnd app='excel.exe' cls='Net UI Tool Window' /&gt;&lt;wnd cls='NetUIHWND' /&gt;&lt;ctrl idx='2' name='Manual Filter' role='outline' /&gt;&lt;ctrl name='2016' role='check box' /&gt;">
+                              <ui:Target.TimeoutMS>
+                                <InArgument x:TypeArguments="x:Int32" />
+                              </ui:Target.TimeoutMS>
+                              <ui:Target.WaitForReady>
+                                <InArgument x:TypeArguments="ui:WaitForReady" />
+                              </ui:Target.WaitForReady>
+                            </ui:Target>
+                          </ui:Check.Target>
+                          <sap:WorkflowViewStateService.ViewState>
+                            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                              <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                            </scg:Dictionary>
+                          </sap:WorkflowViewStateService.ViewState>
+                        </ui:Check>
+                        <ui:Check ContinueOnError="{x:Null}" Action="Check" AlterIfDisabled="True" DelayAfter="[vIntShortDelay]" DelayBefore="[vIntShortDelay]" DisplayName="Check 'Add current Slection" sap:VirtualizedContainerService.HintSize="200,51" sap2010:WorkflowViewState.IdRef="Check_15">
+                          <ui:Check.Target>
+                            <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="37dcd41d-a8ba-4a3e-97e5-be81c1e52bab" InformativeScreenshot="d1aca97d0d014b9713113319bebd0ad5" Selector="&lt;wnd app='excel.exe' cls='Net UI Tool Window' /&gt;&lt;wnd cls='NetUIHWND' /&gt;&lt;ctrl idx='2' name='Manual Filter' role='outline' /&gt;&lt;ctrl name='Add current selection to filter' role='check box' /&gt;" WaitForReady="INTERACTIVE">
+                              <ui:Target.TimeoutMS>
+                                <InArgument x:TypeArguments="x:Int32" />
+                              </ui:Target.TimeoutMS>
+                            </ui:Target>
+                          </ui:Check.Target>
+                          <sap:WorkflowViewStateService.ViewState>
+                            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                              <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                            </scg:Dictionary>
+                          </sap:WorkflowViewStateService.ViewState>
+                        </ui:Check>
+                        <ui:Click SendWindowMessages="{x:Null}" SimulateClick="{x:Null}" AlterIfDisabled="True" ClickType="CLICK_SINGLE" DelayBefore="[vIntShortDelay]" DelayMS="[vIntShortDelay]" DisplayName="Click 'push button  OK'" sap:VirtualizedContainerService.HintSize="200,51" sap2010:WorkflowViewState.IdRef="Click_74" KeyModifiers="None" MouseButton="BTN_LEFT">
+                          <ui:Click.CursorPosition>
+                            <ui:CursorPosition Position="Center">
+                              <ui:CursorPosition.OffsetX>
+                                <InArgument x:TypeArguments="x:Int32" />
+                              </ui:CursorPosition.OffsetX>
+                              <ui:CursorPosition.OffsetY>
+                                <InArgument x:TypeArguments="x:Int32" />
+                              </ui:CursorPosition.OffsetY>
+                            </ui:CursorPosition>
+                          </ui:Click.CursorPosition>
+                          <ui:Click.Target>
+                            <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="0f7dea7d-9e0a-4edc-acb2-09e270ccbe64" InformativeScreenshot="7ad5d9365d71c509f8319edb37261a11" Selector="&lt;wnd app='excel.exe' cls='Net UI Tool Window' /&gt;&lt;wnd cls='NetUIHWND' /&gt;&lt;ctrl name='OK' role='push button' /&gt;">
+                              <ui:Target.TimeoutMS>
+                                <InArgument x:TypeArguments="x:Int32" />
+                              </ui:Target.TimeoutMS>
+                              <ui:Target.WaitForReady>
+                                <InArgument x:TypeArguments="ui:WaitForReady" />
+                              </ui:Target.WaitForReady>
+                            </ui:Target>
+                          </ui:Click.Target>
+                          <sap:WorkflowViewStateService.ViewState>
+                            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                              <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                            </scg:Dictionary>
+                          </sap:WorkflowViewStateService.ViewState>
+                        </ui:Click>
+                        <ui:ExcelSelectRange DisplayName="Select Range - Aging Worksheet Type" sap:VirtualizedContainerService.HintSize="200,51" sap2010:WorkflowViewState.IdRef="ExcelSelectRange_13" Range="D6" SheetName="[argInConfig(&quot;AWorksheetName&quot;).ToString]">
+                          <sap:WorkflowViewStateService.ViewState>
+                            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                              <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                            </scg:Dictionary>
+                          </sap:WorkflowViewStateService.ViewState>
+                        </ui:ExcelSelectRange>
+                        <ui:SendHotkey ClickBeforeTyping="{x:Null}" DelayBetweenKeys="{x:Null}" EmptyField="{x:Null}" SendWindowMessages="{x:Null}" Activate="True" DelayBefore="[vIntShortDelay]" DelayMS="[vIntShortDelay]" DisplayName="Send Hotkey - Alt+down" sap:VirtualizedContainerService.HintSize="200,51" sap2010:WorkflowViewState.IdRef="SendHotkey_28" Key="down" KeyModifiers="Alt" SpecialKey="True">
+                          <ui:SendHotkey.Target>
+                            <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="{x:Null}" Id="d33861b2-2ae6-431a-80ae-3c92dcb0ea13">
+                              <ui:Target.TimeoutMS>
+                                <InArgument x:TypeArguments="x:Int32" />
+                              </ui:Target.TimeoutMS>
+                              <ui:Target.WaitForReady>
+                                <InArgument x:TypeArguments="ui:WaitForReady" />
+                              </ui:Target.WaitForReady>
+                            </ui:Target>
+                          </ui:SendHotkey.Target>
+                          <sap:WorkflowViewStateService.ViewState>
+                            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                              <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                            </scg:Dictionary>
+                          </sap:WorkflowViewStateService.ViewState>
+                        </ui:SendHotkey>
+                        <ui:TypeInto ClickBeforeTyping="{x:Null}" DelayBetweenKeys="{x:Null}" EmptyField="{x:Null}" SendWindowMessages="{x:Null}" SimulateType="{x:Null}" Activate="True" AlterIfDisabled="True" DelayBefore="[vIntShortDelay]" DelayMS="[vIntShortDelay]" DisplayName="Type Into - 3007" sap:VirtualizedContainerService.HintSize="200,51" sap2010:WorkflowViewState.IdRef="TypeInto_55" Text="3007">
+                          <ui:TypeInto.Target>
+                            <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="92d38019-c760-46c2-bada-c11b428a27bc" InformativeScreenshot="889921c481318c78b5b6b61d2154d915" Selector="&lt;wnd app='excel.exe' cls='Net UI Tool Window' /&gt;&lt;wnd cls='RICHEDIT60W' /&gt;">
+                              <ui:Target.TimeoutMS>
+                                <InArgument x:TypeArguments="x:Int32" />
+                              </ui:Target.TimeoutMS>
+                              <ui:Target.WaitForReady>
+                                <InArgument x:TypeArguments="ui:WaitForReady" />
+                              </ui:Target.WaitForReady>
+                            </ui:Target>
+                          </ui:TypeInto.Target>
+                          <sap:WorkflowViewStateService.ViewState>
+                            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                              <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                            </scg:Dictionary>
+                          </sap:WorkflowViewStateService.ViewState>
+                        </ui:TypeInto>
+                        <ui:Check ContinueOnError="{x:Null}" Action="Uncheck" AlterIfDisabled="True" DelayAfter="[vIntShortDelay]" DelayBefore="[vIntShortDelay]" DisplayName="Check 'check box  3007" sap:VirtualizedContainerService.HintSize="200,51" sap2010:WorkflowViewState.IdRef="Check_16">
+                          <ui:Check.Target>
+                            <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="a6c8f5ee-3dfe-4e73-b70e-58ee49e4dab3" InformativeScreenshot="3b01abbe249e6a24339c0ecb314984ba" Selector="&lt;wnd app='excel.exe' cls='Net UI Tool Window' /&gt;&lt;wnd cls='NetUIHWND' /&gt;&lt;ctrl idx='2' name='Manual Filter' role='outline' /&gt;&lt;ctrl name='3007' role='check box' /&gt;">
+                              <ui:Target.TimeoutMS>
+                                <InArgument x:TypeArguments="x:Int32" />
+                              </ui:Target.TimeoutMS>
+                              <ui:Target.WaitForReady>
+                                <InArgument x:TypeArguments="ui:WaitForReady" />
+                              </ui:Target.WaitForReady>
+                            </ui:Target>
+                          </ui:Check.Target>
+                          <sap:WorkflowViewStateService.ViewState>
+                            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                              <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                            </scg:Dictionary>
+                          </sap:WorkflowViewStateService.ViewState>
+                        </ui:Check>
+                        <ui:Check ContinueOnError="{x:Null}" Action="Check" AlterIfDisabled="True" DelayAfter="[vIntShortDelay]" DelayBefore="[vIntShortDelay]" DisplayName="Check 'Add current Slection" sap:VirtualizedContainerService.HintSize="200,51" sap2010:WorkflowViewState.IdRef="Check_17">
+                          <ui:Check.Target>
+                            <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="b94454c2-2d02-4d91-afa9-01a8f94d59d7" InformativeScreenshot="d1aca97d0d014b9713113319bebd0ad5" Selector="&lt;wnd app='excel.exe' cls='Net UI Tool Window' /&gt;&lt;wnd cls='NetUIHWND' /&gt;&lt;ctrl idx='2' name='Manual Filter' role='outline' /&gt;&lt;ctrl name='Add current selection to filter' role='check box' /&gt;" WaitForReady="INTERACTIVE">
+                              <ui:Target.TimeoutMS>
+                                <InArgument x:TypeArguments="x:Int32" />
+                              </ui:Target.TimeoutMS>
+                            </ui:Target>
+                          </ui:Check.Target>
+                          <sap:WorkflowViewStateService.ViewState>
+                            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                              <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                            </scg:Dictionary>
+                          </sap:WorkflowViewStateService.ViewState>
+                        </ui:Check>
+                        <ui:Click SendWindowMessages="{x:Null}" SimulateClick="{x:Null}" AlterIfDisabled="True" ClickType="CLICK_SINGLE" DelayBefore="[vIntShortDelay]" DelayMS="[vIntShortDelay]" DisplayName="Click 'push button  OK'" sap:VirtualizedContainerService.HintSize="200,51" sap2010:WorkflowViewState.IdRef="Click_75" KeyModifiers="None" MouseButton="BTN_LEFT">
+                          <ui:Click.CursorPosition>
+                            <ui:CursorPosition Position="Center">
+                              <ui:CursorPosition.OffsetX>
+                                <InArgument x:TypeArguments="x:Int32" />
+                              </ui:CursorPosition.OffsetX>
+                              <ui:CursorPosition.OffsetY>
+                                <InArgument x:TypeArguments="x:Int32" />
+                              </ui:CursorPosition.OffsetY>
+                            </ui:CursorPosition>
+                          </ui:Click.CursorPosition>
+                          <ui:Click.Target>
+                            <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="014b6cf7-9857-4286-acf8-3b21a8feb736" InformativeScreenshot="7ad5d9365d71c509f8319edb37261a11" Selector="&lt;wnd app='excel.exe' cls='Net UI Tool Window' /&gt;&lt;wnd cls='NetUIHWND' /&gt;&lt;ctrl name='OK' role='push button' /&gt;">
+                              <ui:Target.TimeoutMS>
+                                <InArgument x:TypeArguments="x:Int32" />
+                              </ui:Target.TimeoutMS>
+                              <ui:Target.WaitForReady>
+                                <InArgument x:TypeArguments="ui:WaitForReady" />
+                              </ui:Target.WaitForReady>
+                            </ui:Target>
+                          </ui:Click.Target>
+                          <sap:WorkflowViewStateService.ViewState>
+                            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                              <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                            </scg:Dictionary>
+                          </sap:WorkflowViewStateService.ViewState>
+                        </ui:Click>
+                      </Sequence>
+                    </Sequence>
+                    <ui:ExcelSelectRange DisplayName="Select Range - Aging worksheet 1" sap:VirtualizedContainerService.HintSize="376,59" sap2010:WorkflowViewState.IdRef="ExcelSelectRange_8" Range="A6" SheetName="[argInConfig(&quot;AWorksheetName&quot;).ToString]">
+                      <sap:WorkflowViewStateService.ViewState>
+                        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                        </scg:Dictionary>
+                      </sap:WorkflowViewStateService.ViewState>
+                    </ui:ExcelSelectRange>
+                    <ui:SendHotkey ClickBeforeTyping="{x:Null}" DelayBetweenKeys="{x:Null}" EmptyField="{x:Null}" SendWindowMessages="{x:Null}" Activate="True" DelayBefore="[vIntShortDelay]" DelayMS="[vIntShortDelay]" DisplayName="Send Hotkey - down" sap:VirtualizedContainerService.HintSize="376,51" sap2010:WorkflowViewState.IdRef="SendHotkey_21" Key="down" KeyModifiers="None" SpecialKey="True">
+                      <ui:SendHotkey.Target>
+                        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="{x:Null}" Id="bb89ea8a-3771-4690-ac1b-c721cef5b2c0">
+                          <ui:Target.TimeoutMS>
+                            <InArgument x:TypeArguments="x:Int32" />
+                          </ui:Target.TimeoutMS>
+                          <ui:Target.WaitForReady>
+                            <InArgument x:TypeArguments="ui:WaitForReady" />
+                          </ui:Target.WaitForReady>
+                        </ui:Target>
+                      </ui:SendHotkey.Target>
+                      <sap:WorkflowViewStateService.ViewState>
+                        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                          <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                        </scg:Dictionary>
+                      </sap:WorkflowViewStateService.ViewState>
+                    </ui:SendHotkey>
+                    <ui:SendHotkey ClickBeforeTyping="{x:Null}" DelayBetweenKeys="{x:Null}" EmptyField="{x:Null}" SendWindowMessages="{x:Null}" Activate="True" DelayBefore="[vIntShortDelay]" DelayMS="[vIntShortDelay]" DisplayName="Send Hotkey - Ctrl+Shift+Down" sap:VirtualizedContainerService.HintSize="376,51" sap2010:WorkflowViewState.IdRef="SendHotkey_22" Key="down" KeyModifiers="Ctrl, Shift" SpecialKey="True">
+                      <ui:SendHotkey.Target>
+                        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="{x:Null}" Id="952874ae-246b-4f8f-8064-18bbcaa39104">
+                          <ui:Target.TimeoutMS>
+                            <InArgument x:TypeArguments="x:Int32" />
+                          </ui:Target.TimeoutMS>
+                          <ui:Target.WaitForReady>
+                            <InArgument x:TypeArguments="ui:WaitForReady" />
+                          </ui:Target.WaitForReady>
+                        </ui:Target>
+                      </ui:SendHotkey.Target>
+                      <sap:WorkflowViewStateService.ViewState>
+                        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                          <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                        </scg:Dictionary>
+                      </sap:WorkflowViewStateService.ViewState>
+                    </ui:SendHotkey>
+                    <ui:SendHotkey ClickBeforeTyping="{x:Null}" DelayBetweenKeys="{x:Null}" EmptyField="{x:Null}" SendWindowMessages="{x:Null}" SpecialKey="{x:Null}" Activate="True" DelayBefore="[vIntShortDelay]" DelayMS="[vIntShortDelay]" DisplayName="Send Hotkey - Ctrl+c" sap:VirtualizedContainerService.HintSize="376,51" sap2010:WorkflowViewState.IdRef="SendHotkey_23" Key="c" KeyModifiers="Ctrl">
+                      <ui:SendHotkey.Target>
+                        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="{x:Null}" Id="eb33a2a6-a633-4335-ad75-9425f0d80568">
+                          <ui:Target.TimeoutMS>
+                            <InArgument x:TypeArguments="x:Int32" />
+                          </ui:Target.TimeoutMS>
+                          <ui:Target.WaitForReady>
+                            <InArgument x:TypeArguments="ui:WaitForReady" />
+                          </ui:Target.WaitForReady>
+                        </ui:Target>
+                      </ui:SendHotkey.Target>
+                      <sap:WorkflowViewStateService.ViewState>
+                        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                          <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                        </scg:Dictionary>
+                      </sap:WorkflowViewStateService.ViewState>
+                    </ui:SendHotkey>
+                  </Sequence>
+                </ActivityAction>
+              </ui:WindowScope.Body>
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+            </ui:WindowScope>
+          </Sequence>
+        </ActivityAction>
+      </ui:ExcelApplicationScope.Body>
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </ui:ExcelApplicationScope>
+    <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="635,91" sap2010:WorkflowViewState.IdRef="LogMessage_4" Level="Info" Message="[&quot;Serach Se16N&quot;]" />
+    <ui:WindowScope ApplicationWindow="{x:Null}" SearchScope="{x:Null}" Window="{x:Null}" DisplayName="Attach Window - SAP" sap:VirtualizedContainerService.HintSize="635.2,52.8" sap2010:WorkflowViewState.IdRef="WindowScope_8" InformativeScreenshot="ca5a0b92c3c1e22a71aa8020d57bb8a2" Selector="&lt;wnd app='saplogon.exe' cls='SAP_FRONTEND_SESSION' title='SAP*' /&gt;" TimeoutMS="60000">
+      <ui:WindowScope.Body>
+        <ActivityAction x:TypeArguments="x:Object">
+          <ActivityAction.Argument>
+            <DelegateInArgument x:TypeArguments="x:Object" Name="ContextTarget" />
+          </ActivityAction.Argument>
+          <Sequence sap:VirtualizedContainerService.HintSize="525.6,2978.4" sap2010:WorkflowViewState.IdRef="Sequence_46">
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+            <Sequence DisplayName="Do" sap:VirtualizedContainerService.HintSize="484,868.8" sap2010:WorkflowViewState.IdRef="Sequence_45">
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+              <ui:TypeInto ClickBeforeTyping="{x:Null}" DelayBetweenKeys="{x:Null}" EmptyField="{x:Null}" SendWindowMessages="{x:Null}" SimulateType="{x:Null}" Activate="True" AlterIfDisabled="True" DelayBefore="[vIntShortDelay]" DelayMS="[vIntShortDelay]" DisplayName="Type Into - se16n" sap:VirtualizedContainerService.HintSize="334.4,135.2" sap2010:WorkflowViewState.IdRef="TypeInto_38" Text="se16n[k(enter)]">
+                <ui:TypeInto.Target>
+                  <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="5d2f3b58-8976-421b-bcbd-b12995e631e1" InformativeScreenshot="e557301cdd3c8f69256dcb7e3e1bec49" Selector="&lt;sap id='tbar[0]/okcd' /&gt;">
+                    <ui:Target.TimeoutMS>
+                      <InArgument x:TypeArguments="x:Int32" />
+                    </ui:Target.TimeoutMS>
+                    <ui:Target.WaitForReady>
+                      <InArgument x:TypeArguments="ui:WaitForReady" />
+                    </ui:Target.WaitForReady>
+                  </ui:Target>
+                </ui:TypeInto.Target>
+              </ui:TypeInto>
+              <ui:TypeInto ClickBeforeTyping="{x:Null}" DelayBetweenKeys="{x:Null}" EmptyField="{x:Null}" SendWindowMessages="{x:Null}" SimulateType="{x:Null}" Activate="True" AlterIfDisabled="True" DelayBefore="[vIntShortDelay]" DelayMS="[vIntShortDelay]" DisplayName="Type Into - Table Name" sap:VirtualizedContainerService.HintSize="334.4,135.2" sap2010:WorkflowViewState.IdRef="TypeInto_39" Text="Vbreve[k(enter)]">
+                <ui:TypeInto.Target>
+                  <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="f897ce78-a173-4b54-9948-362642ea9c62" InformativeScreenshot="8eb30be70795485b49b0dd7d65dcac8c" Selector="&lt;wnd app='saplogon.exe' cls='SAP_FRONTEND_SESSION' title='General Table Display' /&gt;&lt;sap id='usr/ctxtGD-TAB' /&gt;">
+                    <ui:Target.TimeoutMS>
+                      <InArgument x:TypeArguments="x:Int32" />
+                    </ui:Target.TimeoutMS>
+                    <ui:Target.WaitForReady>
+                      <InArgument x:TypeArguments="ui:WaitForReady" />
+                    </ui:Target.WaitForReady>
+                  </ui:Target>
+                </ui:TypeInto.Target>
+              </ui:TypeInto>
+              <ui:TypeInto ClickBeforeTyping="{x:Null}" DelayBetweenKeys="{x:Null}" SendWindowMessages="{x:Null}" SimulateType="{x:Null}" Activate="True" AlterIfDisabled="True" DelayBefore="[vIntShortDelay]" DelayMS="[vIntShortDelay]" DisplayName="Type Into - No of hits blank" EmptyField="True" sap:VirtualizedContainerService.HintSize="334,134" sap2010:WorkflowViewState.IdRef="TypeInto_40">
+                <ui:TypeInto.Target>
+                  <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="9ea0f7a7-8b68-403c-9836-141693da9386" InformativeScreenshot="0ca9f61cde2d95023e3e2614fed6446a" Selector="&lt;wnd app='saplogon.exe' cls='SAP_FRONTEND_SESSION' title='General Table Display' /&gt;&lt;sap id='usr/txtGD-MAX_LINES' /&gt;">
+                    <ui:Target.TimeoutMS>
+                      <InArgument x:TypeArguments="x:Int32" />
+                    </ui:Target.TimeoutMS>
+                    <ui:Target.WaitForReady>
+                      <InArgument x:TypeArguments="ui:WaitForReady" />
+                    </ui:Target.WaitForReady>
+                  </ui:Target>
+                </ui:TypeInto.Target>
+                <ui:TypeInto.Text>
+                  <InArgument x:TypeArguments="x:String">
+                    <Literal x:TypeArguments="x:String" Value="" />
+                  </InArgument>
+                </ui:TypeInto.Text>
+              </ui:TypeInto>
+              <ui:Click SendWindowMessages="{x:Null}" SimulateClick="{x:Null}" AlterIfDisabled="True" ClickType="CLICK_SINGLE" DelayBefore="[vIntShortDelay]" DelayMS="[vIntShortDelay]" DisplayName="Click 'Button  More'" sap:VirtualizedContainerService.HintSize="334,106" sap2010:WorkflowViewState.IdRef="Click_53" KeyModifiers="None" MouseButton="BTN_LEFT">
+                <ui:Click.CursorPosition>
+                  <ui:CursorPosition Position="Center">
+                    <ui:CursorPosition.OffsetX>
+                      <InArgument x:TypeArguments="x:Int32" />
+                    </ui:CursorPosition.OffsetX>
+                    <ui:CursorPosition.OffsetY>
+                      <InArgument x:TypeArguments="x:Int32" />
+                    </ui:CursorPosition.OffsetY>
+                  </ui:CursorPosition>
+                </ui:Click.CursorPosition>
+                <ui:Click.Target>
+                  <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="da38b672-fa71-4e86-80e9-46b4219c8e05" InformativeScreenshot="b4b7cb65b643f4ca573c0c0ceeeeaaa0" Selector="&lt;wnd app='saplogon.exe' cls='SAP_FRONTEND_SESSION' title='General Table Display' /&gt;&lt;sap id='usr/tblSAPLSE16NSELFIELDS_TC' tableCol='4' tableRow='1' /&gt;">
+                    <ui:Target.TimeoutMS>
+                      <InArgument x:TypeArguments="x:Int32" />
+                    </ui:Target.TimeoutMS>
+                    <ui:Target.WaitForReady>
+                      <InArgument x:TypeArguments="ui:WaitForReady" />
+                    </ui:Target.WaitForReady>
+                  </ui:Target>
+                </ui:Click.Target>
+              </ui:Click>
+              <ui:Click SendWindowMessages="{x:Null}" SimulateClick="{x:Null}" AlterIfDisabled="True" ClickType="CLICK_SINGLE" DelayBefore="[vIntShortDelay]" DelayMS="[vIntShortDelay]" DisplayName="Click 'Button Upload'" sap:VirtualizedContainerService.HintSize="334,106" sap2010:WorkflowViewState.IdRef="Click_54" KeyModifiers="None" MouseButton="BTN_LEFT">
+                <ui:Click.CursorPosition>
+                  <ui:CursorPosition Position="Center">
+                    <ui:CursorPosition.OffsetX>
+                      <InArgument x:TypeArguments="x:Int32" />
+                    </ui:CursorPosition.OffsetX>
+                    <ui:CursorPosition.OffsetY>
+                      <InArgument x:TypeArguments="x:Int32" />
+                    </ui:CursorPosition.OffsetY>
+                  </ui:CursorPosition>
+                </ui:Click.CursorPosition>
+                <ui:Click.Target>
+                  <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="6097b22a-46aa-41ef-8c72-591195770518" InformativeScreenshot="27293521ffa86456bb4dcc66330bada7" Selector="&lt;wnd app='saplogon.exe' cls='#32770' title='Multiple Selection by Field' /&gt;&lt;sap id='tbar[0]/btn[24]' /&gt;">
+                    <ui:Target.TimeoutMS>
+                      <InArgument x:TypeArguments="x:Int32" />
+                    </ui:Target.TimeoutMS>
+                    <ui:Target.WaitForReady>
+                      <InArgument x:TypeArguments="ui:WaitForReady" />
+                    </ui:Target.WaitForReady>
+                  </ui:Target>
+                </ui:Click.Target>
+              </ui:Click>
+            </Sequence>
+            <ui:Click SendWindowMessages="{x:Null}" SimulateClick="{x:Null}" AlterIfDisabled="True" ClickType="CLICK_SINGLE" DelayBefore="[vIntShortDelay]" DelayMS="[vIntShortDelay]" DisplayName="Click 'Button Transfer'" sap:VirtualizedContainerService.HintSize="484,106" sap2010:WorkflowViewState.IdRef="Click_55" KeyModifiers="None" MouseButton="BTN_LEFT">
+              <ui:Click.CursorPosition>
+                <ui:CursorPosition Position="Center">
+                  <ui:CursorPosition.OffsetX>
+                    <InArgument x:TypeArguments="x:Int32" />
+                  </ui:CursorPosition.OffsetX>
+                  <ui:CursorPosition.OffsetY>
+                    <InArgument x:TypeArguments="x:Int32" />
+                  </ui:CursorPosition.OffsetY>
+                </ui:CursorPosition>
+              </ui:Click.CursorPosition>
+              <ui:Click.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="090e7536-6ad7-4d7e-b4ac-4b569a73ef72" InformativeScreenshot="ece5fad0c008cd9eaf1ab4bce5585095" Selector="&lt;wnd app='saplogon.exe' cls='#32770' title='Multiple Selection by Field' /&gt;&lt;sap id='tbar[0]/btn[8]' /&gt;">
+                  <ui:Target.TimeoutMS>
+                    <InArgument x:TypeArguments="x:Int32" />
+                  </ui:Target.TimeoutMS>
+                  <ui:Target.WaitForReady>
+                    <InArgument x:TypeArguments="ui:WaitForReady" />
+                  </ui:Target.WaitForReady>
+                </ui:Target>
+              </ui:Click.Target>
+            </ui:Click>
+            <ui:TypeInto ClickBeforeTyping="{x:Null}" DelayBetweenKeys="{x:Null}" EmptyField="{x:Null}" SendWindowMessages="{x:Null}" SimulateType="{x:Null}" Activate="True" AlterIfDisabled="True" DelayBefore="[vIntShortDelay]" DelayMS="[vIntShortDelay]" DisplayName="Type Into - RD status A" sap:VirtualizedContainerService.HintSize="484,134" sap2010:WorkflowViewState.IdRef="TypeInto_41" Text="A">
+              <ui:TypeInto.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="47aef781-42c2-43ca-a002-d4e6f2948303" InformativeScreenshot="c7c09191906094819a45ae1d931303f1" Selector="&lt;wnd app='saplogon.exe' cls='SAP_FRONTEND_SESSION' title='General Table Display' /&gt;&lt;sap id='usr/tblSAPLSE16NSELFIELDS_TC' tableCol='2' tableRow='22' /&gt;">
+                  <ui:Target.TimeoutMS>
+                    <InArgument x:TypeArguments="x:Int32" />
+                  </ui:Target.TimeoutMS>
+                  <ui:Target.WaitForReady>
+                    <InArgument x:TypeArguments="ui:WaitForReady" />
+                  </ui:Target.WaitForReady>
+                </ui:Target>
+              </ui:TypeInto.Target>
+            </ui:TypeInto>
+            <ui:Click SendWindowMessages="{x:Null}" SimulateClick="{x:Null}" AlterIfDisabled="True" ClickType="CLICK_SINGLE" DelayBefore="[vIntShortDelay]" DelayMS="[vIntShortDelay]" DisplayName="Click 'Button  Online (F8)'" sap:VirtualizedContainerService.HintSize="484,106" sap2010:WorkflowViewState.IdRef="Click_56" KeyModifiers="None" MouseButton="BTN_LEFT">
+              <ui:Click.CursorPosition>
+                <ui:CursorPosition Position="Center">
+                  <ui:CursorPosition.OffsetX>
+                    <InArgument x:TypeArguments="x:Int32" />
+                  </ui:CursorPosition.OffsetX>
+                  <ui:CursorPosition.OffsetY>
+                    <InArgument x:TypeArguments="x:Int32" />
+                  </ui:CursorPosition.OffsetY>
+                </ui:CursorPosition>
+              </ui:Click.CursorPosition>
+              <ui:Click.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="1ae64c1f-0b62-4ccb-bdc8-860a8ccc9e66" InformativeScreenshot="ae75ac130b17c81d2d214d9bd17721b6" Selector="&lt;wnd app='saplogon.exe' cls='SAP_FRONTEND_SESSION' title='General Table Display' /&gt;&lt;sap id='tbar[1]/btn[8]' /&gt;">
+                  <ui:Target.TimeoutMS>
+                    <InArgument x:TypeArguments="x:Int32" />
+                  </ui:Target.TimeoutMS>
+                  <ui:Target.WaitForReady>
+                    <InArgument x:TypeArguments="ui:WaitForReady" />
+                  </ui:Target.WaitForReady>
+                </ui:Target>
+              </ui:Click.Target>
+            </ui:Click>
+            <ui:Click SendWindowMessages="{x:Null}" SimulateClick="{x:Null}" AlterIfDisabled="True" ClickType="CLICK_SINGLE" DelayBefore="[vIntShortDelay]" DelayMS="[vIntShortDelay]" DisplayName="Click 2" sap:VirtualizedContainerService.HintSize="484,68" sap2010:WorkflowViewState.IdRef="Click_57" KeyModifiers="None" MouseButton="BTN_LEFT">
+              <ui:Click.CursorPosition>
+                <ui:CursorPosition Position="Center">
+                  <ui:CursorPosition.OffsetX>
+                    <InArgument x:TypeArguments="x:Int32" />
+                  </ui:CursorPosition.OffsetX>
+                  <ui:CursorPosition.OffsetY>
+                    <InArgument x:TypeArguments="x:Int32" />
+                  </ui:CursorPosition.OffsetY>
+                </ui:CursorPosition>
+              </ui:Click.CursorPosition>
+              <ui:Click.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="7a21748b-508a-4f10-9593-bc9e376595e0" Selector="&lt;wnd app='saplogon.exe' cls='SAP_FRONTEND_SESSION' title='VBREVE: Display of Entries Found' /&gt;&lt;wnd cls='Custom Container Class' idx='4' title='Custom  Container' /&gt;&lt;wnd cls='Shell Window Class' title='Control  Container' /&gt;&lt;wnd cls='ToolbarWindow32' /&gt;&lt;ctrl idx='4' name=' ' role='split button' /&gt;">
+                  <ui:Target.TimeoutMS>
+                    <InArgument x:TypeArguments="x:Int32" />
+                  </ui:Target.TimeoutMS>
+                  <ui:Target.WaitForReady>
+                    <InArgument x:TypeArguments="ui:WaitForReady" />
+                  </ui:Target.WaitForReady>
+                </ui:Target>
+              </ui:Click.Target>
+            </ui:Click>
+            <ui:Click SendWindowMessages="{x:Null}" SimulateClick="{x:Null}" AlterIfDisabled="True" ClickType="CLICK_SINGLE" DelayBefore="[vIntShortDelay]" DelayMS="[vIntShortDelay]" DisplayName="Click 'menu item  Spreadsheet' 2" sap:VirtualizedContainerService.HintSize="484,106" sap2010:WorkflowViewState.IdRef="Click_58" KeyModifiers="None" MouseButton="BTN_LEFT">
+              <ui:Click.CursorPosition>
+                <ui:CursorPosition Position="Center">
+                  <ui:CursorPosition.OffsetX>
+                    <InArgument x:TypeArguments="x:Int32" />
+                  </ui:CursorPosition.OffsetX>
+                  <ui:CursorPosition.OffsetY>
+                    <InArgument x:TypeArguments="x:Int32" />
+                  </ui:CursorPosition.OffsetY>
+                </ui:CursorPosition>
+              </ui:Click.CursorPosition>
+              <ui:Click.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="5329c7e4-6d0b-48c1-acb4-da2399f47eb7" InformativeScreenshot="54705cf7937ad5b435e1744d01f5e2f1" Selector="&lt;wnd aaname='Context' app='saplogon.exe' cls='#32768' /&gt;&lt;ctrl name='Context' role='popup menu' /&gt;&lt;ctrl automationid='1' /&gt;">
+                  <ui:Target.TimeoutMS>
+                    <InArgument x:TypeArguments="x:Int32" />
+                  </ui:Target.TimeoutMS>
+                  <ui:Target.WaitForReady>
+                    <InArgument x:TypeArguments="ui:WaitForReady" />
+                  </ui:Target.WaitForReady>
+                </ui:Target>
+              </ui:Click.Target>
+            </ui:Click>
+            <ui:UiElementExists DisplayName="Element Exists 'saplogon.exe  Save As'" Exists="[vBoolSaveWindowExists]" sap:VirtualizedContainerService.HintSize="484,106" sap2010:WorkflowViewState.IdRef="UiElementExists_17">
+              <ui:UiElementExists.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="8657c739-5fb4-4123-bbb3-1c4af3ba9234" InformativeScreenshot="b9a5dae96c26f29d362ad678a28c70af" Selector="&lt;wnd app='saplogon.exe' cls='#32770' title='Save As' /&gt;&lt;wnd ctrlid='1148' /&gt;&lt;wnd ctrlid='1148' /&gt;&lt;wnd ctrlid='1148' /&gt;">
+                  <ui:Target.TimeoutMS>
+                    <InArgument x:TypeArguments="x:Int32" />
+                  </ui:Target.TimeoutMS>
+                  <ui:Target.WaitForReady>
+                    <InArgument x:TypeArguments="ui:WaitForReady" />
+                  </ui:Target.WaitForReady>
+                </ui:Target>
+              </ui:UiElementExists.Target>
+            </ui:UiElementExists>
+            <While DisplayName="While - SaveWindow not exists" sap:VirtualizedContainerService.HintSize="484,263" sap2010:WorkflowViewState.IdRef="While_1">
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+              <While.Condition>[vBoolSaveWindowExists=False]</While.Condition>
+              <ui:UiElementExists DisplayName="Element Exists 'saplogon.exe  Save As'" Exists="[vBoolSaveWindowExists]" sap:VirtualizedContainerService.HintSize="334,106" sap2010:WorkflowViewState.IdRef="UiElementExists_21">
+                <ui:UiElementExists.Target>
+                  <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="f49f8142-046c-4027-8f9b-b6f8ae026917" InformativeScreenshot="b9a5dae96c26f29d362ad678a28c70af" Selector="&lt;wnd app='saplogon.exe' cls='#32770' title='Save As' /&gt;&lt;wnd ctrlid='1148' /&gt;&lt;wnd ctrlid='1148' /&gt;&lt;wnd ctrlid='1148' /&gt;">
+                    <ui:Target.TimeoutMS>
+                      <InArgument x:TypeArguments="x:Int32" />
+                    </ui:Target.TimeoutMS>
+                    <ui:Target.WaitForReady>
+                      <InArgument x:TypeArguments="ui:WaitForReady" />
+                    </ui:Target.WaitForReady>
+                  </ui:Target>
+                </ui:UiElementExists.Target>
+              </ui:UiElementExists>
+            </While>
+            <ui:TypeInto ClickBeforeTyping="{x:Null}" DelayBetweenKeys="{x:Null}" EmptyField="{x:Null}" SendWindowMessages="{x:Null}" SimulateType="{x:Null}" Activate="True" AlterIfDisabled="True" DelayBefore="[vIntShortDelay]" DelayMS="[vIntShortDelay]" DisplayName="Type Into 'Save Path'" sap:VirtualizedContainerService.HintSize="484,134" sap2010:WorkflowViewState.IdRef="TypeInto_42" Text="[Environment.CurrentDirectory+argInConfig(&quot;InputPath&quot;).ToString+argInConfig(&quot;RDStatusALookupName&quot;).ToString]">
+              <ui:TypeInto.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="aa648e45-874d-4ca6-b64c-0311110000d8" InformativeScreenshot="e6983e3c06edf4032dbf9025962792bd" Selector="&lt;wnd app='saplogon.exe' cls='#32770' title='Save As' /&gt;&lt;wnd ctrlid='1148' /&gt;&lt;wnd ctrlid='1148' /&gt;&lt;wnd ctrlid='1148' /&gt;">
+                  <ui:Target.TimeoutMS>
+                    <InArgument x:TypeArguments="x:Int32" />
+                  </ui:Target.TimeoutMS>
+                  <ui:Target.WaitForReady>
+                    <InArgument x:TypeArguments="ui:WaitForReady" />
+                  </ui:Target.WaitForReady>
+                </ui:Target>
+              </ui:TypeInto.Target>
+            </ui:TypeInto>
+            <ui:Click SendWindowMessages="{x:Null}" SimulateClick="{x:Null}" AlterIfDisabled="True" ClickType="CLICK_SINGLE" DelayBefore="[vIntShortDelay]" DelayMS="[vIntShortDelay]" DisplayName="Click 'Button Save'" sap:VirtualizedContainerService.HintSize="484,106" sap2010:WorkflowViewState.IdRef="Click_59" KeyModifiers="None" MouseButton="BTN_LEFT">
+              <ui:Click.CursorPosition>
+                <ui:CursorPosition Position="Center">
+                  <ui:CursorPosition.OffsetX>
+                    <InArgument x:TypeArguments="x:Int32" />
+                  </ui:CursorPosition.OffsetX>
+                  <ui:CursorPosition.OffsetY>
+                    <InArgument x:TypeArguments="x:Int32" />
+                  </ui:CursorPosition.OffsetY>
+                </ui:CursorPosition>
+              </ui:Click.CursorPosition>
+              <ui:Click.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="fab2babb-828e-499b-b36f-002408e27f76" InformativeScreenshot="c30780eb5ca27cb369efd73fcbf83ed9" Selector="&lt;wnd app='saplogon.exe' cls='#32770' title='Save As' /&gt;&lt;wnd ctrlid='1' title='&amp;amp;Open' /&gt;">
+                  <ui:Target.TimeoutMS>
+                    <InArgument x:TypeArguments="x:Int32" />
+                  </ui:Target.TimeoutMS>
+                  <ui:Target.WaitForReady>
+                    <InArgument x:TypeArguments="ui:WaitForReady" />
+                  </ui:Target.WaitForReady>
+                </ui:Target>
+              </ui:Click.Target>
+            </ui:Click>
+            <ui:UiElementExists DisplayName="Element Exists Allow" Exists="[vBoolAllowExists]" sap:VirtualizedContainerService.HintSize="484,51" sap2010:WorkflowViewState.IdRef="UiElementExists_11">
+              <ui:UiElementExists.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="7c77d38c-41c3-45e5-8dd1-97d6eb4d83e6" InformativeScreenshot="e9217b99d463005c2ce2bb22f7d832f8" Selector="&lt;wnd app='saplogon.exe' cls='#32770' title='SAP GUI Security' /&gt;&lt;wnd title='&amp;amp;Allow' aaname='Allow' /&gt;" TimeoutMS="3000" WaitForReady="COMPLETE" />
+              </ui:UiElementExists.Target>
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+            </ui:UiElementExists>
+            <If Condition="[vBoolAllowExists]" DisplayName="If Allow Pop up Exists" sap:VirtualizedContainerService.HintSize="484,215" sap2010:WorkflowViewState.IdRef="If_14">
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+              <If.Then>
+                <ui:Click DelayMS="{x:Null}" SendWindowMessages="{x:Null}" SimulateClick="{x:Null}" AlterIfDisabled="True" ClickType="CLICK_SINGLE" DelayBefore="[vIntShortDelay]" DisplayName="Click Allow" sap:VirtualizedContainerService.HintSize="334,68" sap2010:WorkflowViewState.IdRef="Click_60" KeyModifiers="None" MouseButton="BTN_LEFT">
+                  <ui:Click.CursorPosition>
+                    <ui:CursorPosition Position="Center">
+                      <ui:CursorPosition.OffsetX>
+                        <InArgument x:TypeArguments="x:Int32" />
+                      </ui:CursorPosition.OffsetX>
+                      <ui:CursorPosition.OffsetY>
+                        <InArgument x:TypeArguments="x:Int32" />
+                      </ui:CursorPosition.OffsetY>
+                    </ui:CursorPosition>
+                  </ui:Click.CursorPosition>
+                  <ui:Click.Target>
+                    <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="1edb1720-e4ac-43a6-8fdb-8bfe18d34f0d" Selector="&lt;wnd app='saplogon.exe' cls='#32770' title='SAP GUI Security' /&gt;&lt;wnd title='&amp;amp;Allow' aaname='Allow' /&gt;" WaitForReady="COMPLETE">
+                      <ui:Target.TimeoutMS>
+                        <InArgument x:TypeArguments="x:Int32" />
+                      </ui:Target.TimeoutMS>
+                    </ui:Target>
+                  </ui:Click.Target>
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                      <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                      <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                    </scg:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
+                </ui:Click>
+              </If.Then>
+            </If>
+            <ui:UiElementExists DisplayName="Element Exists Allow" Exists="[vBoolAllowExists]" sap:VirtualizedContainerService.HintSize="484,51" sap2010:WorkflowViewState.IdRef="UiElementExists_12">
+              <ui:UiElementExists.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="2a300add-3148-4a4b-9159-4a91fc4460f0" InformativeScreenshot="e9217b99d463005c2ce2bb22f7d832f8" Selector="&lt;wnd app='saplogon.exe' cls='#32770' title='SAP GUI Security' /&gt;&lt;wnd title='&amp;amp;Allow' aaname='Allow' /&gt;" TimeoutMS="3000" WaitForReady="COMPLETE" />
+              </ui:UiElementExists.Target>
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+            </ui:UiElementExists>
+            <If Condition="[vBoolAllowExists]" DisplayName="If Allow Pop up Exists" sap:VirtualizedContainerService.HintSize="484,51" sap2010:WorkflowViewState.IdRef="If_15">
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+              <If.Then>
+                <ui:Click DelayMS="{x:Null}" SendWindowMessages="{x:Null}" SimulateClick="{x:Null}" AlterIfDisabled="True" ClickType="CLICK_SINGLE" DelayBefore="[vIntShortDelay]" DisplayName="Click Allow" sap:VirtualizedContainerService.HintSize="334,68" sap2010:WorkflowViewState.IdRef="Click_61" KeyModifiers="None" MouseButton="BTN_LEFT">
+                  <ui:Click.CursorPosition>
+                    <ui:CursorPosition Position="Center">
+                      <ui:CursorPosition.OffsetX>
+                        <InArgument x:TypeArguments="x:Int32" />
+                      </ui:CursorPosition.OffsetX>
+                      <ui:CursorPosition.OffsetY>
+                        <InArgument x:TypeArguments="x:Int32" />
+                      </ui:CursorPosition.OffsetY>
+                    </ui:CursorPosition>
+                  </ui:Click.CursorPosition>
+                  <ui:Click.Target>
+                    <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="07c7686c-fe3a-445d-830c-8311f7a1645e" Selector="&lt;wnd app='saplogon.exe' cls='#32770' title='SAP GUI Security' /&gt;&lt;wnd title='&amp;amp;Allow' aaname='Allow' /&gt;" WaitForReady="COMPLETE">
+                      <ui:Target.TimeoutMS>
+                        <InArgument x:TypeArguments="x:Int32" />
+                      </ui:Target.TimeoutMS>
+                    </ui:Target>
+                  </ui:Click.Target>
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                      <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                      <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                    </scg:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
+                </ui:Click>
+              </If.Then>
+            </If>
+          </Sequence>
+        </ActivityAction>
+      </ui:WindowScope.Body>
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </ui:WindowScope>
+    <ui:KillProcess AppliesTo="{x:Null}" ContinueOnError="{x:Null}" Process="{x:Null}" DisplayName="Kill Process - Excel" sap:VirtualizedContainerService.HintSize="635.2,134.4" sap2010:WorkflowViewState.IdRef="KillProcess_6" ProcessName="excel" />
+    <ui:KillProcess AppliesTo="{x:Null}" ContinueOnError="{x:Null}" Process="{x:Null}" DisplayName="Kill Process - SAP" sap:VirtualizedContainerService.HintSize="635.2,134.4" sap2010:WorkflowViewState.IdRef="KillProcess_7" ProcessName="saplogon" />
+    <ui:ReadRange AddHeaders="False" DataTable="[vDtRDStatusC]" DisplayName="Read Range - RD status C lookup" sap:VirtualizedContainerService.HintSize="635.2,52.8" sap2010:WorkflowViewState.IdRef="ReadRange_1" Range="A1" SheetName="Sheet1" WorkbookPath="[Environment.CurrentDirectory+argInConfig(&quot;InputPath&quot;).ToString+argInConfig(&quot;RDStatusCLookupName&quot;).ToString]">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </ui:ReadRange>
+    <ui:ReadRange AddHeaders="False" DataTable="[vDtRDStatusA]" DisplayName="Read Range - RD status A lookup" sap:VirtualizedContainerService.HintSize="635.2,52.8" sap2010:WorkflowViewState.IdRef="ReadRange_2" Range="A1" SheetName="Sheet1" WorkbookPath="[Environment.CurrentDirectory+argInConfig(&quot;InputPath&quot;).ToString+argInConfig(&quot;RDStatusALookupName&quot;).ToString]">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </ui:ReadRange>
+    <Assign DisplayName="Assign - RD status C unique values" sap:VirtualizedContainerService.HintSize="635.2,60" sap2010:WorkflowViewState.IdRef="Assign_12">
+      <Assign.To>
+        <OutArgument x:TypeArguments="sd:DataTable">[vDtRDStatusC]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="sd:DataTable">[vDtRDStatusC.AsEnumerable().GroupBy(Function(a) a.Field(of string)(“Column0”).ToString).Select(Function(b) b.First()).CopyToDatatable()]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <Assign DisplayName="Assign - RD status A uniques values" sap:VirtualizedContainerService.HintSize="635.2,60" sap2010:WorkflowViewState.IdRef="Assign_15">
+      <Assign.To>
+        <OutArgument x:TypeArguments="sd:DataTable">[vDtRDStatusA]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="sd:DataTable">[vDtRDStatusA.AsEnumerable().GroupBy(Function(a) a.Field(of string)(“Column0”).ToString).Select(Function(b) b.First()).CopyToDatatable()]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <ui:ExcelApplicationScope Password="{x:Null}" DisplayName="Excel Application Scope - Bad Debt Template" sap:VirtualizedContainerService.HintSize="635,51" sap2010:WorkflowViewState.IdRef="ExcelApplicationScope_2" InstanceCachePeriod="3000" WorkbookPath="[Environment.CurrentDirectory+argInConfig(&quot;InputPath&quot;).ToString+argInConfig(&quot;TemplateName&quot;).ToString]">
+      <ui:ExcelApplicationScope.Body>
+        <ActivityAction x:TypeArguments="ui:WorkbookApplication">
+          <ActivityAction.Argument>
+            <DelegateInArgument x:TypeArguments="ui:WorkbookApplication" Name="ExcelWorkbookScope" />
+          </ActivityAction.Argument>
+          <Sequence DisplayName="Do" sap:VirtualizedContainerService.HintSize="376,151" sap2010:WorkflowViewState.IdRef="Sequence_14">
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+            <ui:ExcelReadRange AddHeaders="True" DataTable="[vDtAgingWorksheet]" DisplayName="Read Range - Aging worksheet 4" sap:VirtualizedContainerService.HintSize="334,59" sap2010:WorkflowViewState.IdRef="ExcelReadRange_2" Range="A6" SheetName="[argInConfig(&quot;AWorksheetName&quot;).ToString]" />
+          </Sequence>
+        </ActivityAction>
+      </ui:ExcelApplicationScope.Body>
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </ui:ExcelApplicationScope>
+    <ui:FilterDataTable DataTable="[vDtAgingWorksheet]" DisplayName="Filter Data Table - Temp DT" FilterRowsMode="Keep" sap:VirtualizedContainerService.HintSize="635,59" sap2010:WorkflowViewState.IdRef="FilterDataTable_3" OutputDataTable="[vDtTemp]" SelectColumnsMode="Keep">
+      <ui:FilterDataTable.Filters>
+        <scg:List x:TypeArguments="ui:FilterOperationArgument" Capacity="4">
+          <ui:FilterOperationArgument Column="{x:Null}" Operand="{x:Null}" BooleanOperator="And" Operator="LT" />
+        </scg:List>
+      </ui:FilterDataTable.Filters>
+      <ui:FilterDataTable.SelectColumns>
+        <scg:List x:TypeArguments="InArgument" Capacity="4">
+          <InArgument x:TypeArguments="x:String">["Invoice"]</InArgument>
+          <InArgument x:TypeArguments="x:String">["Division"]</InArgument>
+          <InArgument x:TypeArguments="x:String">["Type"]</InArgument>
+          <InArgument x:TypeArguments="x:String">["C Code"]</InArgument>
+        </scg:List>
+      </ui:FilterDataTable.SelectColumns>
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </ui:FilterDataTable>
+    <ui:ForEachRow ColumnNames="{x:Null}" CurrentIndex="{x:Null}" DataTable="[vDtRDStatusA]" DisplayName="For Each Row - RD Status A Lookup" sap:VirtualizedContainerService.HintSize="635,51" sap2010:WorkflowViewState.IdRef="ForEachRow_10">
+      <ui:ForEachRow.Body>
+        <ActivityAction x:TypeArguments="sd:DataRow">
+          <ActivityAction.Argument>
+            <DelegateInArgument x:TypeArguments="sd:DataRow" Name="row1" />
+          </ActivityAction.Argument>
+          <ui:ForEachRow ColumnNames="{x:Null}" CurrentIndex="{x:Null}" DataTable="[vDtTemp]" DisplayName="For Each Row - Temp Aging DT" sap:VirtualizedContainerService.HintSize="679,504" sap2010:WorkflowViewState.IdRef="ForEachRow_14">
+            <ui:ForEachRow.Body>
+              <ActivityAction x:TypeArguments="sd:DataRow">
+                <ActivityAction.Argument>
+                  <DelegateInArgument x:TypeArguments="sd:DataRow" Name="row2" />
+                </ActivityAction.Argument>
+                <If Condition="[row2(&quot;C Code&quot;).ToString=&quot;1000&quot; or row2(&quot;C Code&quot;).ToString=&quot;1002&quot; or  row2(&quot;C Code&quot;).ToString=&quot;2000&quot;]" DisplayName="If Service C Code" sap:VirtualizedContainerService.HintSize="629,356" sap2010:WorkflowViewState.IdRef="If_35">
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                      <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                      <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                    </scg:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
+                  <If.Then>
+                    <If Condition="[row2(&quot;Invoice&quot;).ToString=row1(0).ToString and row2(&quot;Division&quot;).ToString=&quot;20&quot;]" DisplayName="If Service Filter" sap:VirtualizedContainerService.HintSize="484,208" sap2010:WorkflowViewState.IdRef="If_34">
+                      <sap:WorkflowViewStateService.ViewState>
+                        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                        </scg:Dictionary>
+                      </sap:WorkflowViewStateService.ViewState>
+                      <If.Then>
+                        <Assign sap:VirtualizedContainerService.HintSize="262,60" sap2010:WorkflowViewState.IdRef="Assign_27">
+                          <Assign.To>
+                            <OutArgument x:TypeArguments="x:Object">[row2("Type")]</OutArgument>
+                          </Assign.To>
+                          <Assign.Value>
+                            <InArgument x:TypeArguments="x:Object">["Services"]</InArgument>
+                          </Assign.Value>
+                        </Assign>
+                      </If.Then>
+                    </If>
+                  </If.Then>
+                </If>
+              </ActivityAction>
+            </ui:ForEachRow.Body>
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                <x:Boolean x:Key="IsPinned">False</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+          </ui:ForEachRow>
+        </ActivityAction>
+      </ui:ForEachRow.Body>
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </ui:ForEachRow>
+    <ui:ForEachRow ColumnNames="{x:Null}" CurrentIndex="{x:Null}" DataTable="[vDtRDStatusC]" DisplayName="For Each Row - RD Status C lookup" sap:VirtualizedContainerService.HintSize="635,51" sap2010:WorkflowViewState.IdRef="ForEachRow_8">
+      <ui:ForEachRow.Body>
+        <ActivityAction x:TypeArguments="sd:DataRow">
+          <ActivityAction.Argument>
+            <DelegateInArgument x:TypeArguments="sd:DataRow" Name="row1" />
+          </ActivityAction.Argument>
+          <Sequence DisplayName="Body" sap:VirtualizedContainerService.HintSize="721,596" sap2010:WorkflowViewState.IdRef="Sequence_53">
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+            <ui:ForEachRow ColumnNames="{x:Null}" CurrentIndex="{x:Null}" DataTable="[vDtTemp]" DisplayName="For Each Row - Temp Aging DT" sap:VirtualizedContainerService.HintSize="679,504" sap2010:WorkflowViewState.IdRef="ForEachRow_7">
+              <ui:ForEachRow.Body>
+                <ActivityAction x:TypeArguments="sd:DataRow">
+                  <ActivityAction.Argument>
+                    <DelegateInArgument x:TypeArguments="sd:DataRow" Name="row2" />
+                  </ActivityAction.Argument>
+                  <If Condition="[row2(&quot;C Code&quot;).ToString=&quot;1000&quot; or row2(&quot;C Code&quot;).ToString=&quot;1002&quot; or  row2(&quot;C Code&quot;).ToString=&quot;2000&quot;]" DisplayName="If Genera FIlter" sap:VirtualizedContainerService.HintSize="629,356" sap2010:WorkflowViewState.IdRef="If_31">
+                    <sap:WorkflowViewStateService.ViewState>
+                      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                        <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                      </scg:Dictionary>
+                    </sap:WorkflowViewStateService.ViewState>
+                    <If.Then>
+                      <If Condition="[row2(&quot;Invoice&quot;).ToString=row1(0).ToString and row2(&quot;Division&quot;).ToString=&quot;20&quot;]" DisplayName="If Divsion 20" sap:VirtualizedContainerService.HintSize="484,208" sap2010:WorkflowViewState.IdRef="If_30">
+                        <sap:WorkflowViewStateService.ViewState>
+                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                          </scg:Dictionary>
+                        </sap:WorkflowViewStateService.ViewState>
+                        <If.Then>
+                          <Assign sap:VirtualizedContainerService.HintSize="262,60" sap2010:WorkflowViewState.IdRef="Assign_25">
+                            <Assign.To>
+                              <OutArgument x:TypeArguments="x:Object">[row2("Type")]</OutArgument>
+                            </Assign.To>
+                            <Assign.Value>
+                              <InArgument x:TypeArguments="x:Object">["General"]</InArgument>
+                            </Assign.Value>
+                          </Assign>
+                        </If.Then>
+                      </If>
+                    </If.Then>
+                  </If>
+                </ActivityAction>
+              </ui:ForEachRow.Body>
+            </ui:ForEachRow>
+          </Sequence>
+        </ActivityAction>
+      </ui:ForEachRow.Body>
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </ui:ForEachRow>
+    <ui:ForEachRow ColumnNames="{x:Null}" CurrentIndex="{x:Null}" DataTable="[vDtTemp]" DisplayName="For Each Row - Temp Aging DT" sap:VirtualizedContainerService.HintSize="635,51" sap2010:WorkflowViewState.IdRef="ForEachRow_13">
+      <ui:ForEachRow.Body>
+        <ActivityAction x:TypeArguments="sd:DataRow">
+          <ActivityAction.Argument>
+            <DelegateInArgument x:TypeArguments="sd:DataRow" Name="row" />
+          </ActivityAction.Argument>
+          <Sequence DisplayName="Body" sap:VirtualizedContainerService.HintSize="526,300" sap2010:WorkflowViewState.IdRef="Sequence_63">
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+            <If Condition="[row(&quot;Type&quot;).ToString=&quot;&quot;]" DisplayName="If Blank  Types" sap:VirtualizedContainerService.HintSize="484,208" sap2010:WorkflowViewState.IdRef="If_28">
+              <If.Then>
+                <Assign sap:VirtualizedContainerService.HintSize="262,60" sap2010:WorkflowViewState.IdRef="Assign_24">
+                  <Assign.To>
+                    <OutArgument x:TypeArguments="x:Object">[row("Type")]</OutArgument>
+                  </Assign.To>
+                  <Assign.Value>
+                    <InArgument x:TypeArguments="x:Object">["General"]</InArgument>
+                  </Assign.Value>
+                </Assign>
+              </If.Then>
+            </If>
+          </Sequence>
+        </ActivityAction>
+      </ui:ForEachRow.Body>
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </ui:ForEachRow>
+    <ui:FilterDataTable DataTable="[vDtTemp]" DisplayName="Filter Data Table - Keep Only Type Column" FilterRowsMode="Keep" sap:VirtualizedContainerService.HintSize="635,51" sap2010:WorkflowViewState.IdRef="FilterDataTable_4" OutputDataTable="[vDtTemp]" SelectColumnsMode="Keep">
+      <ui:FilterDataTable.Filters>
+        <scg:List x:TypeArguments="ui:FilterOperationArgument" Capacity="4">
+          <ui:FilterOperationArgument Column="{x:Null}" Operand="{x:Null}" BooleanOperator="And" Operator="LT" />
+        </scg:List>
+      </ui:FilterDataTable.Filters>
+      <ui:FilterDataTable.SelectColumns>
+        <scg:List x:TypeArguments="InArgument" Capacity="4">
+          <InArgument x:TypeArguments="x:String">["Type"]</InArgument>
+        </scg:List>
+      </ui:FilterDataTable.SelectColumns>
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </ui:FilterDataTable>
+    <ui:ExcelApplicationScope Password="{x:Null}" CreateNewFile="False" DisplayName="Excel Application Scope - Bad Debt Template" sap:VirtualizedContainerService.HintSize="635,51" sap2010:WorkflowViewState.IdRef="ExcelApplicationScope_5" InstanceCachePeriod="3000" WorkbookPath="[Environment.CurrentDirectory+argInConfig(&quot;InputPath&quot;).ToString+argInConfig(&quot;TemplateName&quot;).ToString]">
+      <ui:ExcelApplicationScope.Body>
+        <ActivityAction x:TypeArguments="ui:WorkbookApplication">
+          <ActivityAction.Argument>
+            <DelegateInArgument x:TypeArguments="ui:WorkbookApplication" Name="ExcelWorkbookScope" />
+          </ActivityAction.Argument>
+          <Sequence DisplayName="Do" sap:VirtualizedContainerService.HintSize="376,380" sap2010:WorkflowViewState.IdRef="Sequence_56">
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+            <ui:ExcelWriteRange AddHeaders="False" DataTable="[vDtTemp]" DisplayName="Write Range - Type Column" sap:VirtualizedContainerService.HintSize="334,51" sap2010:WorkflowViewState.IdRef="ExcelWriteRange_2" SheetName="[argInConfig(&quot;AWorksheetName&quot;).ToString]" StartingCell="AV7">
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+            </ui:ExcelWriteRange>
+            <ui:SendHotkey ClickBeforeTyping="{x:Null}" DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" EmptyField="{x:Null}" SendWindowMessages="{x:Null}" SpecialKey="{x:Null}" Activate="True" DisplayName="Send Hotkey" sap:VirtualizedContainerService.HintSize="334,51" sap2010:WorkflowViewState.IdRef="SendHotkey_18" Key="l" KeyModifiers="Ctrl, Shift">
+              <ui:SendHotkey.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="{x:Null}" Id="9dfc8192-a5dc-4ea1-81d4-08683fa6d302">
+                  <ui:Target.TimeoutMS>
+                    <InArgument x:TypeArguments="x:Int32" />
+                  </ui:Target.TimeoutMS>
+                  <ui:Target.WaitForReady>
+                    <InArgument x:TypeArguments="ui:WaitForReady" />
+                  </ui:Target.WaitForReady>
+                </ui:Target>
+              </ui:SendHotkey.Target>
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+            </ui:SendHotkey>
+            <ui:CloseApplication DisplayName="Close Application 'EXCEL.EXE Bad'" sap:VirtualizedContainerService.HintSize="334,106" sap2010:WorkflowViewState.IdRef="CloseApplication_2">
+              <ui:CloseApplication.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="e6dede0f-b74e-4366-9bc4-5264acce48b3" InformativeScreenshot="633aaad7c653e21e4389fc4369f9a6ae" Selector="&lt;wnd app='excel.exe' cls='XLMAIN' omit:title='Bad Debt Analysis_Blank - Excel' /&gt;">
+                  <ui:Target.TimeoutMS>
+                    <InArgument x:TypeArguments="x:Int32" />
+                  </ui:Target.TimeoutMS>
+                  <ui:Target.WaitForReady>
+                    <InArgument x:TypeArguments="ui:WaitForReady" />
+                  </ui:Target.WaitForReady>
+                </ui:Target>
+              </ui:CloseApplication.Target>
+            </ui:CloseApplication>
+          </Sequence>
+        </ActivityAction>
+      </ui:ExcelApplicationScope.Body>
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </ui:ExcelApplicationScope>
+    <ui:InvokeWorkflowFile ArgumentsVariable="{x:Null}" ContinueOnError="{x:Null}" DisplayName=" 40 Invoke LogFile workflow" sap:VirtualizedContainerService.HintSize="635,51" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_5" UnSafe="False" WorkflowFileName="LogandReport\LogFile.xaml">
+      <ui:InvokeWorkflowFile.Arguments>
+        <InArgument x:TypeArguments="x:String" x:Key="argIstrLogNumber">LOG-BD40</InArgument>
+        <InArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" x:Key="argIdicConfig">[ArgInConfig]</InArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="argIstrKeyValues" />
+        <InArgument x:TypeArguments="x:String" x:Key="argIstrErrorScreenshot" />
+        <InArgument x:TypeArguments="sd:DataTable" x:Key="argIdtLogNotification">[ArgInLogNotifications]</InArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="arglstrTechincalExceptionMessage" />
+        <OutArgument x:TypeArguments="x:String" x:Key="argOException" />
+        <InArgument x:TypeArguments="x:Int32" x:Key="argIstrTransactionID" />
+        <InArgument x:TypeArguments="x:String" x:Key="argInDBConnectionString">[ArgInConfig("DB_ConnectionString").ToString]</InArgument>
+      </ui:InvokeWorkflowFile.Arguments>
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </ui:InvokeWorkflowFile>
+  </Sequence>
+</Activity>

@@ -1,0 +1,1041 @@
+<Activity mc:Ignorable="sap sap2010" x:Class="Bad_Dept_SigleCode" this:Bad_Dept_SigleCode.argInSheetName="Aging Worksheet" this:Bad_Dept_SigleCode.ArgInStartCell="A6" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:av="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib" xmlns:sd="clr-namespace:System.Data;assembly=System.Data" xmlns:this="clr-namespace:" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="argInFilePath" Type="InArgument(x:String)" />
+    <x:Property Name="argInSheetName" Type="InArgument(x:String)" />
+    <x:Property Name="ArgInStartCell" Type="InArgument(x:String)" />
+    <x:Property Name="argInFilter" Type="InArgument(x:String)" />
+    <x:Property Name="argInAnnualLIC" Type="InArgument(scg:List(x:String))" />
+    <x:Property Name="argInShiftedLIC" Type="InOutArgument(scg:List(x:String))" />
+    <x:Property Name="argInListInvoice" Type="InArgument(scg:List(x:String))" />
+    <x:Property Name="ArgInConfig" Type="InArgument(scg:Dictionary(x:String, x:Object))" />
+    <x:Property Name="ArgInLogNotifications" Type="InArgument(sd:DataTable)" />
+  </x:Members>
+  <mva:VisualBasic.Settings>
+    <x:Null />
+  </mva:VisualBasic.Settings>
+  <sap:VirtualizedContainerService.HintSize>1104,1054.4</sap:VirtualizedContainerService.HintSize>
+  <sap2010:WorkflowViewState.IdRef>Bad_Dept_SigleCode_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <scg:List x:TypeArguments="x:String" Capacity="46">
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>Microsoft.VisualBasic</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Collections</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Diagnostics</x:String>
+      <x:String>System.Drawing</x:String>
+      <x:String>System.IO</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Net.Mail</x:String>
+      <x:String>System.Xml</x:String>
+      <x:String>System.Xml.Linq</x:String>
+      <x:String>UiPath.Core</x:String>
+      <x:String>UiPath.Core.Activities</x:String>
+      <x:String>System.Windows.Markup</x:String>
+      <x:String>UiPath.Excel</x:String>
+      <x:String>System.Xml.Serialization</x:String>
+      <x:String>Microsoft.VisualBasic.CompilerServices</x:String>
+      <x:String>System.Collections.ObjectModel</x:String>
+      <x:String>System.Runtime.Serialization</x:String>
+      <x:String>System.Activities.DynamicUpdate</x:String>
+      <x:String>System.ComponentModel</x:String>
+      <x:String>UiPath.Excel.Activities</x:String>
+      <x:String>System.Reflection</x:String>
+      <x:String>System.Runtime.InteropServices</x:String>
+    </scg:List>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <scg:List x:TypeArguments="AssemblyReference" Capacity="44">
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Drawing</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.UiAutomation.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.Excel</AssemblyReference>
+      <AssemblyReference>UiPath.Excel.Activities</AssemblyReference>
+      <AssemblyReference>System.ValueTuple</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.Composition</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization</AssemblyReference>
+      <AssemblyReference>System.Reflection.Metadata</AssemblyReference>
+      <AssemblyReference>System.Memory</AssemblyReference>
+      <AssemblyReference>System.Data.Entity</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities.Design</AssemblyReference>
+      <AssemblyReference>Microsoft.Bcl.AsyncInterfaces</AssemblyReference>
+      <AssemblyReference>System.Runtime.WindowsRuntime</AssemblyReference>
+    </scg:List>
+  </TextExpression.ReferencesForImplementation>
+  <Flowchart sap2010:Annotation.AnnotationText="Description: Bad Dept Shifting. Shift all the values to respective Buckets within Aging Worksheet and balace the net aging value for all the custome. Get all multiple and single C Code's.&#xA;Based on Negative and Positive shift the values to correct Bucket. Highlight the bot added values/rows with respective color.&#xA;&#xA;&#xA;Developed by Shivani Karla&#xA;Modified by Vaishnavi Dendukuri on Bluejeans change" DisplayName="FlowBad Dept" sap:VirtualizedContainerService.HintSize="734.4,989.6" sap2010:WorkflowViewState.IdRef="Flowchart_1">
+    <Flowchart.Variables>
+      <Variable x:TypeArguments="sd:DataTable" Default="[New Datatable]" Name="vDTAgingSheetData" />
+      <Variable x:TypeArguments="sd:DataTable" Default="[New Datatable]" Name="vDTFilteredData" />
+      <Variable x:TypeArguments="sd:DataTable" Default="[New DataTable]" Name="vDTDinstinctData" />
+      <Variable x:TypeArguments="sd:DataTable" Default="[new DataTable]" Name="vDTSingleCCode" />
+      <Variable x:TypeArguments="sd:DataTable" Default="[new DataTable]" Name="vDTMultiCCode" />
+      <Variable x:TypeArguments="scg:List(x:String)" Default="[new list(of string)]" Name="vListCustomers" />
+      <Variable x:TypeArguments="x:String" Name="vStrTotalAmt" />
+      <Variable x:TypeArguments="sd:DataTable" Name="vDTCustomerData" />
+      <Variable x:TypeArguments="scg:ICollection(x:String)" Default="[new List(of string)]" Name="vStrCollection" />
+      <Variable x:TypeArguments="x:Int32" Default="0" Name="vIntRowCounter" />
+      <Variable x:TypeArguments="sd:DataTable" Name="vDTTotalData" />
+      <Variable x:TypeArguments="sd:DataTable" Name="vDTLICData" />
+      <Variable x:TypeArguments="x:Int64" Name="vIntDaysInArrears" />
+      <Variable x:TypeArguments="x:Boolean" Name="vBoolAnnualLIC" />
+      <Variable x:TypeArguments="sd:DataTable" Name="vDTCustTempData" />
+      <Variable x:TypeArguments="x:Boolean" Name="vBoolBlueJeans" />
+      <Variable x:TypeArguments="sd:DataTable" Name="vDTBlueJeans" />
+    </Flowchart.Variables>
+    <sap:WorkflowViewStateService.ViewState>
+      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+        <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        <av:Point x:Key="ShapeLocation">330,2.5</av:Point>
+        <av:Size x:Key="ShapeSize">60,75.2</av:Size>
+        <x:Double x:Key="Width">701</x:Double>
+        <x:Double x:Key="Height">829</x:Double>
+        <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+        <av:PointCollection x:Key="ConnectorLocation">360,77.7 360,104.5</av:PointCollection>
+      </scg:Dictionary>
+    </sap:WorkflowViewStateService.ViewState>
+    <Flowchart.StartNode>
+      <x:Reference>__ReferenceID14</x:Reference>
+    </Flowchart.StartNode>
+    <FlowStep x:Name="__ReferenceID8">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <av:Point x:Key="ShapeLocation">260,167</av:Point>
+          <av:Size x:Key="ShapeSize">200,68.8</av:Size>
+          <av:PointCollection x:Key="ConnectorLocation">260,201.666666666667 200,201.666666666667 200,234.5</av:PointCollection>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+      <Sequence DisplayName="Initialise" sap:VirtualizedContainerService.HintSize="200,68.8" sap2010:WorkflowViewState.IdRef="Sequence_30">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+        <TryCatch DisplayName="Try Catch" sap:VirtualizedContainerService.HintSize="483.2,351.2" sap2010:WorkflowViewState.IdRef="TryCatch_2">
+          <TryCatch.Try>
+            <ui:ReadRange AddHeaders="True" DataTable="[vDTAgingSheetData]" DisplayName="Read Range- Aging" sap:VirtualizedContainerService.HintSize="333.6,88" sap2010:WorkflowViewState.IdRef="ReadRange_4" Range="A6" SheetName="[argInSheetName]" WorkbookPath="[argInFilePath]">
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+            </ui:ReadRange>
+          </TryCatch.Try>
+          <TryCatch.Catches>
+            <Catch x:TypeArguments="s:IndexOutOfRangeException" sap:VirtualizedContainerService.HintSize="400,22.4" sap2010:WorkflowViewState.IdRef="Catch`1_2">
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+              <ActivityAction x:TypeArguments="s:IndexOutOfRangeException">
+                <ActivityAction.Argument>
+                  <DelegateInArgument x:TypeArguments="s:IndexOutOfRangeException" Name="exception" />
+                </ActivityAction.Argument>
+                <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="333.6,92.8" sap2010:WorkflowViewState.IdRef="LogMessage_24" Level="Info" Message="[Exception.Message+&quot; Excel - badDebt_annual LIC&quot;]" />
+              </ActivityAction>
+            </Catch>
+            <Catch x:TypeArguments="s:Exception" sap:VirtualizedContainerService.HintSize="400,163.2" sap2010:WorkflowViewState.IdRef="Catch`1_3">
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+              <ActivityAction x:TypeArguments="s:Exception">
+                <ActivityAction.Argument>
+                  <DelegateInArgument x:TypeArguments="s:Exception" Name="exception" />
+                </ActivityAction.Argument>
+                <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="333.6,92.8" sap2010:WorkflowViewState.IdRef="LogMessage_25" Level="Info" Message="[Exception.Message+&quot; Excel - badDebt_annual LIC&quot;]" />
+              </ActivityAction>
+            </Catch>
+          </TryCatch.Catches>
+        </TryCatch>
+        <ui:ExcelApplicationScope Password="{x:Null}" CreateNewFile="False" DisplayName="Excel Application Scope - aging" sap:VirtualizedContainerService.HintSize="483.2,262.4" sap2010:WorkflowViewState.IdRef="ExcelApplicationScope_1" InstanceCachePeriod="3000" WorkbookPath="[argInFilePath]">
+          <ui:ExcelApplicationScope.Body>
+            <ActivityAction x:TypeArguments="ui:WorkbookApplication">
+              <ActivityAction.Argument>
+                <DelegateInArgument x:TypeArguments="ui:WorkbookApplication" Name="ExcelWorkbookScope" />
+              </ActivityAction.Argument>
+              <Sequence DisplayName="Do" sap:VirtualizedContainerService.HintSize="375.2,152.8" sap2010:WorkflowViewState.IdRef="Sequence_45">
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+                <ui:ExcelReadRange AddHeaders="True" DataTable="[vDTAgingSheetData]" DisplayName="Read Range - aging" sap:VirtualizedContainerService.HintSize="333.6,60" sap2010:WorkflowViewState.IdRef="ExcelReadRange_1" Range="A6" SheetName="[argInSheetName]" />
+              </Sequence>
+            </ActivityAction>
+          </ui:ExcelApplicationScope.Body>
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+        </ui:ExcelApplicationScope>
+        <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="483.2,92.8" sap2010:WorkflowViewState.IdRef="LogMessage_15" Level="Info" Message="[&quot;Aging sheet has &quot;+vDTAgingSheetData.Rows.Count.ToString+ &quot; rows &quot;]">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+        </ui:LogMessage>
+        <If Condition="[argInFilter.ToLower.Trim=&quot;lic&quot; And vDTAgingSheetData.Select(&quot;[Type]='Annual LIC' and [Comments] like '%Days in Arrears: %'&quot;).Length&gt;0]" DisplayName="If LIC Type" sap:VirtualizedContainerService.HintSize="483.2,248.8" sap2010:WorkflowViewState.IdRef="If_14">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <If.Then>
+            <Assign DisplayName="Assign Filtered Date" sap:VirtualizedContainerService.HintSize="262.4,60" sap2010:WorkflowViewState.IdRef="Assign_54">
+              <Assign.To>
+                <OutArgument x:TypeArguments="sd:DataTable">[vDTFilteredData]</OutArgument>
+              </Assign.To>
+              <Assign.Value>
+                <InArgument x:TypeArguments="sd:DataTable">[vDTAgingSheetData.Select("[Type]='Annual LIC' and [Comments] like '%Days in Arrears: %'").CopyToDataTable]</InArgument>
+              </Assign.Value>
+            </Assign>
+          </If.Then>
+        </If>
+        <If Condition="[argInFilter.ToLower.Trim=&quot;general&quot;]" DisplayName="If GeneralType" sap:VirtualizedContainerService.HintSize="483.2,248.8" sap2010:WorkflowViewState.IdRef="If_21">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <If.Then>
+            <Assign DisplayName="Assign Filtered Date" sap:VirtualizedContainerService.HintSize="262.4,60" sap2010:WorkflowViewState.IdRef="Assign_59">
+              <Assign.To>
+                <OutArgument x:TypeArguments="sd:DataTable">[vDTFilteredData]</OutArgument>
+              </Assign.To>
+              <Assign.Value>
+                <InArgument x:TypeArguments="sd:DataTable">[vDTAgingSheetData.Select("[Type]='General BT' or [Type]='DC General' or [Type]='General' or [Type]='VIA' or [Type]='Patent Pool' or [Type]='Low Risk'").CopyToDataTable]</InArgument>
+              </Assign.Value>
+            </Assign>
+          </If.Then>
+        </If>
+        <If Condition="[vDTFilteredData.Rows.Count&gt;0]" DisplayName="If Rows Found - Bad Dept" sap:VirtualizedContainerService.HintSize="483.2,541.6" sap2010:WorkflowViewState.IdRef="If_22">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <If.Then>
+            <Sequence sap:VirtualizedContainerService.HintSize="304,352.8" sap2010:WorkflowViewState.IdRef="Sequence_40">
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+              <Assign DisplayName="AssignDistinct Data" sap:VirtualizedContainerService.HintSize="262.4,60" sap2010:WorkflowViewState.IdRef="Assign_35">
+                <Assign.To>
+                  <OutArgument x:TypeArguments="sd:DataTable">[vDTDinstinctData]</OutArgument>
+                </Assign.To>
+                <Assign.Value>
+                  <InArgument x:TypeArguments="sd:DataTable">[vDTFilteredData.DefaultView.ToTable(True,"Customer number","C Code","Customer name")]</InArgument>
+                </Assign.Value>
+              </Assign>
+              <Assign DisplayName="Assign Single CCOde" sap:VirtualizedContainerService.HintSize="262.4,60" sap2010:WorkflowViewState.IdRef="Assign_28">
+                <Assign.To>
+                  <OutArgument x:TypeArguments="sd:DataTable">[vDTSingleCCode]</OutArgument>
+                </Assign.To>
+                <Assign.Value>
+                  <InArgument x:TypeArguments="sd:DataTable">[vDTDinstinctData.Clone()]</InArgument>
+                </Assign.Value>
+              </Assign>
+              <Assign DisplayName="Assign Multi CCode" sap:VirtualizedContainerService.HintSize="262.4,60" sap2010:WorkflowViewState.IdRef="Assign_29">
+                <Assign.To>
+                  <OutArgument x:TypeArguments="sd:DataTable">[vDTMultiCCode]</OutArgument>
+                </Assign.To>
+                <Assign.Value>
+                  <InArgument x:TypeArguments="sd:DataTable">[vDTDinstinctData.Clone()]</InArgument>
+                </Assign.Value>
+              </Assign>
+            </Sequence>
+          </If.Then>
+        </If>
+        <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="483.2,92.8" sap2010:WorkflowViewState.IdRef="LogMessage_17" Level="Info" Message="[vDTDinstinctData.Rows.Count.ToString+&quot; dintinct customers found&quot;]">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+        </ui:LogMessage>
+      </Sequence>
+      <FlowStep.Next>
+        <FlowStep x:Name="__ReferenceID1">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <av:Point x:Key="ShapeLocation">100,234.5</av:Point>
+              <av:Size x:Key="ShapeSize">200,52.8</av:Size>
+              <av:PointCollection x:Key="ConnectorLocation">200,287.3 199.1,287.3 199.1,296.5</av:PointCollection>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <ui:ForEachRow ColumnNames="{x:Null}" CurrentIndex="{x:Null}" DataTable="[vDTDinstinctData]" DisplayName="For Each Row Customer" sap:VirtualizedContainerService.HintSize="508.8,976.8" sap2010:WorkflowViewState.IdRef="ForEachRow_9">
+            <ui:ForEachRow.Body>
+              <ActivityAction x:TypeArguments="sd:DataRow">
+                <ActivityAction.Argument>
+                  <DelegateInArgument x:TypeArguments="sd:DataRow" Name="row" />
+                </ActivityAction.Argument>
+                <Sequence sap:VirtualizedContainerService.HintSize="475.2,856" sap2010:WorkflowViewState.IdRef="Sequence_44">
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                      <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                    </scg:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
+                  <Assign DisplayName="Initialize BJ boolvalue" sap:VirtualizedContainerService.HintSize="433.6,60" sap2010:WorkflowViewState.IdRef="Assign_63">
+                    <Assign.To>
+                      <OutArgument x:TypeArguments="x:Boolean">[vBoolBlueJeans]</OutArgument>
+                    </Assign.To>
+                    <Assign.Value>
+                      <InArgument x:TypeArguments="x:Boolean">False</InArgument>
+                    </Assign.Value>
+                  </Assign>
+                  <TryCatch DisplayName="Try Catch - BJ check" sap:VirtualizedContainerService.HintSize="433.6,295.2" sap2010:WorkflowViewState.IdRef="TryCatch_1">
+                    <sap:WorkflowViewStateService.ViewState>
+                      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                        <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                      </scg:Dictionary>
+                    </sap:WorkflowViewStateService.ViewState>
+                    <TryCatch.Try>
+                      <Sequence sap:VirtualizedContainerService.HintSize="304,326.4" sap2010:WorkflowViewState.IdRef="Sequence_43">
+                        <sap:WorkflowViewStateService.ViewState>
+                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                          </scg:Dictionary>
+                        </sap:WorkflowViewStateService.ViewState>
+                        <Assign DisplayName=" if bluejeans data" sap:VirtualizedContainerService.HintSize="262.4,60" sap2010:WorkflowViewState.IdRef="Assign_64">
+                          <Assign.To>
+                            <OutArgument x:TypeArguments="sd:DataTable">[vDTBlueJeans]</OutArgument>
+                          </Assign.To>
+                          <Assign.Value>
+                            <InArgument x:TypeArguments="sd:DataTable">[vDTAgingSheetData.Select("Convert([Customer number],System.String)='"+row(0).ToString+"' AND Convert([Customer name],System.String) like '%BLUEJEANS%'").CopyToDataTable.DefaultView.ToTable(True,"C Code")]</InArgument>
+                          </Assign.Value>
+                        </Assign>
+                        <InvokeMethod DisplayName="Invoke method" sap:VirtualizedContainerService.HintSize="262.4,133.6" sap2010:WorkflowViewState.IdRef="InvokeMethod_10" MethodName="ImportRow">
+                          <InvokeMethod.TargetObject>
+                            <InArgument x:TypeArguments="sd:DataTable">[vDTSingleCCode]</InArgument>
+                          </InvokeMethod.TargetObject>
+                          <InArgument x:TypeArguments="sd:DataRow">
+                            <mva:VisualBasicValue x:TypeArguments="sd:DataRow" ExpressionText="row" />
+                          </InArgument>
+                        </InvokeMethod>
+                      </Sequence>
+                    </TryCatch.Try>
+                    <TryCatch.Catches>
+                      <Catch x:TypeArguments="s:Exception" sap:VirtualizedContainerService.HintSize="400,130.4" sap2010:WorkflowViewState.IdRef="Catch`1_1">
+                        <sap:WorkflowViewStateService.ViewState>
+                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                          </scg:Dictionary>
+                        </sap:WorkflowViewStateService.ViewState>
+                        <ActivityAction x:TypeArguments="s:Exception">
+                          <ActivityAction.Argument>
+                            <DelegateInArgument x:TypeArguments="s:Exception" Name="exception" />
+                          </ActivityAction.Argument>
+                          <Assign DisplayName="Set BJ boolvalue" sap:VirtualizedContainerService.HintSize="262.4,60" sap2010:WorkflowViewState.IdRef="Assign_65">
+                            <Assign.To>
+                              <OutArgument x:TypeArguments="x:Boolean">[vBoolBlueJeans]</OutArgument>
+                            </Assign.To>
+                            <Assign.Value>
+                              <InArgument x:TypeArguments="x:Boolean">True</InArgument>
+                            </Assign.Value>
+                          </Assign>
+                        </ActivityAction>
+                      </Catch>
+                    </TryCatch.Catches>
+                  </TryCatch>
+                  <TryCatch DisplayName="Try Catch" sap:VirtualizedContainerService.HintSize="433.6,328" sap2010:WorkflowViewState.IdRef="TryCatch_3">
+                    <TryCatch.Try>
+                      <If Condition="[vBoolBlueJeans]" DisplayName="check if bluejeans customer" sap:VirtualizedContainerService.HintSize="200,52.8" sap2010:WorkflowViewState.IdRef="If_24">
+                        <sap:WorkflowViewStateService.ViewState>
+                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                          </scg:Dictionary>
+                        </sap:WorkflowViewStateService.ViewState>
+                        <If.Then>
+                          <If Condition="[vDTAgingSheetData.Select(&quot;Convert([Customer number],System.String)='&quot;+row(0).ToString+&quot;'&quot;).CopyToDataTable.DefaultView.ToTable(True,&quot;C Code&quot;).Rows.Count&gt;1]" DisplayName="If One Company Code" sap:VirtualizedContainerService.HintSize="517.6,292.8" sap2010:WorkflowViewState.IdRef="If_11">
+                            <sap:WorkflowViewStateService.ViewState>
+                              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                              </scg:Dictionary>
+                            </sap:WorkflowViewStateService.ViewState>
+                            <If.Then>
+                              <InvokeMethod DisplayName="Invoke method" sap:VirtualizedContainerService.HintSize="236.8,133.6" sap2010:WorkflowViewState.IdRef="InvokeMethod_8" MethodName="ImportRow">
+                                <InvokeMethod.TargetObject>
+                                  <InArgument x:TypeArguments="sd:DataTable">[vDTMultiCCode]</InArgument>
+                                </InvokeMethod.TargetObject>
+                                <InArgument x:TypeArguments="sd:DataRow">[row]</InArgument>
+                              </InvokeMethod>
+                            </If.Then>
+                            <If.Else>
+                              <InvokeMethod DisplayName="Invoke method" sap:VirtualizedContainerService.HintSize="236.8,133.6" sap2010:WorkflowViewState.IdRef="InvokeMethod_9" MethodName="ImportRow">
+                                <InvokeMethod.TargetObject>
+                                  <InArgument x:TypeArguments="sd:DataTable">[vDTSingleCCode]</InArgument>
+                                </InvokeMethod.TargetObject>
+                                <InArgument x:TypeArguments="sd:DataRow">[row]</InArgument>
+                              </InvokeMethod>
+                            </If.Else>
+                          </If>
+                        </If.Then>
+                      </If>
+                    </TryCatch.Try>
+                    <TryCatch.Catches>
+                      <Catch x:TypeArguments="s:Exception" sap:VirtualizedContainerService.HintSize="400,163.2" sap2010:WorkflowViewState.IdRef="Catch`1_4">
+                        <sap:WorkflowViewStateService.ViewState>
+                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                          </scg:Dictionary>
+                        </sap:WorkflowViewStateService.ViewState>
+                        <ActivityAction x:TypeArguments="s:Exception">
+                          <ActivityAction.Argument>
+                            <DelegateInArgument x:TypeArguments="s:Exception" Name="exception" />
+                          </ActivityAction.Argument>
+                          <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="333.6,92.8" sap2010:WorkflowViewState.IdRef="LogMessage_26" Level="Info" Message="[&quot;Bluejeans Segment  &quot;]" />
+                        </ActivityAction>
+                      </Catch>
+                    </TryCatch.Catches>
+                  </TryCatch>
+                </Sequence>
+              </ActivityAction>
+            </ui:ForEachRow.Body>
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                <x:Boolean x:Key="IsPinned">False</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+          </ui:ForEachRow>
+          <FlowStep.Next>
+            <FlowDecision x:Name="__ReferenceID3" Condition="[vDTMultiCCode.Rows.Count&gt;0]" DisplayName="Multi CCode" sap:VirtualizedContainerService.HintSize="71.2,87.2" sap2010:WorkflowViewState.IdRef="FlowDecision_1">
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                  <av:Point x:Key="ShapeLocation">163.5,296.5</av:Point>
+                  <av:Size x:Key="ShapeSize">71.2,87.2</av:Size>
+                  <av:PointCollection x:Key="TrueConnector">163.5,340 100,340 100,394.5</av:PointCollection>
+                  <av:PointCollection x:Key="FalseConnector">234.833333333333,339.833333333333 350,339.833333333333 350,394.5</av:PointCollection>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+              <FlowDecision.True>
+                <FlowStep x:Name="__ReferenceID11">
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                      <av:Point x:Key="ShapeLocation">0,394.5</av:Point>
+                      <av:Size x:Key="ShapeSize">200,52.8</av:Size>
+                      <av:PointCollection x:Key="ConnectorLocation">100,447.166666666667 100,464.5</av:PointCollection>
+                    </scg:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
+                  <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="200,52.8" sap2010:WorkflowViewState.IdRef="LogMessage_21" Level="Info" Message="[&quot;Shift to Dominant C Code&quot;]">
+                    <sap:WorkflowViewStateService.ViewState>
+                      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                      </scg:Dictionary>
+                    </sap:WorkflowViewStateService.ViewState>
+                  </ui:LogMessage>
+                  <FlowStep.Next>
+                    <FlowStep x:Name="__ReferenceID4">
+                      <sap:WorkflowViewStateService.ViewState>
+                        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                          <av:Point x:Key="ShapeLocation">0,464.5</av:Point>
+                          <av:Size x:Key="ShapeSize">200,52.8</av:Size>
+                          <av:PointCollection x:Key="ConnectorLocation">100,517.3 100,534.5</av:PointCollection>
+                        </scg:Dictionary>
+                      </sap:WorkflowViewStateService.ViewState>
+                      <ui:ForEachRow ColumnNames="{x:Null}" CurrentIndex="{x:Null}" DataTable="[vDTMultiCCode]" DisplayName="For Each Row- Multiple Data" sap:VirtualizedContainerService.HintSize="200,52.8" sap2010:WorkflowViewState.IdRef="ForEachRow_11">
+                        <ui:ForEachRow.Body>
+                          <ActivityAction x:TypeArguments="sd:DataRow">
+                            <ActivityAction.Argument>
+                              <DelegateInArgument x:TypeArguments="sd:DataRow" Name="row" />
+                            </ActivityAction.Argument>
+                            <Sequence DisplayName="Body" sap:VirtualizedContainerService.HintSize="611,690" sap2010:WorkflowViewState.IdRef="Sequence_33">
+                              <sap:WorkflowViewStateService.ViewState>
+                                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                </scg:Dictionary>
+                              </sap:WorkflowViewStateService.ViewState>
+                              <If Condition="[vStrCollection.Contains(row(0).ToString)]" DisplayName="If Processed Customer" sap:VirtualizedContainerService.HintSize="569,51" sap2010:WorkflowViewState.IdRef="If_13">
+                                <sap:WorkflowViewStateService.ViewState>
+                                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                    <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                                    <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                  </scg:Dictionary>
+                                </sap:WorkflowViewStateService.ViewState>
+                                <If.Then>
+                                  <ui:Continue sap:VirtualizedContainerService.HintSize="200,22" sap2010:WorkflowViewState.IdRef="Continue_1" />
+                                </If.Then>
+                              </If>
+                              <AddToCollection x:TypeArguments="x:String" Collection="[vStrCollection]" DisplayName="Add To Collection- Processed" sap:VirtualizedContainerService.HintSize="569,22" sap2010:WorkflowViewState.IdRef="AddToCollection`1_1" Item="[ROW(0).ToString]" />
+                              <If Condition="[argInFilter.ToLower.Trim=&quot;lic&quot;]" DisplayName="If LIC Type2" sap:VirtualizedContainerService.HintSize="569,218" sap2010:WorkflowViewState.IdRef="If_17">
+                                <sap:WorkflowViewStateService.ViewState>
+                                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                    <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                  </scg:Dictionary>
+                                </sap:WorkflowViewStateService.ViewState>
+                                <If.Then>
+                                  <Assign DisplayName="Assign Filter LIC- One" sap:VirtualizedContainerService.HintSize="262,60" sap2010:WorkflowViewState.IdRef="Assign_57">
+                                    <Assign.To>
+                                      <OutArgument x:TypeArguments="sd:DataTable">[vDTFilteredData]</OutArgument>
+                                    </Assign.To>
+                                    <Assign.Value>
+                                      <InArgument x:TypeArguments="sd:DataTable">[vDTAgingSheetData.Select("[Type]='Annual LIC' and [Comments] like '%Days in Arrears: %'").CopyToDataTable]</InArgument>
+                                    </Assign.Value>
+                                  </Assign>
+                                </If.Then>
+                                <If.Else>
+                                  <Assign DisplayName="Assign Filter" sap:VirtualizedContainerService.HintSize="262,60" sap2010:WorkflowViewState.IdRef="Assign_36">
+                                    <Assign.To>
+                                      <OutArgument x:TypeArguments="sd:DataTable">[vDTFilteredData]</OutArgument>
+                                    </Assign.To>
+                                    <Assign.Value>
+                                      <InArgument x:TypeArguments="sd:DataTable">[vDTAgingSheetData.Select("[Type]='General BT' or [Type]='DC General' or [Type]='General' or [Type]='VIA' or [Type]='Patent Pool' or [Type]='Low Risk'").CopyToDataTable]</InArgument>
+                                    </Assign.Value>
+                                  </Assign>
+                                </If.Else>
+                              </If>
+                              <Assign DisplayName="Assign Customer Data" sap:VirtualizedContainerService.HintSize="569,60" sap2010:WorkflowViewState.IdRef="Assign_37">
+                                <Assign.To>
+                                  <OutArgument x:TypeArguments="sd:DataTable">[vDTCustomerData]</OutArgument>
+                                </Assign.To>
+                                <Assign.Value>
+                                  <InArgument x:TypeArguments="sd:DataTable">[vDTFilteredData.Select("Convert([Customer number],System.String)='"+row(0).ToString+"'").CopyToDataTable]</InArgument>
+                                </Assign.Value>
+                              </Assign>
+                              <ui:InvokeWorkflowFile ArgumentsVariable="{x:Null}" ContinueOnError="{x:Null}" DisplayName="Invoke Mutiple_CCodeProcess workflow" sap:VirtualizedContainerService.HintSize="569,87" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_17" UnSafe="False" WorkflowFileName="Bad_DeptShifting\Mutiple_CCodeProcess.xaml">
+                                <ui:InvokeWorkflowFile.Arguments>
+                                  <InArgument x:TypeArguments="sd:DataTable" x:Key="argInCutomerData">[vDTCustomerData]</InArgument>
+                                  <InOutArgument x:TypeArguments="sd:DataTable" x:Key="argInOutAgingTable">[vDTAgingSheetData]</InOutArgument>
+                                  <InOutArgument x:TypeArguments="x:Int32" x:Key="argInRowCounter">[vIntRowCounter]</InOutArgument>
+                                  <InOutArgument x:TypeArguments="sd:DataTable" x:Key="argInOutDomRows">[vDTSingleCCode]</InOutArgument>
+                                  <InArgument x:TypeArguments="x:String" x:Key="argInCustomerNumber">[row("Customer number").ToString]</InArgument>
+                                  <InOutArgument x:TypeArguments="scg:List(x:String)" x:Key="argInOutAddedList" />
+                                </ui:InvokeWorkflowFile.Arguments>
+                                <sap:WorkflowViewStateService.ViewState>
+                                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                    <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                  </scg:Dictionary>
+                                </sap:WorkflowViewStateService.ViewState>
+                              </ui:InvokeWorkflowFile>
+                            </Sequence>
+                          </ActivityAction>
+                        </ui:ForEachRow.Body>
+                        <sap:WorkflowViewStateService.ViewState>
+                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                          </scg:Dictionary>
+                        </sap:WorkflowViewStateService.ViewState>
+                      </ui:ForEachRow>
+                      <FlowStep.Next>
+                        <FlowStep x:Name="__ReferenceID12">
+                          <sap:WorkflowViewStateService.ViewState>
+                            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                              <av:Point x:Key="ShapeLocation">0,534.5</av:Point>
+                              <av:Size x:Key="ShapeSize">200,52.8</av:Size>
+                              <av:PointCollection x:Key="ConnectorLocation">200,560 230,560 230,490 250,490</av:PointCollection>
+                            </scg:Dictionary>
+                          </sap:WorkflowViewStateService.ViewState>
+                          <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="200,52.8" sap2010:WorkflowViewState.IdRef="LogMessage_22" Level="Info" Message="[&quot;Completed Dominant C Code&quot;]">
+                            <sap:WorkflowViewStateService.ViewState>
+                              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                              </scg:Dictionary>
+                            </sap:WorkflowViewStateService.ViewState>
+                          </ui:LogMessage>
+                          <FlowStep.Next>
+                            <FlowStep x:Name="__ReferenceID0">
+                              <sap:WorkflowViewStateService.ViewState>
+                                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                  <av:Point x:Key="ShapeLocation">250,464.5</av:Point>
+                                  <av:Size x:Key="ShapeSize">200,52.8</av:Size>
+                                  <av:PointCollection x:Key="ConnectorLocation">350,517.3 350,534.5</av:PointCollection>
+                                </scg:Dictionary>
+                              </sap:WorkflowViewStateService.ViewState>
+                              <ui:ForEachRow ColumnNames="{x:Null}" CurrentIndex="{x:Null}" DataTable="[vDTSingleCCode]" DisplayName="For Each Row Single CCode" sap:VirtualizedContainerService.HintSize="200,52.8" sap2010:WorkflowViewState.IdRef="ForEachRow_10">
+                                <ui:ForEachRow.Body>
+                                  <ActivityAction x:TypeArguments="sd:DataRow">
+                                    <ActivityAction.Argument>
+                                      <DelegateInArgument x:TypeArguments="sd:DataRow" Name="row" />
+                                    </ActivityAction.Argument>
+                                    <Sequence DisplayName="Body" sap:VirtualizedContainerService.HintSize="1002,2016" sap2010:WorkflowViewState.IdRef="Sequence_31">
+                                      <Sequence.Variables>
+                                        <Variable x:TypeArguments="sd:DataTable" Name="vDTCustomerFiltered" />
+                                      </Sequence.Variables>
+                                      <sap:WorkflowViewStateService.ViewState>
+                                        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                        </scg:Dictionary>
+                                      </sap:WorkflowViewStateService.ViewState>
+                                      <If Condition="[argInFilter.ToLower.Trim=&quot;lic&quot;]" DisplayName="If LIC Type1" sap:VirtualizedContainerService.HintSize="960,51" sap2010:WorkflowViewState.IdRef="If_15">
+                                        <sap:WorkflowViewStateService.ViewState>
+                                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                                            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                          </scg:Dictionary>
+                                        </sap:WorkflowViewStateService.ViewState>
+                                        <If.Then>
+                                          <Assign DisplayName="Assign Filter 1" sap:VirtualizedContainerService.HintSize="262,60" sap2010:WorkflowViewState.IdRef="Assign_42">
+                                            <Assign.To>
+                                              <OutArgument x:TypeArguments="sd:DataTable">[vDTCustomerFiltered]</OutArgument>
+                                            </Assign.To>
+                                            <Assign.Value>
+                                              <InArgument x:TypeArguments="sd:DataTable">[vDTAgingSheetData.Select("[Type]='Annual LIC' and [Comments] like '%Days in Arrears: %'").CopyToDataTable]</InArgument>
+                                            </Assign.Value>
+                                          </Assign>
+                                        </If.Then>
+                                        <If.Else>
+                                          <Assign DisplayName="Assign Filter 2" sap:VirtualizedContainerService.HintSize="262,60" sap2010:WorkflowViewState.IdRef="Assign_30">
+                                            <Assign.To>
+                                              <OutArgument x:TypeArguments="sd:DataTable">[vDTCustomerFiltered]</OutArgument>
+                                            </Assign.To>
+                                            <Assign.Value>
+                                              <InArgument x:TypeArguments="sd:DataTable">[vDTAgingSheetData.Select("[Type]='General BT' or [Type]='DC General' or [Type]='General' or [Type]='VIA' or [Type]='Patent Pool' or [Type]='Low Risk'").CopyToDataTable]</InArgument>
+                                            </Assign.Value>
+                                          </Assign>
+                                        </If.Else>
+                                      </If>
+                                      <Assign DisplayName="Assign Customer Data- 1" sap:VirtualizedContainerService.HintSize="960,60" sap2010:WorkflowViewState.IdRef="Assign_31">
+                                        <Assign.To>
+                                          <OutArgument x:TypeArguments="sd:DataTable">[vDTCustomerData]</OutArgument>
+                                        </Assign.To>
+                                        <Assign.Value>
+                                          <InArgument x:TypeArguments="sd:DataTable">[vDTCustomerFiltered.Select("Convert([Customer number],System.String)='"+row("Customer number").ToString+"' and [C Code]='"+row("C Code").tostring+"'").CopyToDataTable]</InArgument>
+                                        </Assign.Value>
+                                      </Assign>
+                                      <ui:InvokeWorkflowFile ArgumentsVariable="{x:Null}" ContinueOnError="{x:Null}" DisplayName="Invoke Negative_to_Positive workflow" sap:VirtualizedContainerService.HintSize="960,87" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_15" UnSafe="False" WorkflowFileName="Bad_DeptShifting\Negative_to_Positive.xaml">
+                                        <ui:InvokeWorkflowFile.Arguments>
+                                          <InOutArgument x:TypeArguments="sd:DataTable" x:Key="argInOutAgingTable">[vDTAgingSheetData]</InOutArgument>
+                                          <InArgument x:TypeArguments="sd:DataTable" x:Key="argInCustomerData">[vDTCustomerData]</InArgument>
+                                          <InArgument x:TypeArguments="x:String" x:Key="argInAgingColumns">[if(argInFilter.ToLower.Trim="lic","181 to 365 _Net (Amnt),121 to 180 _Net (Amnt),91 to 120 _Net (Amnt),61 to 90 _Net (Amnt),31 to 60 _Net (Amnt),1 to 30 _Net (Amnt)","366 + _Net (Amnt),181 to 365 _Net (Amnt),121 to 180 _Net (Amnt),91 to 120 _Net (Amnt),61 to 90 _Net (Amnt),31 to 60 _Net (Amnt),1 to 30 _Net (Amnt)")]</InArgument>
+                                          <InOutArgument x:TypeArguments="scg:List(x:String)" x:Key="argInOutAddedList">[vListCustomers]</InOutArgument>
+                                          <InArgument x:TypeArguments="x:Boolean" x:Key="argInMultipleCCode">False</InArgument>
+                                          <InArgument x:TypeArguments="x:String" x:Key="argInDominatCCode" />
+                                          <InOutArgument x:TypeArguments="x:Int32" x:Key="argInRowCount" />
+                                          <InArgument x:TypeArguments="x:String" x:Key="argInDominantDiv" />
+                                        </ui:InvokeWorkflowFile.Arguments>
+                                        <sap:WorkflowViewStateService.ViewState>
+                                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                          </scg:Dictionary>
+                                        </sap:WorkflowViewStateService.ViewState>
+                                      </ui:InvokeWorkflowFile>
+                                      <If Condition="[argInFilter.ToLower.Trim=&quot;lic&quot;]" DisplayName="If LIC Type1" sap:VirtualizedContainerService.HintSize="960,218" sap2010:WorkflowViewState.IdRef="If_16">
+                                        <sap:WorkflowViewStateService.ViewState>
+                                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                          </scg:Dictionary>
+                                        </sap:WorkflowViewStateService.ViewState>
+                                        <If.Then>
+                                          <Assign DisplayName="Assign Filter LIC" sap:VirtualizedContainerService.HintSize="262,60" sap2010:WorkflowViewState.IdRef="Assign_55">
+                                            <Assign.To>
+                                              <OutArgument x:TypeArguments="sd:DataTable">[vDTCustomerFiltered]</OutArgument>
+                                            </Assign.To>
+                                            <Assign.Value>
+                                              <InArgument x:TypeArguments="sd:DataTable">[vDTAgingSheetData.Select("[Type]='Annual LIC' and [Comments] like '%Days in Arrears: %'").CopyToDataTable]</InArgument>
+                                            </Assign.Value>
+                                          </Assign>
+                                        </If.Then>
+                                        <If.Else>
+                                          <Assign DisplayName="Assign Filter General" sap:VirtualizedContainerService.HintSize="262,60" sap2010:WorkflowViewState.IdRef="Assign_44">
+                                            <Assign.To>
+                                              <OutArgument x:TypeArguments="sd:DataTable">[vDTCustomerFiltered]</OutArgument>
+                                            </Assign.To>
+                                            <Assign.Value>
+                                              <InArgument x:TypeArguments="sd:DataTable">[vDTAgingSheetData.Select("[Type]='General BT' or [Type]='DC General' or [Type]='General' or [Type]='VIA' or [Type]='Patent Pool' or [Type]='Low Risk'").CopyToDataTable]</InArgument>
+                                            </Assign.Value>
+                                          </Assign>
+                                        </If.Else>
+                                      </If>
+                                      <Assign DisplayName="Assign Customer Data-2" sap:VirtualizedContainerService.HintSize="960,60" sap2010:WorkflowViewState.IdRef="Assign_40">
+                                        <Assign.To>
+                                          <OutArgument x:TypeArguments="sd:DataTable">[vDTCustomerData]</OutArgument>
+                                        </Assign.To>
+                                        <Assign.Value>
+                                          <InArgument x:TypeArguments="sd:DataTable">[vDTCustomerFiltered.Select("Convert([Customer number],System.String)='"+row("Customer number").ToString+"' and [C Code]='"+row("C Code").tostring+"'").CopyToDataTable]</InArgument>
+                                        </Assign.Value>
+                                      </Assign>
+                                      <If Condition="[vDTCustomerData.Select(&quot;Convert([Customer number],System.String)='&quot;+row(&quot;Customer number&quot;).ToString+&quot;'&quot;).CopyToDataTable.Select(&quot;Convert([CurrentAmt_Net], System.String)&lt; &gt;''&quot;).Length&gt;0]" DisplayName="If Blank rows" sap:VirtualizedContainerService.HintSize="960,750" sap2010:WorkflowViewState.IdRef="If_20">
+                                        <sap:WorkflowViewStateService.ViewState>
+                                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                          </scg:Dictionary>
+                                        </sap:WorkflowViewStateService.ViewState>
+                                        <If.Then>
+                                          <Sequence sap:VirtualizedContainerService.HintSize="653,592" sap2010:WorkflowViewState.IdRef="Sequence_42">
+                                            <sap:WorkflowViewStateService.ViewState>
+                                              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                              </scg:Dictionary>
+                                            </sap:WorkflowViewStateService.ViewState>
+                                            <Assign DisplayName="Assign Cust Temp Data" sap:VirtualizedContainerService.HintSize="611,60" sap2010:WorkflowViewState.IdRef="Assign_61">
+                                              <Assign.To>
+                                                <OutArgument x:TypeArguments="sd:DataTable">[vDTCustTempData]</OutArgument>
+                                              </Assign.To>
+                                              <Assign.Value>
+                                                <InArgument x:TypeArguments="sd:DataTable">[vDTCustomerData.Select("Convert([Customer number],System.String)='"+row("Customer number").ToString+"'").CopyToDataTable.Select("Convert([CurrentAmt_Net], System.String)&lt; &gt;''").CopyToDataTable()]</InArgument>
+                                              </Assign.Value>
+                                            </Assign>
+                                            <If Condition="[vDTCustTempData.Select(&quot;Convert([CurrentAmt_Net], System.String) LIKE '%-%'&quot;).Length&gt;0]" DisplayName="If Positive Amount- Current" sap:VirtualizedContainerService.HintSize="611,400" sap2010:WorkflowViewState.IdRef="If_23">
+                                              <sap:WorkflowViewStateService.ViewState>
+                                                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                                </scg:Dictionary>
+                                              </sap:WorkflowViewStateService.ViewState>
+                                              <If.Then>
+                                                <Sequence sap:VirtualizedContainerService.HintSize="304,252" sap2010:WorkflowViewState.IdRef="Sequence_39">
+                                                  <sap:WorkflowViewStateService.ViewState>
+                                                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                                      <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                                      <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                                    </scg:Dictionary>
+                                                  </sap:WorkflowViewStateService.ViewState>
+                                                  <Assign DisplayName="Assign Total Data" sap:VirtualizedContainerService.HintSize="262,60" sap2010:WorkflowViewState.IdRef="Assign_39">
+                                                    <Assign.To>
+                                                      <OutArgument x:TypeArguments="sd:DataTable">[vDTTotalData]</OutArgument>
+                                                    </Assign.To>
+                                                    <Assign.Value>
+                                                      <InArgument x:TypeArguments="sd:DataTable">[vDTCustTempData.Select("Convert([CurrentAmt_Net], System.String) LIKE '%-%'").CopyToDataTable()]</InArgument>
+                                                    </Assign.Value>
+                                                  </Assign>
+                                                  <Assign DisplayName="Assign Total Amount" sap:VirtualizedContainerService.HintSize="262,60" sap2010:WorkflowViewState.IdRef="Assign_38">
+                                                    <Assign.To>
+                                                      <OutArgument x:TypeArguments="x:String">[vStrTotalAmt]</OutArgument>
+                                                    </Assign.To>
+                                                    <Assign.Value>
+                                                      <InArgument x:TypeArguments="x:String">[vDTTotalData.AsEnumerable.Sum(Function(x) Convert.ToDouble(x(“CurrentAmt_Net”).ToString.Trim) ).tostring]</InArgument>
+                                                    </Assign.Value>
+                                                  </Assign>
+                                                </Sequence>
+                                              </If.Then>
+                                              <If.Else>
+                                                <Assign DisplayName="Assign Total Amount" sap:VirtualizedContainerService.HintSize="262,60" sap2010:WorkflowViewState.IdRef="Assign_62">
+                                                  <Assign.To>
+                                                    <OutArgument x:TypeArguments="x:String">[vStrTotalAmt]</OutArgument>
+                                                  </Assign.To>
+                                                  <Assign.Value>
+                                                    <InArgument x:TypeArguments="x:String">["0"]</InArgument>
+                                                  </Assign.Value>
+                                                </Assign>
+                                              </If.Else>
+                                            </If>
+                                          </Sequence>
+                                        </If.Then>
+                                        <If.Else>
+                                          <Assign DisplayName="Assign Total Amount" sap:VirtualizedContainerService.HintSize="262,60" sap2010:WorkflowViewState.IdRef="Assign_58">
+                                            <Assign.To>
+                                              <OutArgument x:TypeArguments="x:String">[vStrTotalAmt]</OutArgument>
+                                            </Assign.To>
+                                            <Assign.Value>
+                                              <InArgument x:TypeArguments="x:String">["0"]</InArgument>
+                                            </Assign.Value>
+                                          </Assign>
+                                        </If.Else>
+                                      </If>
+                                      <If Condition="[Convert.ToDouble(vStrTotalAmt)&lt;0]" DisplayName="If Negative Total Amount" sap:VirtualizedContainerService.HintSize="960,458" sap2010:WorkflowViewState.IdRef="If_12">
+                                        <sap:WorkflowViewStateService.ViewState>
+                                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                          </scg:Dictionary>
+                                        </sap:WorkflowViewStateService.ViewState>
+                                        <If.Then>
+                                          <Sequence sap:VirtualizedContainerService.HintSize="408,310" sap2010:WorkflowViewState.IdRef="Sequence_41">
+                                            <sap:WorkflowViewStateService.ViewState>
+                                              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                              </scg:Dictionary>
+                                            </sap:WorkflowViewStateService.ViewState>
+                                            <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="366,91" sap2010:WorkflowViewState.IdRef="LogMessage_19" Level="Info" Message="[vStrTotalAmt+&quot; is the total&quot;]">
+                                              <sap:WorkflowViewStateService.ViewState>
+                                                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                                </scg:Dictionary>
+                                              </sap:WorkflowViewStateService.ViewState>
+                                            </ui:LogMessage>
+                                            <ui:InvokeWorkflowFile ArgumentsVariable="{x:Null}" ContinueOnError="{x:Null}" DisplayName="Invoke Positive_to_Negative workflow" sap:VirtualizedContainerService.HintSize="366,87" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_16" UnSafe="False" WorkflowFileName="Bad_DeptShifting\Positive_to_Negative_BadDept.xaml">
+                                              <ui:InvokeWorkflowFile.Arguments>
+                                                <InOutArgument x:TypeArguments="sd:DataTable" x:Key="argInOutAgingTable">[vDTAgingSheetData]</InOutArgument>
+                                                <InArgument x:TypeArguments="sd:DataTable" x:Key="argInCustomerData">[vDTCustomerData]</InArgument>
+                                                <InArgument x:TypeArguments="x:String" x:Key="argInAgingColumns">[if(argInFilter.ToLower.Trim="lic","181 to 365 _Net (Amnt),121 to 180 _Net (Amnt),91 to 120 _Net (Amnt),61 to 90 _Net (Amnt),31 to 60 _Net (Amnt),1 to 30 _Net (Amnt)","366 + _Net (Amnt),181 to 365 _Net (Amnt),121 to 180 _Net (Amnt),91 to 120 _Net (Amnt),61 to 90 _Net (Amnt),31 to 60 _Net (Amnt),1 to 30 _Net (Amnt)")]</InArgument>
+                                                <InOutArgument x:TypeArguments="scg:List(x:String)" x:Key="argInOutAddedList">[vListCustomers]</InOutArgument>
+                                                <InArgument x:TypeArguments="x:String" x:Key="argInTotalValue">[vStrTotalAmt]</InArgument>
+                                                <InArgument x:TypeArguments="x:Boolean" x:Key="argInMultipleCCode">False</InArgument>
+                                                <InArgument x:TypeArguments="x:String" x:Key="argInDominatCCode" />
+                                                <InOutArgument x:TypeArguments="x:Int32" x:Key="argInRowCount" />
+                                              </ui:InvokeWorkflowFile.Arguments>
+                                              <sap:WorkflowViewStateService.ViewState>
+                                                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                                </scg:Dictionary>
+                                              </sap:WorkflowViewStateService.ViewState>
+                                            </ui:InvokeWorkflowFile>
+                                          </Sequence>
+                                        </If.Then>
+                                      </If>
+                                    </Sequence>
+                                  </ActivityAction>
+                                </ui:ForEachRow.Body>
+                                <sap:WorkflowViewStateService.ViewState>
+                                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                    <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                                    <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                  </scg:Dictionary>
+                                </sap:WorkflowViewStateService.ViewState>
+                              </ui:ForEachRow>
+                              <FlowStep.Next>
+                                <FlowStep x:Name="__ReferenceID13">
+                                  <sap:WorkflowViewStateService.ViewState>
+                                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                      <av:Point x:Key="ShapeLocation">250,534.5</av:Point>
+                                      <av:Size x:Key="ShapeSize">200,52.8</av:Size>
+                                      <av:PointCollection x:Key="ConnectorLocation">350,587.3 350,594.5</av:PointCollection>
+                                    </scg:Dictionary>
+                                  </sap:WorkflowViewStateService.ViewState>
+                                  <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="200,52.8" sap2010:WorkflowViewState.IdRef="LogMessage_23" Level="Info" Message="[&quot;Bad Debt Shifted&quot;]">
+                                    <sap:WorkflowViewStateService.ViewState>
+                                      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                      </scg:Dictionary>
+                                    </sap:WorkflowViewStateService.ViewState>
+                                  </ui:LogMessage>
+                                  <FlowStep.Next>
+                                    <FlowStep x:Name="__ReferenceID2">
+                                      <sap:WorkflowViewStateService.ViewState>
+                                        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                          <av:Point x:Key="ShapeLocation">250,594.5</av:Point>
+                                          <av:Size x:Key="ShapeSize">200,52.8</av:Size>
+                                          <av:PointCollection x:Key="ConnectorLocation">350,647.3 350,656.5 350.2,656.5</av:PointCollection>
+                                        </scg:Dictionary>
+                                      </sap:WorkflowViewStateService.ViewState>
+                                      <ui:InvokeWorkflowFile ArgumentsVariable="{x:Null}" ContinueOnError="{x:Null}" DisplayName="Invoke AgingSheet_HighlightNewRows workflow" sap:VirtualizedContainerService.HintSize="200,52.8" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_14" UnSafe="False" WorkflowFileName="Bad_DeptShifting\AgingSheet_HighlightNewRows.xaml">
+                                        <ui:InvokeWorkflowFile.Arguments>
+                                          <InArgument x:TypeArguments="x:String" x:Key="argInFileName">[argInFilePath]</InArgument>
+                                          <InArgument x:TypeArguments="x:String" x:Key="argInSheetName">[argInSheetName]</InArgument>
+                                          <InArgument x:TypeArguments="sd:DataTable" x:Key="argInAgingData">[vDTAgingSheetData]</InArgument>
+                                          <InArgument x:TypeArguments="scg:List(x:String)" x:Key="argInListCustomers">[vListCustomers]</InArgument>
+                                          <InArgument x:TypeArguments="x:String" x:Key="argInAgingColumns">[ArgInConfig("FormulaExtendedCols").ToString]</InArgument>
+                                          <InArgument x:TypeArguments="scg:List(x:String)" x:Key="argInAnnualLIC">[argInAnnualLIC]</InArgument>
+                                          <InArgument x:TypeArguments="scg:List(x:String)" x:Key="argInShiftedLIC">[argInShiftedLIC]</InArgument>
+                                          <InArgument x:TypeArguments="x:String" x:Key="argInFilter">[argInFilter]</InArgument>
+                                          <InArgument x:TypeArguments="scg:List(x:String)" x:Key="argInListInvoice">[argInListInvoice]</InArgument>
+                                          <InArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" x:Key="ArgInConfig">[ArgInConfig]</InArgument>
+                                        </ui:InvokeWorkflowFile.Arguments>
+                                        <sap:WorkflowViewStateService.ViewState>
+                                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                                            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                          </scg:Dictionary>
+                                        </sap:WorkflowViewStateService.ViewState>
+                                      </ui:InvokeWorkflowFile>
+                                      <FlowStep.Next>
+                                        <FlowDecision x:Name="__ReferenceID6" Condition="[argInFilter.ToLower.Trim=&quot;general&quot;]" DisplayName="General" sap:VirtualizedContainerService.HintSize="70.4,87.2" sap2010:WorkflowViewState.IdRef="FlowDecision_2">
+                                          <sap:WorkflowViewStateService.ViewState>
+                                            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                              <av:Point x:Key="ShapeLocation">315,656.5</av:Point>
+                                              <av:Size x:Key="ShapeSize">70.4,87.2</av:Size>
+                                              <av:PointCollection x:Key="FalseConnector">385,700 450,700</av:PointCollection>
+                                              <av:PointCollection x:Key="TrueConnector">315,700 250,700</av:PointCollection>
+                                            </scg:Dictionary>
+                                          </sap:WorkflowViewStateService.ViewState>
+                                          <FlowDecision.True>
+                                            <FlowStep x:Name="__ReferenceID7">
+                                              <sap:WorkflowViewStateService.ViewState>
+                                                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                                  <av:Point x:Key="ShapeLocation">50,674.5</av:Point>
+                                                  <av:Size x:Key="ShapeSize">200,52.8</av:Size>
+                                                </scg:Dictionary>
+                                              </sap:WorkflowViewStateService.ViewState>
+                                              <ui:InvokeWorkflowFile ArgumentsVariable="{x:Null}" ContinueOnError="{x:Null}" DisplayName="Invoke Refresh_PivotsBadDept workflow" sap:VirtualizedContainerService.HintSize="200,52.8" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_18" UnSafe="False" WorkflowFileName="Bad_DeptShifting\Refresh_PivotsBadDept.xaml">
+                                                <ui:InvokeWorkflowFile.Arguments>
+                                                  <InArgument x:TypeArguments="x:String" x:Key="argInFileName">[argInFilePath]</InArgument>
+                                                  <InArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" x:Key="ArgInConfig">[ArgInConfig]</InArgument>
+                                                </ui:InvokeWorkflowFile.Arguments>
+                                                <sap:WorkflowViewStateService.ViewState>
+                                                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                                  </scg:Dictionary>
+                                                </sap:WorkflowViewStateService.ViewState>
+                                              </ui:InvokeWorkflowFile>
+                                            </FlowStep>
+                                          </FlowDecision.True>
+                                          <FlowDecision.False>
+                                            <FlowStep x:Name="__ReferenceID9">
+                                              <sap:WorkflowViewStateService.ViewState>
+                                                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                                  <av:Point x:Key="ShapeLocation">450,674.5</av:Point>
+                                                  <av:Size x:Key="ShapeSize">200,52.8</av:Size>
+                                                  <av:PointCollection x:Key="ConnectorLocation">550,727.3 550,750 550.2,750</av:PointCollection>
+                                                </scg:Dictionary>
+                                              </sap:WorkflowViewStateService.ViewState>
+                                              <ui:InvokeWorkflowFile ArgumentsVariable="{x:Null}" ContinueOnError="{x:Null}" DisplayName=" 46  Invoke LogFile workflow" sap:VirtualizedContainerService.HintSize="200,52.8" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_20" UnSafe="False" WorkflowFileName="LogandReport\LogFile.xaml">
+                                                <ui:InvokeWorkflowFile.Arguments>
+                                                  <InArgument x:TypeArguments="x:String" x:Key="argIstrLogNumber">LOG-BD46</InArgument>
+                                                  <InArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" x:Key="argIdicConfig">[ArgInConfig]</InArgument>
+                                                  <InArgument x:TypeArguments="x:String" x:Key="argIstrKeyValues" />
+                                                  <InArgument x:TypeArguments="x:String" x:Key="argIstrErrorScreenshot" />
+                                                  <InArgument x:TypeArguments="sd:DataTable" x:Key="argIdtLogNotification">[ArgInLogNotifications]</InArgument>
+                                                  <InArgument x:TypeArguments="x:String" x:Key="arglstrTechincalExceptionMessage" />
+                                                  <OutArgument x:TypeArguments="x:String" x:Key="argOException" />
+                                                  <InArgument x:TypeArguments="x:Int32" x:Key="argIstrTransactionID" />
+                                                  <InArgument x:TypeArguments="x:String" x:Key="argInDBConnectionString">[ArgInConfig("DB_ConnectionString").ToString]</InArgument>
+                                                </ui:InvokeWorkflowFile.Arguments>
+                                                <sap:WorkflowViewStateService.ViewState>
+                                                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                                    <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                                  </scg:Dictionary>
+                                                </sap:WorkflowViewStateService.ViewState>
+                                              </ui:InvokeWorkflowFile>
+                                              <FlowStep.Next>
+                                                <FlowStep x:Name="__ReferenceID5">
+                                                  <sap:WorkflowViewStateService.ViewState>
+                                                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                                      <av:Point x:Key="ShapeLocation">419,750</av:Point>
+                                                      <av:Size x:Key="ShapeSize">262.4,60</av:Size>
+                                                    </scg:Dictionary>
+                                                  </sap:WorkflowViewStateService.ViewState>
+                                                  <Assign DisplayName="Assign List" sap:VirtualizedContainerService.HintSize="262.4,60" sap2010:WorkflowViewState.IdRef="Assign_60">
+                                                    <Assign.To>
+                                                      <OutArgument x:TypeArguments="scg:List(x:String)">[argInShiftedLIC]</OutArgument>
+                                                    </Assign.To>
+                                                    <Assign.Value>
+                                                      <InArgument x:TypeArguments="scg:List(x:String)">[vListCustomers]</InArgument>
+                                                    </Assign.Value>
+                                                    <sap:WorkflowViewStateService.ViewState>
+                                                      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                                        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                                      </scg:Dictionary>
+                                                    </sap:WorkflowViewStateService.ViewState>
+                                                  </Assign>
+                                                </FlowStep>
+                                              </FlowStep.Next>
+                                            </FlowStep>
+                                          </FlowDecision.False>
+                                        </FlowDecision>
+                                      </FlowStep.Next>
+                                    </FlowStep>
+                                  </FlowStep.Next>
+                                </FlowStep>
+                              </FlowStep.Next>
+                            </FlowStep>
+                          </FlowStep.Next>
+                        </FlowStep>
+                      </FlowStep.Next>
+                    </FlowStep>
+                  </FlowStep.Next>
+                </FlowStep>
+              </FlowDecision.True>
+              <FlowDecision.False>
+                <FlowStep x:Name="__ReferenceID10">
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                      <av:Point x:Key="ShapeLocation">250,394.5</av:Point>
+                      <av:Size x:Key="ShapeSize">200,52.8</av:Size>
+                      <av:PointCollection x:Key="ConnectorLocation">350,447.166666666667 350,464.5</av:PointCollection>
+                    </scg:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
+                  <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="200,52.8" sap2010:WorkflowViewState.IdRef="LogMessage_20" Level="Info" Message="[&quot;Shifting Values..&quot;]">
+                    <sap:WorkflowViewStateService.ViewState>
+                      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                      </scg:Dictionary>
+                    </sap:WorkflowViewStateService.ViewState>
+                  </ui:LogMessage>
+                  <FlowStep.Next>
+                    <x:Reference>__ReferenceID0</x:Reference>
+                  </FlowStep.Next>
+                </FlowStep>
+              </FlowDecision.False>
+            </FlowDecision>
+          </FlowStep.Next>
+        </FlowStep>
+      </FlowStep.Next>
+    </FlowStep>
+    <x:Reference>__ReferenceID1</x:Reference>
+    <x:Reference>__ReferenceID2</x:Reference>
+    <x:Reference>__ReferenceID0</x:Reference>
+    <x:Reference>__ReferenceID3</x:Reference>
+    <x:Reference>__ReferenceID4</x:Reference>
+    <x:Reference>__ReferenceID5</x:Reference>
+    <x:Reference>__ReferenceID6</x:Reference>
+    <x:Reference>__ReferenceID7</x:Reference>
+    <FlowStep x:Name="__ReferenceID14">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <av:Point x:Key="ShapeLocation">260,104.5</av:Point>
+          <av:Size x:Key="ShapeSize">200,52.8</av:Size>
+          <av:PointCollection x:Key="ConnectorLocation">360,157.166666666667 360,167</av:PointCollection>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+      <ui:InvokeWorkflowFile ArgumentsVariable="{x:Null}" ContinueOnError="{x:Null}" DisplayName=" 45  Invoke LogFile workflow" sap:VirtualizedContainerService.HintSize="200,52.8" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_19" UnSafe="False" WorkflowFileName="LogandReport\LogFile.xaml">
+        <ui:InvokeWorkflowFile.Arguments>
+          <InArgument x:TypeArguments="x:String" x:Key="argIstrLogNumber">LOG-BD45</InArgument>
+          <InArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" x:Key="argIdicConfig">[ArgInConfig]</InArgument>
+          <InArgument x:TypeArguments="x:String" x:Key="argIstrKeyValues" />
+          <InArgument x:TypeArguments="x:String" x:Key="argIstrErrorScreenshot" />
+          <InArgument x:TypeArguments="sd:DataTable" x:Key="argIdtLogNotification">[ArgInLogNotifications]</InArgument>
+          <InArgument x:TypeArguments="x:String" x:Key="arglstrTechincalExceptionMessage" />
+          <OutArgument x:TypeArguments="x:String" x:Key="argOException" />
+          <InArgument x:TypeArguments="x:Int32" x:Key="argIstrTransactionID" />
+          <InArgument x:TypeArguments="x:String" x:Key="argInDBConnectionString">[ArgInConfig("DB_ConnectionString").ToString]</InArgument>
+        </ui:InvokeWorkflowFile.Arguments>
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </ui:InvokeWorkflowFile>
+      <FlowStep.Next>
+        <x:Reference>__ReferenceID8</x:Reference>
+      </FlowStep.Next>
+    </FlowStep>
+    <x:Reference>__ReferenceID9</x:Reference>
+    <x:Reference>__ReferenceID10</x:Reference>
+    <x:Reference>__ReferenceID11</x:Reference>
+    <x:Reference>__ReferenceID12</x:Reference>
+    <x:Reference>__ReferenceID13</x:Reference>
+  </Flowchart>
+</Activity>

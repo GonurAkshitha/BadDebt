@@ -1,0 +1,375 @@
+<Activity mc:Ignorable="sap sap2010" x:Class="BadDept_CCode" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib" xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib" xmlns:sd="clr-namespace:System.Data;assembly=System.Data" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="argInOutAgingTable" Type="InOutArgument(sd:DataTable)" />
+    <x:Property Name="argInCustomerData" Type="InArgument(sd:DataTable)" />
+    <x:Property Name="argInAgingColumns" Type="InArgument(x:String)" />
+    <x:Property Name="argInOutAddedList" Type="InOutArgument(scg:List(x:String))" />
+    <x:Property Name="argInTotalValue" Type="InArgument(x:String)" />
+    <x:Property Name="argInMultipleCCode" Type="InArgument(x:Boolean)" />
+    <x:Property Name="argInDominatCCode" Type="InArgument(x:String)" />
+    <x:Property Name="argInRowCount" Type="InOutArgument(x:Int32)" />
+    <x:Property Name="argInDominantDiv" Type="InArgument(x:String)" />
+  </x:Members>
+  <mva:VisualBasic.Settings>
+    <x:Null />
+  </mva:VisualBasic.Settings>
+  <sap:VirtualizedContainerService.HintSize>723,3189</sap:VirtualizedContainerService.HintSize>
+  <sap2010:WorkflowViewState.IdRef>BadDept_CCode_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>Microsoft.VisualBasic</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Collections</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Diagnostics</x:String>
+      <x:String>System.Drawing</x:String>
+      <x:String>System.IO</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Net.Mail</x:String>
+      <x:String>System.Xml</x:String>
+      <x:String>System.Xml.Linq</x:String>
+      <x:String>UiPath.Core</x:String>
+      <x:String>UiPath.Core.Activities</x:String>
+      <x:String>System.Windows.Markup</x:String>
+      <x:String>System.Xml.Serialization</x:String>
+      <x:String>Microsoft.VisualBasic.CompilerServices</x:String>
+      <x:String>Microsoft.VisualBasic.CompilerServices</x:String>
+      <x:String>UiPath.Excel</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Drawing</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.UiAutomation.Activities</AssemblyReference>
+      <AssemblyReference>System.ValueTuple</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.Composition</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>UiPath.Excel</AssemblyReference>
+      <AssemblyReference>UiPath.Excel.Activities</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence DisplayName="BadDept_CCode" sap:VirtualizedContainerService.HintSize="703,3129" sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="x:Int32" Name="vIntIndex" />
+      <Variable x:TypeArguments="x:String" Name="vStrCustomerValue" />
+      <Variable x:TypeArguments="x:Boolean" Name="vBoolTotalMatched" />
+      <Variable x:TypeArguments="x:String" Default="[argInTotalValue]" Name="vStrPreviousValue" />
+      <Variable x:TypeArguments="x:Int32" Default="0" Name="vIntDefaulValuescCount" />
+    </Sequence.Variables>
+    <sap:WorkflowViewStateService.ViewState>
+      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+      </scg:Dictionary>
+    </sap:WorkflowViewStateService.ViewState>
+    <Assign DisplayName="Assig Total Boolean" sap:VirtualizedContainerService.HintSize="661,60" sap2010:WorkflowViewState.IdRef="Assign_55">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:Boolean">[vBoolTotalMatched]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:Boolean">False</InArgument>
+      </Assign.Value>
+    </Assign>
+    <ui:ForEachRow CurrentIndex="{x:Null}" DataTable="[argInCustomerData]" DisplayName="For Each Row- Customer Data" sap:VirtualizedContainerService.HintSize="661,2937" sap2010:WorkflowViewState.IdRef="ForEachRow_2">
+      <ui:ForEachRow.Body>
+        <ActivityAction x:TypeArguments="sd:DataRow">
+          <ActivityAction.Argument>
+            <DelegateInArgument x:TypeArguments="sd:DataRow" Name="CCrow" />
+          </ActivityAction.Argument>
+          <Sequence sap:VirtualizedContainerService.HintSize="611,2789" sap2010:WorkflowViewState.IdRef="Sequence_72">
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                <x:Boolean x:Key="IsPinned">False</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+            <ui:ForEach x:TypeArguments="x:Object" CurrentIndex="{x:Null}" DisplayName="For Each- Amount Column" sap:VirtualizedContainerService.HintSize="569,2606" sap2010:WorkflowViewState.IdRef="ForEach`1_6" Values="[split(argInAgingColumns,&quot;,&quot;)]">
+              <ui:ForEach.Body>
+                <ActivityAction x:TypeArguments="x:Object">
+                  <ActivityAction.Argument>
+                    <DelegateInArgument x:TypeArguments="x:Object" Name="item" />
+                  </ActivityAction.Argument>
+                  <Sequence sap:VirtualizedContainerService.HintSize="533,2472" sap2010:WorkflowViewState.IdRef="Sequence_64">
+                    <sap:WorkflowViewStateService.ViewState>
+                      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                      </scg:Dictionary>
+                    </sap:WorkflowViewStateService.ViewState>
+                    <Assign DisplayName="Assign Values" sap:VirtualizedContainerService.HintSize="491,60" sap2010:WorkflowViewState.IdRef="Assign_44">
+                      <Assign.To>
+                        <OutArgument x:TypeArguments="x:String">[vStrCustomerValue]</OutArgument>
+                      </Assign.To>
+                      <Assign.Value>
+                        <InArgument x:TypeArguments="x:String">[if(CCrow(item.tostring).ToString.Trim&lt;&gt;"",CCrow(item.tostring).ToString,"0")]</InArgument>
+                      </Assign.Value>
+                    </Assign>
+                    <If Condition="[Convert.ToDouble(vStrCustomerValue)&gt;0 and CCrow(&quot;Total 110070&quot;).ToString.Trim&lt;&gt;&quot;&quot;]" DisplayName="If Negative Values found" sap:VirtualizedContainerService.HintSize="491,2280" sap2010:WorkflowViewState.IdRef="If_8">
+                      <sap:WorkflowViewStateService.ViewState>
+                        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                        </scg:Dictionary>
+                      </sap:WorkflowViewStateService.ViewState>
+                      <If.Then>
+                        <Sequence sap:VirtualizedContainerService.HintSize="346,2132" sap2010:WorkflowViewState.IdRef="Sequence_66">
+                          <sap:WorkflowViewStateService.ViewState>
+                            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                            </scg:Dictionary>
+                          </sap:WorkflowViewStateService.ViewState>
+                          <ui:LookupDataTable CellValue="{x:Null}" LookupColumnName="{x:Null}" LookupDataColumn="{x:Null}" TargetColumnName="{x:Null}" TargetDataColumn="{x:Null}" DataTable="[argInOutAgingTable]" DisplayName="Lookup Data Table- Invoice nUmber" sap:VirtualizedContainerService.HintSize="304,22" sap2010:WorkflowViewState.IdRef="LookupDataTable_1" LookupColumnIndex="[0]" LookupValue="[CCrow(0).ToString]" RowIndex="[vIntIndex]" TargetColumnIndex="[1]" />
+                          <InvokeMethod DisplayName="Invoke Insert method" sap:VirtualizedContainerService.HintSize="304,132" sap2010:WorkflowViewState.IdRef="InvokeMethod_2" MethodName="InsertAt">
+                            <InvokeMethod.TargetObject>
+                              <InArgument x:TypeArguments="sd:DataRowCollection">[argInOutAgingTable.Rows]</InArgument>
+                            </InvokeMethod.TargetObject>
+                            <InArgument x:TypeArguments="sd:DataRow">[argInOutAgingTable.NewRow]</InArgument>
+                            <InArgument x:TypeArguments="x:Int32">[vIntIndex+1]</InArgument>
+                          </InvokeMethod>
+                          <Assign DisplayName="Assign Init Counter" sap:VirtualizedContainerService.HintSize="304,60" sap2010:WorkflowViewState.IdRef="Assign_59">
+                            <Assign.To>
+                              <OutArgument x:TypeArguments="x:Int32">[vIntDefaulValuescCount]</OutArgument>
+                            </Assign.To>
+                            <Assign.Value>
+                              <InArgument x:TypeArguments="x:Int32">0</InArgument>
+                            </Assign.Value>
+                          </Assign>
+                          <While DisplayName="While 10th Column" sap:VirtualizedContainerService.HintSize="304,51" sap2010:WorkflowViewState.IdRef="While_2">
+                            <sap:WorkflowViewStateService.ViewState>
+                              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                                <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                              </scg:Dictionary>
+                            </sap:WorkflowViewStateService.ViewState>
+                            <While.Condition>[vIntDefaulValuescCount&lt;&gt;10]</While.Condition>
+                            <Sequence sap:VirtualizedContainerService.HintSize="304,252" sap2010:WorkflowViewState.IdRef="Sequence_70">
+                              <sap:WorkflowViewStateService.ViewState>
+                                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                </scg:Dictionary>
+                              </sap:WorkflowViewStateService.ViewState>
+                              <Assign DisplayName="Assign Column Values" sap:VirtualizedContainerService.HintSize="262,60" sap2010:WorkflowViewState.IdRef="Assign_60">
+                                <Assign.To>
+                                  <OutArgument x:TypeArguments="x:Object">[argInOutAgingTable.Rows(vIntIndex+1).Item(vIntDefaulValuescCount)]</OutArgument>
+                                </Assign.To>
+                                <Assign.Value>
+                                  <InArgument x:TypeArguments="x:Object">[CCrow(vIntDefaulValuescCount).ToString]</InArgument>
+                                </Assign.Value>
+                              </Assign>
+                              <Assign DisplayName="Assign Increment" sap:VirtualizedContainerService.HintSize="262,60" sap2010:WorkflowViewState.IdRef="Assign_61">
+                                <Assign.To>
+                                  <OutArgument x:TypeArguments="x:Int32">[vIntDefaulValuescCount]</OutArgument>
+                                </Assign.To>
+                                <Assign.Value>
+                                  <InArgument x:TypeArguments="x:Int32">[vIntDefaulValuescCount+1]</InArgument>
+                                </Assign.Value>
+                              </Assign>
+                            </Sequence>
+                          </While>
+                          <Assign DisplayName="Assign TypeValues" sap:VirtualizedContainerService.HintSize="304,60" sap2010:WorkflowViewState.IdRef="Assign_72">
+                            <Assign.To>
+                              <OutArgument x:TypeArguments="x:Object">[argInOutAgingTable.Rows(vIntIndex+1).Item("Type")]</OutArgument>
+                            </Assign.To>
+                            <Assign.Value>
+                              <InArgument x:TypeArguments="x:Object">[CCrow("Type").ToString]</InArgument>
+                            </Assign.Value>
+                          </Assign>
+                          <Assign DisplayName="Assign Total Values" sap:VirtualizedContainerService.HintSize="304,60" sap2010:WorkflowViewState.IdRef="Assign_82">
+                            <Assign.To>
+                              <OutArgument x:TypeArguments="x:Object">[argInOutAgingTable.Rows(vIntIndex+1).Item("Net Aging")]</OutArgument>
+                            </Assign.To>
+                            <Assign.Value>
+                              <InArgument x:TypeArguments="x:Object">["-"+CCrow(item.tostring).ToString]</InArgument>
+                            </Assign.Value>
+                          </Assign>
+                          <Assign DisplayName="Assign Net Column Values" sap:VirtualizedContainerService.HintSize="304,60" sap2010:WorkflowViewState.IdRef="Assign_63">
+                            <Assign.To>
+                              <OutArgument x:TypeArguments="x:Object">[argInOutAgingTable.Rows(vIntIndex+1).Item(item.tostring)]</OutArgument>
+                            </Assign.To>
+                            <Assign.Value>
+                              <InArgument x:TypeArguments="x:Object">["-"+CCrow(item.tostring).ToString]</InArgument>
+                            </Assign.Value>
+                          </Assign>
+                          <Sequence DisplayName="Muti Line C Code" sap:VirtualizedContainerService.HintSize="304,1315" sap2010:WorkflowViewState.IdRef="Sequence_75">
+                            <sap:WorkflowViewStateService.ViewState>
+                              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                              </scg:Dictionary>
+                            </sap:WorkflowViewStateService.ViewState>
+                            <InvokeMethod DisplayName="Invoke Insert method" sap:VirtualizedContainerService.HintSize="262,132" sap2010:WorkflowViewState.IdRef="InvokeMethod_3" MethodName="InsertAt">
+                              <InvokeMethod.TargetObject>
+                                <InArgument x:TypeArguments="sd:DataRowCollection">[argInOutAgingTable.Rows]</InArgument>
+                              </InvokeMethod.TargetObject>
+                              <InArgument x:TypeArguments="sd:DataRow">[argInOutAgingTable.NewRow]</InArgument>
+                              <InArgument x:TypeArguments="x:Int32">[vIntIndex+2]</InArgument>
+                            </InvokeMethod>
+                            <Assign DisplayName="Assign Init Counter" sap:VirtualizedContainerService.HintSize="262,60" sap2010:WorkflowViewState.IdRef="Assign_73">
+                              <Assign.To>
+                                <OutArgument x:TypeArguments="x:Int32">[vIntDefaulValuescCount]</OutArgument>
+                              </Assign.To>
+                              <Assign.Value>
+                                <InArgument x:TypeArguments="x:Int32">0</InArgument>
+                              </Assign.Value>
+                            </Assign>
+                            <While DisplayName="While 10th Column" sap:VirtualizedContainerService.HintSize="262,51" sap2010:WorkflowViewState.IdRef="While_3">
+                              <sap:WorkflowViewStateService.ViewState>
+                                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                  <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                </scg:Dictionary>
+                              </sap:WorkflowViewStateService.ViewState>
+                              <While.Condition>[vIntDefaulValuescCount&lt;&gt;10]</While.Condition>
+                              <Sequence sap:VirtualizedContainerService.HintSize="304,252" sap2010:WorkflowViewState.IdRef="Sequence_74">
+                                <sap:WorkflowViewStateService.ViewState>
+                                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                  </scg:Dictionary>
+                                </sap:WorkflowViewStateService.ViewState>
+                                <Assign DisplayName="Assign Column Values" sap:VirtualizedContainerService.HintSize="262,60" sap2010:WorkflowViewState.IdRef="Assign_74">
+                                  <Assign.To>
+                                    <OutArgument x:TypeArguments="x:Object">[argInOutAgingTable.Rows(vIntIndex+2).Item(vIntDefaulValuescCount)]</OutArgument>
+                                  </Assign.To>
+                                  <Assign.Value>
+                                    <InArgument x:TypeArguments="x:Object">[CCrow(vIntDefaulValuescCount).ToString]</InArgument>
+                                  </Assign.Value>
+                                </Assign>
+                                <Assign DisplayName="Assign Increment" sap:VirtualizedContainerService.HintSize="262,60" sap2010:WorkflowViewState.IdRef="Assign_75">
+                                  <Assign.To>
+                                    <OutArgument x:TypeArguments="x:Int32">[vIntDefaulValuescCount]</OutArgument>
+                                  </Assign.To>
+                                  <Assign.Value>
+                                    <InArgument x:TypeArguments="x:Int32">[vIntDefaulValuescCount+1]</InArgument>
+                                  </Assign.Value>
+                                </Assign>
+                              </Sequence>
+                            </While>
+                            <Assign sap:VirtualizedContainerService.HintSize="262,60" sap2010:WorkflowViewState.IdRef="Assign_85">
+                              <Assign.To>
+                                <OutArgument x:TypeArguments="x:Int32">[argInRowCount]</OutArgument>
+                              </Assign.To>
+                              <Assign.Value>
+                                <InArgument x:TypeArguments="x:Int32">[argInRowCount+1]</InArgument>
+                              </Assign.Value>
+                            </Assign>
+                            <Assign DisplayName="Assign TypeValues" sap:VirtualizedContainerService.HintSize="262,60" sap2010:WorkflowViewState.IdRef="Assign_76">
+                              <Assign.To>
+                                <OutArgument x:TypeArguments="x:Object">[argInOutAgingTable.Rows(vIntIndex+2).Item("Type")]</OutArgument>
+                              </Assign.To>
+                              <Assign.Value>
+                                <InArgument x:TypeArguments="x:Object">[CCrow("Type").ToString]</InArgument>
+                              </Assign.Value>
+                            </Assign>
+                            <Assign DisplayName="Assign Invoice" sap:VirtualizedContainerService.HintSize="262,60" sap2010:WorkflowViewState.IdRef="Assign_77">
+                              <Assign.To>
+                                <OutArgument x:TypeArguments="x:Object">[argInOutAgingTable.Rows(vIntIndex+1).Item("Invoice")]</OutArgument>
+                              </Assign.To>
+                              <Assign.Value>
+                                <InArgument x:TypeArguments="x:Object">["CoCo Reclass"]</InArgument>
+                              </Assign.Value>
+                            </Assign>
+                            <Assign DisplayName="Assign Invoice CCode" sap:VirtualizedContainerService.HintSize="262,60" sap2010:WorkflowViewState.IdRef="Assign_83">
+                              <Assign.To>
+                                <OutArgument x:TypeArguments="x:Object">[argInOutAgingTable.Rows(vIntIndex+2).Item("Invoice")]</OutArgument>
+                              </Assign.To>
+                              <Assign.Value>
+                                <InArgument x:TypeArguments="x:String">["CoCo Reclass"+argInRowCount.ToString]</InArgument>
+                              </Assign.Value>
+                            </Assign>
+                            <Assign DisplayName="Assign Total Values" sap:VirtualizedContainerService.HintSize="262,60" sap2010:WorkflowViewState.IdRef="Assign_81">
+                              <Assign.To>
+                                <OutArgument x:TypeArguments="x:Object">[argInOutAgingTable.Rows(vIntIndex+2).Item("Net Aging")]</OutArgument>
+                              </Assign.To>
+                              <Assign.Value>
+                                <InArgument x:TypeArguments="x:Object">[CCrow(item.tostring).ToString]</InArgument>
+                              </Assign.Value>
+                            </Assign>
+                            <Assign DisplayName="Assign (&quot;Total 110070&quot;)" sap:VirtualizedContainerService.HintSize="262,60" sap2010:WorkflowViewState.IdRef="Assign_84">
+                              <Assign.To>
+                                <OutArgument x:TypeArguments="x:Object">[argInOutAgingTable.Rows(vIntIndex+2).Item("Total 110070")]</OutArgument>
+                              </Assign.To>
+                              <Assign.Value>
+                                <InArgument x:TypeArguments="x:Object">["0"]</InArgument>
+                              </Assign.Value>
+                            </Assign>
+                            <Assign DisplayName="Assign CCode Valus" sap:VirtualizedContainerService.HintSize="262,60" sap2010:WorkflowViewState.IdRef="Assign_79">
+                              <Assign.To>
+                                <OutArgument x:TypeArguments="x:Object">[argInOutAgingTable.Rows(vIntIndex+2).Item("C Code")]</OutArgument>
+                              </Assign.To>
+                              <Assign.Value>
+                                <InArgument x:TypeArguments="x:Object">[argInDominatCCode]</InArgument>
+                              </Assign.Value>
+                            </Assign>
+                            <Assign DisplayName="Assign CCode Division" sap:VirtualizedContainerService.HintSize="262,60" sap2010:WorkflowViewState.IdRef="Assign_86">
+                              <Assign.To>
+                                <OutArgument x:TypeArguments="x:Object">[argInOutAgingTable.Rows(vIntIndex+2).Item("Division")]</OutArgument>
+                              </Assign.To>
+                              <Assign.Value>
+                                <InArgument x:TypeArguments="x:Object">[argInDominantDiv]</InArgument>
+                              </Assign.Value>
+                            </Assign>
+                            <Assign DisplayName="Assign Column Values" sap:VirtualizedContainerService.HintSize="262,60" sap2010:WorkflowViewState.IdRef="Assign_80">
+                              <Assign.To>
+                                <OutArgument x:TypeArguments="x:Object">[argInOutAgingTable.Rows(vIntIndex+2).Item(item.tostring)]</OutArgument>
+                              </Assign.To>
+                              <Assign.Value>
+                                <InArgument x:TypeArguments="x:Object">[CCrow(item.tostring).ToString]</InArgument>
+                              </Assign.Value>
+                            </Assign>
+                          </Sequence>
+                        </Sequence>
+                      </If.Then>
+                    </If>
+                  </Sequence>
+                </ActivityAction>
+              </ui:ForEach.Body>
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+            </ui:ForEach>
+            <If Condition="[vBoolTotalMatched]" DisplayName="If No Offset " sap:VirtualizedContainerService.HintSize="569,51" sap2010:WorkflowViewState.IdRef="If_11">
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+              <If.Then>
+                <ui:Break sap:VirtualizedContainerService.HintSize="200,22" sap2010:WorkflowViewState.IdRef="Break_2" />
+              </If.Then>
+            </If>
+          </Sequence>
+        </ActivityAction>
+      </ui:ForEachRow.Body>
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </ui:ForEachRow>
+  </Sequence>
+</Activity>

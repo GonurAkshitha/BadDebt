@@ -1,0 +1,375 @@
+<Activity mc:Ignorable="sap sap2010" x:Class="Mutiple_CCodeProcess" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:av="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib" xmlns:sd="clr-namespace:System.Data;assembly=System.Data" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="argInCutomerData" Type="InArgument(sd:DataTable)" />
+    <x:Property Name="argInOutAgingTable" Type="InOutArgument(sd:DataTable)" />
+    <x:Property Name="argInRowCounter" Type="InOutArgument(x:Int32)" />
+    <x:Property Name="argInOutDomRows" Type="InOutArgument(sd:DataTable)" />
+    <x:Property Name="argInCustomerNumber" Type="InArgument(x:String)" />
+    <x:Property Name="argInOutAddedList" Type="InOutArgument(scg:List(x:String))" />
+  </x:Members>
+  <mva:VisualBasic.Settings>
+    <x:Null />
+  </mva:VisualBasic.Settings>
+  <sap:VirtualizedContainerService.HintSize>654,696</sap:VirtualizedContainerService.HintSize>
+  <sap2010:WorkflowViewState.IdRef>Mutiple_CCodeProcess_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <scg:List x:TypeArguments="x:String" Capacity="46">
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>Microsoft.VisualBasic</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Collections</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Diagnostics</x:String>
+      <x:String>System.Drawing</x:String>
+      <x:String>System.IO</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Net.Mail</x:String>
+      <x:String>System.Xml</x:String>
+      <x:String>System.Xml.Linq</x:String>
+      <x:String>UiPath.Core</x:String>
+      <x:String>UiPath.Core.Activities</x:String>
+      <x:String>System.Windows.Markup</x:String>
+      <x:String>System.Xml.Serialization</x:String>
+      <x:String>Microsoft.VisualBasic.CompilerServices</x:String>
+      <x:String>System.Text.RegularExpressions</x:String>
+    </scg:List>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <scg:List x:TypeArguments="AssemblyReference" Capacity="20">
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Drawing</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.UiAutomation.Activities</AssemblyReference>
+      <AssemblyReference>System.ValueTuple</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.Composition</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.Runtime.WindowsRuntime</AssemblyReference>
+    </scg:List>
+  </TextExpression.ReferencesForImplementation>
+  <Flowchart DisplayName="Multiple CCOde" sap:VirtualizedContainerService.HintSize="634,636" sap2010:WorkflowViewState.IdRef="Flowchart_1">
+    <Flowchart.Variables>
+      <Variable x:TypeArguments="sd:DataTable" Name="vDtTempData" />
+      <Variable x:TypeArguments="x:String" Name="vStrTotalAmt" />
+      <Variable x:TypeArguments="x:String" Name="vStrMaxValue" />
+      <Variable x:TypeArguments="sd:DataTable" Name="vDTCCodeData" />
+      <Variable x:TypeArguments="x:String" Name="vStrDomCCode" />
+      <Variable x:TypeArguments="ui:GenericValue" Name="vDblInvoiceNumber" />
+      <Variable x:TypeArguments="x:Int32" Name="vIntIndex" />
+      <Variable x:TypeArguments="sd:DataTable" Name="vDTNonDomData" />
+      <Variable x:TypeArguments="x:Int32" Name="vIntDefaulValuescCount" />
+      <Variable x:TypeArguments="x:String" Name="vStrDomDivision" />
+    </Flowchart.Variables>
+    <sap:WorkflowViewStateService.ViewState>
+      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+        <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        <av:Point x:Key="ShapeLocation">270,2.5</av:Point>
+        <av:Size x:Key="ShapeSize">60,75</av:Size>
+        <av:PointCollection x:Key="ConnectorLocation">300,77.5 300,107</av:PointCollection>
+      </scg:Dictionary>
+    </sap:WorkflowViewStateService.ViewState>
+    <Flowchart.StartNode>
+      <x:Reference>__ReferenceID3</x:Reference>
+    </Flowchart.StartNode>
+    <FlowStep x:Name="__ReferenceID3">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <av:Point x:Key="ShapeLocation">200,107</av:Point>
+          <av:Size x:Key="ShapeSize">200,66</av:Size>
+          <av:PointCollection x:Key="ConnectorLocation">300,173 300,184.5</av:PointCollection>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+      <Sequence DisplayName="Get Dominant C COde" sap:VirtualizedContainerService.HintSize="200,66" sap2010:WorkflowViewState.IdRef="Sequence_5">
+        <Sequence.Variables>
+          <Variable x:TypeArguments="sd:DataTable" Name="vDtDomData" />
+        </Sequence.Variables>
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+        <ui:BuildDataTable DataTable="[vDtTempData]" DisplayName="Build Data Table Temp" sap:VirtualizedContainerService.HintSize="334,59" sap2010:WorkflowViewState.IdRef="BuildDataTable_2" TableInfo="&lt;NewDataSet&gt;&#xA;  &lt;xs:schema id=&quot;NewDataSet&quot; xmlns=&quot;&quot; xmlns:xs=&quot;http://www.w3.org/2001/XMLSchema&quot; xmlns:msdata=&quot;urn:schemas-microsoft-com:xml-msdata&quot;&gt;&#xA;    &lt;xs:element name=&quot;NewDataSet&quot; msdata:IsDataSet=&quot;true&quot; msdata:MainDataTable=&quot;TableName&quot; msdata:UseCurrentLocale=&quot;true&quot;&gt;&#xA;      &lt;xs:complexType&gt;&#xA;        &lt;xs:choice minOccurs=&quot;0&quot; maxOccurs=&quot;unbounded&quot;&gt;&#xA;          &lt;xs:element name=&quot;TableName&quot;&gt;&#xA;            &lt;xs:complexType&gt;&#xA;              &lt;xs:sequence&gt;&#xA;                &lt;xs:element name=&quot;Column1&quot; minOccurs=&quot;0&quot;&gt;&#xA;                  &lt;xs:simpleType&gt;&#xA;                    &lt;xs:restriction base=&quot;xs:string&quot;&gt;&#xA;                      &lt;xs:maxLength value=&quot;100&quot; /&gt;&#xA;                    &lt;/xs:restriction&gt;&#xA;                  &lt;/xs:simpleType&gt;&#xA;                &lt;/xs:element&gt;&#xA;                &lt;xs:element name=&quot;Column2&quot; type=&quot;xs:string&quot; minOccurs=&quot;0&quot; /&gt;&#xA;              &lt;/xs:sequence&gt;&#xA;            &lt;/xs:complexType&gt;&#xA;          &lt;/xs:element&gt;&#xA;        &lt;/xs:choice&gt;&#xA;      &lt;/xs:complexType&gt;&#xA;    &lt;/xs:element&gt;&#xA;  &lt;/xs:schema&gt;&#xA;&lt;/NewDataSet&gt;">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+        </ui:BuildDataTable>
+        <Assign DisplayName="Assign Customer Data" sap:VirtualizedContainerService.HintSize="334,60" sap2010:WorkflowViewState.IdRef="Assign_4">
+          <Assign.To>
+            <OutArgument x:TypeArguments="sd:DataTable">[vDTCCodeData]</OutArgument>
+          </Assign.To>
+          <Assign.Value>
+            <InArgument x:TypeArguments="sd:DataTable">[argInCutomerData.DefaultView.ToTable(True,"C Code")]</InArgument>
+          </Assign.Value>
+        </Assign>
+        <ui:ForEachRow CurrentIndex="{x:Null}" DataTable="[vDTCCodeData]" DisplayName="For Each Row" sap:VirtualizedContainerService.HintSize="334,51" sap2010:WorkflowViewState.IdRef="ForEachRow_2">
+          <ui:ForEachRow.Body>
+            <ActivityAction x:TypeArguments="sd:DataRow">
+              <ActivityAction.Argument>
+                <DelegateInArgument x:TypeArguments="sd:DataRow" Name="Crow" />
+              </ActivityAction.Argument>
+              <Sequence DisplayName="Body" sap:VirtualizedContainerService.HintSize="376,345" sap2010:WorkflowViewState.IdRef="Sequence_4">
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+                <Assign DisplayName="Assign Total Amount" sap:VirtualizedContainerService.HintSize="334,60" sap2010:WorkflowViewState.IdRef="Assign_5">
+                  <Assign.To>
+                    <OutArgument x:TypeArguments="x:String">[vStrTotalAmt]</OutArgument>
+                  </Assign.To>
+                  <Assign.Value>
+                    <InArgument x:TypeArguments="x:String">[argInCutomerData.Select("[C Code]='"+Crow("C Code").ToString+"'").CopyToDataTable.AsEnumerable.Sum(Function(x) Convert.ToDouble(x(“Net Aging”).ToString.Trim) ).tostring]</InArgument>
+                  </Assign.Value>
+                </Assign>
+                <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="334,91" sap2010:WorkflowViewState.IdRef="LogMessage_6" Level="Info" Message="[Crow(&quot;C Code&quot;).ToString+&quot; Total is &quot;+ vStrTotalAmt]" />
+                <ui:AddDataRow DataRow="{x:Null}" ArrayRow="[{Crow(0).tostring,vStrTotalAmt.ToString}]" DataTable="[vDtTempData]" DisplayName="Add Data Row- Temp" sap:VirtualizedContainerService.HintSize="334,22" sap2010:WorkflowViewState.IdRef="AddDataRow_2" />
+              </Sequence>
+            </ActivityAction>
+          </ui:ForEachRow.Body>
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+        </ui:ForEachRow>
+        <Assign DisplayName="Assign Max Value" sap:VirtualizedContainerService.HintSize="334,60" sap2010:WorkflowViewState.IdRef="Assign_10">
+          <Assign.To>
+            <OutArgument x:TypeArguments="x:String">[vStrMaxValue]</OutArgument>
+          </Assign.To>
+          <Assign.Value>
+            <InArgument x:TypeArguments="x:String">[vDtTempData.AsEnumerable().Max(Function(row) cdbl(row(“Column2”))).ToString]</InArgument>
+          </Assign.Value>
+        </Assign>
+        <ui:LookupDataTable LookupColumnName="{x:Null}" LookupDataColumn="{x:Null}" RowIndex="{x:Null}" TargetColumnName="{x:Null}" TargetDataColumn="{x:Null}" DataTable="[vDtTempData]" DisplayName="Lookup Data Table- Temp1" sap:VirtualizedContainerService.HintSize="334,22" sap2010:WorkflowViewState.IdRef="LookupDataTable_4" LookupColumnIndex="[1]" LookupValue="[vStrMaxValue]" TargetColumnIndex="[0]">
+          <ui:LookupDataTable.CellValue>
+            <OutArgument x:TypeArguments="x:String">[vStrDomCCode]</OutArgument>
+          </ui:LookupDataTable.CellValue>
+        </ui:LookupDataTable>
+        <ui:LookupDataTable LookupColumnIndex="{x:Null}" LookupDataColumn="{x:Null}" RowIndex="{x:Null}" TargetColumnName="{x:Null}" TargetDataColumn="{x:Null}" DataTable="[argInCutomerData]" DisplayName="Lookup Data Table- Temp2" sap:VirtualizedContainerService.HintSize="334,22" sap2010:WorkflowViewState.IdRef="LookupDataTable_5" LookupColumnName="C Code" LookupValue="[vStrDomCCode]" TargetColumnIndex="[0]">
+          <ui:LookupDataTable.CellValue>
+            <OutArgument x:TypeArguments="ui:GenericValue">[vDblInvoiceNumber]</OutArgument>
+          </ui:LookupDataTable.CellValue>
+        </ui:LookupDataTable>
+        <Assign DisplayName="Assign Cutomer Data" sap:VirtualizedContainerService.HintSize="334,60" sap2010:WorkflowViewState.IdRef="Assign_9">
+          <Assign.To>
+            <OutArgument x:TypeArguments="x:String">[vStrDomDivision]</OutArgument>
+          </Assign.To>
+          <Assign.Value>
+            <InArgument x:TypeArguments="x:String">[argInCutomerData.Select("[C Code]='"+vStrDomCCode+"'").CopyToDataTable.Rows(0).Item("Division").ToString]</InArgument>
+          </Assign.Value>
+        </Assign>
+        <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="334,51" sap2010:WorkflowViewState.IdRef="LogMessage_5" Level="Info" Message="[vStrDomCCode+&quot; is the maximum CCode with total &quot;+vStrMaxValue+&quot; of Invoice number &quot;+vDblInvoiceNumber.ToString+&quot; with Division&quot;+vStrDomDivision+&quot; Customer &quot;+argInCustomerNumber]">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+        </ui:LogMessage>
+      </Sequence>
+      <FlowStep.Next>
+        <FlowStep x:Name="__ReferenceID0">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <av:Point x:Key="ShapeLocation">200,184.5</av:Point>
+              <av:Size x:Key="ShapeSize">200,51</av:Size>
+              <av:PointCollection x:Key="ConnectorLocation">300,235.5 300,260</av:PointCollection>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <ui:ForEachRow CurrentIndex="{x:Null}" DataTable="[argInCutomerData.DefaultView.ToTable(True,&quot;Customer number&quot;,&quot;C Code&quot;)]" DisplayName="For Each Row- Non Dominant" sap:VirtualizedContainerService.HintSize="563,1009" sap2010:WorkflowViewState.IdRef="ForEachRow_3">
+            <ui:ForEachRow.Body>
+              <ActivityAction x:TypeArguments="sd:DataRow">
+                <ActivityAction.Argument>
+                  <DelegateInArgument x:TypeArguments="sd:DataRow" Name="row" />
+                </ActivityAction.Argument>
+                <Sequence sap:VirtualizedContainerService.HintSize="513,861" sap2010:WorkflowViewState.IdRef="Sequence_7">
+                  <Sequence.Variables>
+                    <Variable x:TypeArguments="scg:ICollection(x:String)" Default="[new List(of string)]" Name="vStrCollection" />
+                  </Sequence.Variables>
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                      <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                    </scg:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
+                  <If Condition="[row(&quot;C Code&quot;).ToString=vStrDomCCode]" DisplayName="If Dominant CCode" sap:VirtualizedContainerService.HintSize="471,51" sap2010:WorkflowViewState.IdRef="If_1">
+                    <sap:WorkflowViewStateService.ViewState>
+                      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                        <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                        <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                      </scg:Dictionary>
+                    </sap:WorkflowViewStateService.ViewState>
+                    <If.Then>
+                      <ui:Continue sap:VirtualizedContainerService.HintSize="200,22" sap2010:WorkflowViewState.IdRef="Continue_1" />
+                    </If.Then>
+                  </If>
+                  <ui:LookupDataTable CellValue="{x:Null}" LookupColumnName="{x:Null}" LookupDataColumn="{x:Null}" TargetColumnIndex="{x:Null}" TargetColumnName="{x:Null}" TargetDataColumn="{x:Null}" DataTable="[argInOutAgingTable]" DisplayName="Lookup Data Table" sap:VirtualizedContainerService.HintSize="471,22" sap2010:WorkflowViewState.IdRef="LookupDataTable_6" LookupColumnIndex="[0]" LookupValue="[vDblInvoiceNumber.ToString]" RowIndex="[vIntIndex]" />
+                  <Assign DisplayName="Assign Cutomer Data" sap:VirtualizedContainerService.HintSize="471,60" sap2010:WorkflowViewState.IdRef="Assign_7">
+                    <Assign.To>
+                      <OutArgument x:TypeArguments="sd:DataTable">[vDTNonDomData]</OutArgument>
+                    </Assign.To>
+                    <Assign.Value>
+                      <InArgument x:TypeArguments="sd:DataTable">[argInCutomerData.Select("Convert([Customer number],System.String)='"+row("Customer number").ToString+"' and [C Code]='"+row("C Code").ToString+"'").CopyToDataTable]</InArgument>
+                    </Assign.Value>
+                  </Assign>
+                  <ui:ForEachRow CurrentIndex="{x:Null}" DataTable="[vDTNonDomData]" DisplayName="For Each Row" sap:VirtualizedContainerService.HintSize="471,516" sap2010:WorkflowViewState.IdRef="ForEachRow_4">
+                    <ui:ForEachRow.Body>
+                      <ActivityAction x:TypeArguments="sd:DataRow">
+                        <ActivityAction.Argument>
+                          <DelegateInArgument x:TypeArguments="sd:DataRow" Name="Cusrow" />
+                        </ActivityAction.Argument>
+                        <Sequence sap:VirtualizedContainerService.HintSize="421,368" sap2010:WorkflowViewState.IdRef="Sequence_10">
+                          <sap:WorkflowViewStateService.ViewState>
+                            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                            </scg:Dictionary>
+                          </sap:WorkflowViewStateService.ViewState>
+                          <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke Negative_to_Positive workflow" sap:VirtualizedContainerService.HintSize="379,87" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_1" UnSafe="False" WorkflowFileName="Bad_DeptShifting\Negative_to_Positive.xaml">
+                            <ui:InvokeWorkflowFile.Arguments>
+                              <InOutArgument x:TypeArguments="sd:DataTable" x:Key="argInOutAgingTable">[argInOutAgingTable]</InOutArgument>
+                              <InArgument x:TypeArguments="sd:DataTable" x:Key="argInCustomerData">[vDTNonDomData]</InArgument>
+                              <InArgument x:TypeArguments="x:String" x:Key="argInAgingColumns">366 + _Net (Amnt),181 to 365 _Net (Amnt),121 to 180 _Net (Amnt),91 to 120 _Net (Amnt),61 to 90 _Net (Amnt),31 to 60 _Net (Amnt),1 to 30 _Net (Amnt),CurrentAmt_Net</InArgument>
+                              <InOutArgument x:TypeArguments="scg:List(x:String)" x:Key="argInOutAddedList">[argInOutAddedList]</InOutArgument>
+                              <InArgument x:TypeArguments="x:Boolean" x:Key="argInMultipleCCode">True</InArgument>
+                              <InArgument x:TypeArguments="x:String" x:Key="argInDominatCCode">[vStrDomCCode]</InArgument>
+                              <InOutArgument x:TypeArguments="x:Int32" x:Key="argInRowCount">[argInRowCounter]</InOutArgument>
+                              <InArgument x:TypeArguments="x:String" x:Key="argInDominantDiv">[vStrDomDivision]</InArgument>
+                            </ui:InvokeWorkflowFile.Arguments>
+                            <sap:WorkflowViewStateService.ViewState>
+                              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                              </scg:Dictionary>
+                            </sap:WorkflowViewStateService.ViewState>
+                          </ui:InvokeWorkflowFile>
+                          <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke Positive_to_Negative workflow" sap:VirtualizedContainerService.HintSize="379,87" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_2" UnSafe="False" WorkflowFileName="Bad_DeptShifting\Positive_to_Negative_MultiCCode.xaml">
+                            <ui:InvokeWorkflowFile.Arguments>
+                              <InOutArgument x:TypeArguments="sd:DataTable" x:Key="argInOutAgingTable">[argInOutAgingTable]</InOutArgument>
+                              <InArgument x:TypeArguments="sd:DataTable" x:Key="argInCustomerData">[vDTNonDomData]</InArgument>
+                              <InArgument x:TypeArguments="x:String" x:Key="argInAgingColumns">366 + _Net (Amnt),181 to 365 _Net (Amnt),121 to 180 _Net (Amnt),91 to 120 _Net (Amnt),61 to 90 _Net (Amnt),31 to 60 _Net (Amnt),1 to 30 _Net (Amnt),CurrentAmt_Net</InArgument>
+                              <InOutArgument x:TypeArguments="scg:List(x:String)" x:Key="argInOutAddedList">[argInOutAddedList]</InOutArgument>
+                              <InArgument x:TypeArguments="x:String" x:Key="argInTotalValue">NA</InArgument>
+                              <InArgument x:TypeArguments="x:Boolean" x:Key="argInMultipleCCode">True</InArgument>
+                              <InArgument x:TypeArguments="x:String" x:Key="argInDominatCCode">[vStrDomCCode]</InArgument>
+                              <InOutArgument x:TypeArguments="x:Int32" x:Key="argInRowCount">[argInRowCounter]</InOutArgument>
+                              <InArgument x:TypeArguments="x:String" x:Key="argInDominantDiv">[vStrDomDivision]</InArgument>
+                            </ui:InvokeWorkflowFile.Arguments>
+                            <sap:WorkflowViewStateService.ViewState>
+                              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                              </scg:Dictionary>
+                            </sap:WorkflowViewStateService.ViewState>
+                          </ui:InvokeWorkflowFile>
+                          <ui:Break sap:VirtualizedContainerService.HintSize="379,22" sap2010:WorkflowViewState.IdRef="Break_1" />
+                        </Sequence>
+                      </ActivityAction>
+                    </ui:ForEachRow.Body>
+                    <sap:WorkflowViewStateService.ViewState>
+                      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                        <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                      </scg:Dictionary>
+                    </sap:WorkflowViewStateService.ViewState>
+                  </ui:ForEachRow>
+                </Sequence>
+              </ActivityAction>
+            </ui:ForEachRow.Body>
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+          </ui:ForEachRow>
+          <FlowStep.Next>
+            <FlowStep x:Name="__ReferenceID1">
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <av:Point x:Key="ShapeLocation">169,260</av:Point>
+                  <av:Size x:Key="ShapeSize">262,60</av:Size>
+                  <av:PointCollection x:Key="ConnectorLocation">300,320 300,344.5</av:PointCollection>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+              <Assign DisplayName="Assign Dominan C Code Data" sap:VirtualizedContainerService.HintSize="262,60" sap2010:WorkflowViewState.IdRef="Assign_8">
+                <Assign.To>
+                  <OutArgument x:TypeArguments="sd:DataTable">[vDTCCodeData]</OutArgument>
+                </Assign.To>
+                <Assign.Value>
+                  <InArgument x:TypeArguments="sd:DataTable">[argInOutAgingTable.Select("Convert([Customer number],System.String)='"+argInCustomerNumber+"' and [C Code]='"+vStrDomCCode+"'").CopyToDataTable]</InArgument>
+                </Assign.Value>
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+              </Assign>
+              <FlowStep.Next>
+                <FlowStep x:Name="__ReferenceID2">
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                      <av:Point x:Key="ShapeLocation">200,344.5</av:Point>
+                      <av:Size x:Key="ShapeSize">200,51</av:Size>
+                    </scg:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
+                  <ui:ForEachRow CurrentIndex="{x:Null}" DataTable="[vDTCCodeData]" DisplayName="For Each Row- Dominant C Code" sap:VirtualizedContainerService.HintSize="200,51" sap2010:WorkflowViewState.IdRef="ForEachRow_5">
+                    <ui:ForEachRow.Body>
+                      <ActivityAction x:TypeArguments="sd:DataRow">
+                        <ActivityAction.Argument>
+                          <DelegateInArgument x:TypeArguments="sd:DataRow" Name="row" />
+                        </ActivityAction.Argument>
+                        <Sequence sap:VirtualizedContainerService.HintSize="280,288" sap2010:WorkflowViewState.IdRef="Sequence_12">
+                          <sap:WorkflowViewStateService.ViewState>
+                            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                            </scg:Dictionary>
+                          </sap:WorkflowViewStateService.ViewState>
+                          <InvokeMethod DisplayName="Invoke method" sap:VirtualizedContainerService.HintSize="238,134" sap2010:WorkflowViewState.IdRef="InvokeMethod_2" MethodName="ImportRow">
+                            <InvokeMethod.TargetObject>
+                              <InArgument x:TypeArguments="sd:DataTable">[argInOutDomRows]</InArgument>
+                            </InvokeMethod.TargetObject>
+                            <InArgument x:TypeArguments="sd:DataRow">[row]</InArgument>
+                          </InvokeMethod>
+                          <ui:Break sap:VirtualizedContainerService.HintSize="238,22" sap2010:WorkflowViewState.IdRef="Break_2" />
+                        </Sequence>
+                      </ActivityAction>
+                    </ui:ForEachRow.Body>
+                    <sap:WorkflowViewStateService.ViewState>
+                      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                      </scg:Dictionary>
+                    </sap:WorkflowViewStateService.ViewState>
+                  </ui:ForEachRow>
+                </FlowStep>
+              </FlowStep.Next>
+            </FlowStep>
+          </FlowStep.Next>
+        </FlowStep>
+      </FlowStep.Next>
+    </FlowStep>
+    <x:Reference>__ReferenceID0</x:Reference>
+    <x:Reference>__ReferenceID1</x:Reference>
+    <x:Reference>__ReferenceID2</x:Reference>
+  </Flowchart>
+</Activity>
